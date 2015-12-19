@@ -4,6 +4,10 @@
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
+$small-font: rem-calc(14);
+$vote-font-size: rem-calc(40);
+$default-margin: rem-calc(20);
+
 .votes {
 	@include grid-column-row();
 	@include panel();
@@ -12,18 +16,23 @@
 }
 
 ol.results-winners,
-ol.results-others 
+ol.results-others,
+ol.voting
 {
 	list-style: none;
 	margin-left: 0;
 
 	li {
-		margin-top: rem-calc(20);
+		margin-top: $default-margin;
 	}
 
 	.vote {
+		text-align: right;
 		display: inline-block;
-		width: rem-calc(80);
+		width: $vote-font-size * 2;
+
+		margin: 0;
+		margin-right: $default-margin;
 	}
 }
 
@@ -34,12 +43,21 @@ ol.results-winners
 	}
 
 	.vote {
-		font-size: rem-calc(40);
+		font-size: $vote-font-size;
 		line-height: 1em;
 	}
 }
 
 ol.results-others > li
 {
-	font-size: rem-calc(14);
+	font-size: $small-font;
+}
+
+ol.voting
+{
+	input.vote {
+		font-size: $vote-font-size;
+
+		height: ($vote-font-size + ($form-spacing * 0.7) - rem-calc(1));
+	}
 }

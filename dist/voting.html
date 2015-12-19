@@ -11,20 +11,31 @@
   <body>
 
     <div class="votes">
-    	<h1>Results</h1>
-    	<h2>Winners</h2>
-    	<ol class="results">
+    	<h1>Voting</h1>
+    	<p>Ban proposes you to vote</p>
+    	<ol class="voting">
     		<li>
-    			<input type="number" name="points" min="-100" max="100">
-    			 some text
+    			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			Mauris vestibulum facilisis diam quis tincidunt. Nam vehicula elementum magna hendrerit venenatis. Nunc ut ante a lorem posuere.
     		</li>
-    		<li><span class="vote">+1</span> some text</li>
+    		<li>
+    			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			Quisque elementum sollicitudin arcu, dapibus blandit arcu finibus sed. Phasellus lacinia magna id est vestibulum, vitae posuere.
+    		</li>
+    		<li>
+    			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			Nulla a erat arcu. Nam vel erat vitae purus faucibus posuere a et sapien. Quisque porta tempor consequat. Aliquam in leo nullam. 
+    		</li>
+    		<li>
+    			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			Proin commodo vestibulum velit nec laoreet. Sed vehicula nibh augue, et aliquam diam eleifend quis. Morbi enim ante, mollis sed.
+    		</li>
+    		<li>
+    			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			Pellentesque vitae felis ligula. Phasellus faucibus id erat et mattis. Aliquam a eros sed tellus sagittis feugiat semper ut sed. 
+    		</li>
     	</ol>
-    	<h2>Losers</h2>
-    	<ol class="results">
-    		<li><span class="negative-vote"></span> some text</li>
-    		<li><span class="negative-vote">-1</span> some text</li>
-    	</ol>
+    	<button class="button primary">Save my vote</button>
     </div>
 
     <script src="assets/js/app.js"></script>
