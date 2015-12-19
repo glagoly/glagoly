@@ -1,17 +1,19 @@
+$default-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
 @mixin panel {
 	background-color: $panel-color;
 	border-radius: 2px;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	box-shadow: $default-shadow;
 }
 
 $small-font: rem-calc(14);
 $vote-font-size: rem-calc(40);
 $default-margin: rem-calc(20);
 
-.votes {
+.panel {
 	@include grid-column-row();
 	@include panel();
-	
+	margin-top: $default-margin;
 	max-width: 33em;
 }
 
@@ -57,7 +59,10 @@ ol.voting
 {
 	input.vote {
 		font-size: $vote-font-size;
-
 		height: ($vote-font-size + ($form-spacing * 0.7) - rem-calc(1));
 	}
+}
+
+.top-bar {
+	box-shadow: $default-shadow;
 }
