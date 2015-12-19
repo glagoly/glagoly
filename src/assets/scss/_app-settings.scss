@@ -12,15 +12,21 @@ $divider-color:        #B6B6B6;
 $panel-color: #FFFFFF;
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
-$prinary-font-family: 'Open Sans', sans-serif;
+$primary-font-family: 'Open Sans', sans-serif;
 
 $global-font-size: 112.5%;
 $rem-base: 18px;
 
 $body-background: #FAFAFA;
 $body-font-color: rgba(#000, 0.87);
-$body-font-family: $prinary-font-family;
+$body-font-family: $primary-font-family;
 
 $topbar-background: $primary-color;
 $topbar-padding: 0;
 $topbar-link-color: $primary-color-text;
+
+$input-color: $body-font-color;
+$input-font-family: $primary-font-family;
+$input-font-size: rem-calc(18);
+$input-background: $panel-color;
+$input-background-focus: $panel-color;
