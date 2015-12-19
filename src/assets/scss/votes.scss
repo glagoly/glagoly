@@ -1,18 +1,45 @@
+@mixin panel {
+	background-color: $panel-color;
+	border-radius: 2px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
 .votes {
 	@include grid-column-row();
-	max-width: 30em;
+	@include panel();
+	
+	max-width: 33em;
 }
-ol.results {
+
+ol.results-winners,
+ol.results-others 
+{
 	list-style: none;
 	margin-left: 0;
+
+	li {
+		margin-top: rem-calc(20);
+	}
+
+	.vote {
+		display: inline-block;
+		width: rem-calc(80);
+	}
 }
-.results .vote {
-	display: inline-block;
-	font-size: rem-calc(40);
-	width: rem-calc(80);
+
+ol.results-winners
+{
+	li.winner {
+		font-size: rem-calc(25);
+	}
+
+	.vote {
+		font-size: rem-calc(40);
+		line-height: 1em;
+	}
 }
-.results .negative-vote {
-	display: inline-block;
-	font-size: rem-calc(20);
-	width: rem-calc(80);
+
+ol.results-others > li
+{
+	font-size: rem-calc(14);
 }
