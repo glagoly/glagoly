@@ -1,0 +1,18 @@
+.votes {
+	@include grid-column-row();
+	max-width: 30em;
+}
+ol.results {
+	list-style: none;
+	margin-left: 0;
+}
+.results .vote {
+	display: inline-block;
+	font-size: rem-calc(40);
+	width: rem-calc(80);
+}
+.results .negative-vote {
+	display: inline-block;
+	font-size: rem-calc(20);
+	width: rem-calc(80);
+}
