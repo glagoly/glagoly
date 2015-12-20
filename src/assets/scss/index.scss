@@ -1,0 +1,23 @@
+.cta {
+	background: $primary-color;
+	padding: rem-calc(100) 0;
+
+	box-shadow: $default-shadow;
+	text-align: center;
+	h1 {
+		color: $primary-color-text;
+		font-size: rem-calc(150);
+		line-height: 0.5em;
+	}
+
+	small {
+		color: $primary-color-light;
+		font-size: rem-calc(30);
+	}
+}
+
+.card {
+	@include panel();
+	padding: rem-calc(15);
+	margin-top: rem-calc(30);
+}
