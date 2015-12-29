@@ -9,3 +9,6 @@ deps
 .applist
 ebin
 sample
+
+.rebar
+.eunit
