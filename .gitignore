@@ -1,4 +1,11 @@
+# frontend
 node_modules
 bower_components
 npm-debug.log
 .sass-cache
+
+# erlang
+deps
+.applist
+ebin
+sample

@@ -1,0 +1,7 @@
+{application, web,
+  [{description, ""},
+   {vsn, "2.10"},
+   {registered, []},
+   {applications, [kernel, stdlib, n2o]},
+   {mod, { web, []}},
+   {env, []} ]}.
