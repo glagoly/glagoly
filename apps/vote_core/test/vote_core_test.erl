@@ -2,6 +2,15 @@
 -compile(export_all).
 -include_lib("eunit/include/eunit.hrl").
 
+init_test() ->
+	D = [[nil, 1, 2],
+		[3, nil, 4],
+		[5, 6, nil]],
+	P = [[{nil, nil}, {1, 3}, {2, 5}],
+		[{3, 1}, {nil, nil}, {4, 6}],
+		[{5, 2}, {6, 4}, {nil, nil}]],
+	?assertEqual(P, vote_core:init(D)).
+
 %% wikipedia sample
 %% https://en.wikipedia.org/wiki/Schulze_method#Example
 strongest_path_wiki_test() -> 
