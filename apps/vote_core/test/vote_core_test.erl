@@ -2,6 +2,16 @@
 -compile(export_all).
 -include_lib("eunit/include/eunit.hrl").
 
+
+transpose_test() ->
+	M = [[1,2,3],
+		 [4,5,6],
+		 [7,8,9]],
+	MT = [[1,4,7],
+		 [2,5,8],
+		 [3,6,9]],
+	?assertEqual(MT, vote_core:transpose(M)).
+	
 init_test() ->
 	D = [[nil, 1, 2],
 		[3, nil, 4],
@@ -13,6 +23,7 @@ init_test() ->
 
 gt_test() ->
 	?assertEqual(true, vote_core:gt({2,1},{0,0})).	
+
 %% wikipedia sample
 %% https://en.wikipedia.org/wiki/Schulze_method#Example
 strongest_path_wiki_test() -> 
