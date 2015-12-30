@@ -11,6 +11,8 @@ init_test() ->
 		[{5, 2}, {6, 4}, {nil, nil}]],
 	?assertEqual(P, vote_core:init(D)).
 
+gt_test() ->
+	?assertEqual(true, vote_core:gt({2,1},{0,0})).	
 %% wikipedia sample
 %% https://en.wikipedia.org/wiki/Schulze_method#Example
 strongest_path_wiki_test() -> 
