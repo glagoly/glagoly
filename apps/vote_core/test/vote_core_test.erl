@@ -28,7 +28,7 @@ max_d_test() ->
 	?assertEqual({14,7}, vote_core:max_d({14,7},{12,9})).	
 
 %% Sample 1. Page 12
-strongest_path_test() ->
+strongest_path_1_test() ->
 	P = vote_core:init([
 		[nil, 8, 14, 10],
 		[13, nil, 6, 2],
@@ -38,4 +38,17 @@ strongest_path_test() ->
           [{13,8},{nil,nil},{13,8},{12,9}],
           [{13,8},{15,6},{nil,nil},{12,9}],
           [{13,8},{19,2},{13,8},{nil,nil}]],
+	?assertEqual(P2, vote_core:strongest_path(P)).
+
+%% Sample 6. Page 26
+strongest_path_6_test() ->
+	P = vote_core:init([
+		[nil, 67, 28, 40],
+		[55, nil, 79, 58],
+		[36, 59, nil, 45],
+		[50, 72, 29, nil]]),
+	P2 = [[{nil,nil},{67,55},{67,55},{45,29}],
+          [{45,29},{nil,nil},{79,59},{45,29}],
+          [{45,29},{45,29},{nil,nil},{45,29}],
+          [{50,40},{72,58},{72,58},{nil,nil}]],
 	?assertEqual(P2, vote_core:strongest_path(P)).
