@@ -21,24 +21,21 @@ init_test() ->
 		[{5, 2}, {6, 4}, {nil, nil}]],
 	?assertEqual(P, vote_core:init(D)).
 
-gt_test() ->
-	?assertEqual(true, vote_core:gt({2,1},{0,0})).	
+min_d_test() ->
+	?assertEqual({14,7}, vote_core:min_d({14,7},{15,6})).	
 
-%% wikipedia sample
-%% https://en.wikipedia.org/wiki/Schulze_method#Example
-strongest_path_wiki_test() -> 
-	D = [
-			[00, 20, 26, 30, 22],
-			[25, 00, 16, 33, 18],
-			[19 ,29 ,00, 17, 24],
-			[15 ,12 ,28, 00, 14],
-			[23 ,27 ,21, 31, 00]
-	],
-	P = [
-			[00, 28, 28, 30, 24],
-			[25, 00, 28, 33, 24],
-			[25, 29, 00, 29, 24],
-			[25, 28, 28, 00, 24],
-			[25, 28, 28, 31, 00]
-	],
-	?assertEqual(P, vote_core:strongest_path(D)).
+max_d_test() ->
+	?assertEqual({14,7}, vote_core:max_d({14,7},{12,9})).	
+
+%% Sample 1. Page 12
+strongest_path_test() ->
+	P = vote_core:init([
+		[nil, 8, 14, 10],
+		[13, nil, 6, 2],
+		[7, 15, nil, 12],
+		[11, 19, 9, nil]]),
+	P2 = [[{nil,nil},{14,7},{14,7},{12,9}],
+          [{13,8},{nil,nil},{13,8},{12,9}],
+          [{13,8},{15,6},{nil,nil},{12,9}],
+          [{13,8},{19,2},{13,8},{nil,nil}]],
+	?assertEqual(P2, vote_core:strongest_path(P)).
