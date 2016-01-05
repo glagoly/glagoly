@@ -15,6 +15,5 @@ prefix(P)                   -> route(P).
 
 route(<<>>)                 -> index;
 route(<<"index">>)          -> index;
-route(<<"favicon.ico">>)    -> index;
 route(<<"static/spa/index",_/binary>>) -> index;
 route(_)                    -> index.

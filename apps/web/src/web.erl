@@ -18,6 +18,9 @@ n2o()    ->   { dir, "deps/n2o/priv", mime() }.
 mime()   -> [ { mimetypes, cow_mimetypes, all   } ].
 port()   -> [ { port, wf:config(n2o,port,8001)  } ].
 points() -> cowboy_router:compile([{'_', [
+			  { "/favicon.ico",  cowboy_static, {file, "apps/web/priv/static/favicon.ico"}},
+			  { "/apple-touch-icon.png",  cowboy_static, {file, "apps/web/priv/static/apple-touch-icon.png"}},
+			  { "/static/[...]", n2o_static, static() },
               { "/static/[...]", n2o_static, static() },
               { "/n2o/[...]",    n2o_static, n2o()    },
               { "/ws/[...]",     n2o_stream, []       },
