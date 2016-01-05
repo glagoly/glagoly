@@ -52,3 +52,19 @@ strongest_path_6_test() ->
           [{45,29},{45,29},{nil,nil},{45,29}],
           [{50,40},{72,58},{72,58},{nil,nil}]],
 	?assertEqual(P2, vote_core:strongest_path(P)).
+
+%% Sample 6. Page 26
+order_test() ->
+	P = [[{nil,nil},{67,55},{67,55},{45,29}],
+          [{45,29},{nil,nil},{79,59},{45,29}],
+          [{45,29},{45,29},{nil,nil},{45,29}],
+          [{50,40},{72,58},{72,58},{nil,nil}]],
+    ?assertEqual([[4],[1],[2],[3]], vote_core:order(P)).
+
+%% Sample 2. Page 16
+order_tie_test() ->
+	P = [[{nil,nil},{5,4},{5,4},{5,4}],
+         [{5,4},{nil,nil},{7,2},{5,4}],
+         [{5,4},{5,4},{nil,nil},{5,4}],
+         [{6,3},{5,4},{5,4},{nil,nil}]],
+	?assertEqual([[2,4],[1,3]], vote_core:order(P)).

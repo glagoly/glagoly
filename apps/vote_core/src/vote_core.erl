@@ -1,6 +1,11 @@
 -module(vote_core).
 -compile(export_all).
 
+%% A New Monotonic, Clone-Independent,
+%% Reversal Symmetric, and Condorcet-Consistent
+%% Single-Winner Election Method
+
+
 %% M[i,j] = M[j,i]
 transpose([[]|_]) -> [];
 transpose(M) ->
@@ -42,3 +47,21 @@ strongest_path_row(Pj, Pi, Pji, I, J) ->
 
 strongest_path_cell(Pjk, _, _, I, J, K) when I =:= K; J =:= K -> Pjk;
 strongest_path_cell(Pjk, Pji, Pik, _, _, _) -> max_d(Pjk, min_d(Pji, Pik)). 
+
+order(P) ->
+	O = lists:zipwith(fun (R, C) -> lists:zipwith(fun gt/2, R, C) end, P, transpose(P)),
+	order(O, [], lists:seq(1, length(P))).
+
+order(_, Result, []) -> Result;
+order(O, Result, Acc) -> 
+	{Winners, Acc2} = lists:partition(fun (W) -> is_winner(O, W, Acc) end, Acc),
+	%{Winners, Acc2}.
+	order(O, Result ++ [Winners], Acc2).
+
+is_winner(_, _, []) -> true;
+is_winner(O, W, [C|Acc]) when C =:= W -> is_winner(O, W, Acc);
+is_winner(O, W, [C|Acc]) ->
+	case lists:nth(W,lists:nth(C, O)) of
+		true -> false;
+		_ -> is_winner(O, W, Acc)
+	end.
