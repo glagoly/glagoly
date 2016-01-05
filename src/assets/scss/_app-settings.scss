@@ -14,8 +14,7 @@ $panel-color: #FFFFFF;
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 $primary-font-family: 'Open Sans', sans-serif;
 
-$global-font-size: 112.5%;
-$rem-base: 18px;
+$global-font-size: 18px;
 
 $body-background: #FAFAFA;
 $body-font-color: rgba(#000, 0.87);
@@ -29,6 +28,6 @@ $topbar-link-color: $primary-color-text;
 
 $input-color: $body-font-color;
 $input-font-family: $primary-font-family;
-$input-font-size: rem-calc(18);
+$input-font-size: rem-calc($global-font-size);
 $input-background: $panel-color;
 $input-background-focus: $panel-color;
