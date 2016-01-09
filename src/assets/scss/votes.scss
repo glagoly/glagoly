@@ -1,28 +1,12 @@
-$default-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-
-.top-bar {
-	box-shadow: $default-shadow;
-}
 
 .main {
 	@include button-style($accent-color, auto);
 }
 
-@mixin panel {
-	background-color: $panel-color;
-	border-radius: 2px;
-	box-shadow: $default-shadow;
-}
-
-$small-font: rem-calc(14);
-$vote-font-size: rem-calc(40);
-$default-margin: rem-calc(20);
-
-.panel {
-	@include grid-column-row();
-	@include panel();
+.title-input {
+	font-size: $h1-font-size;
+	height: ($h1-font-size + ($form-spacing * 2));
 	margin-top: $default-margin;
-	max-width: 33em;
 }
 
 ol.results-winners,
@@ -33,6 +17,8 @@ ol.voting
 	margin-left: 0;
 
 	li {
+		display: block;
+		position: relative;
 		margin-top: $default-margin;
 	}
 }
@@ -74,16 +60,42 @@ ol.results-others > li
 }
 
 .vote-column {
-	@include grid-column(1 of 6);
+	@include grid-column(1 of 6, 0);
 	@include grid-column-collapse;
 }
 
 .text-column {
-	@include grid-column(5 of 6);
+	@include grid-column(5 of 6, 0);
 	@include grid-column-collapse;
 
 	textarea {
 		height: rem-calc(101px); // magic number to fit 3 rows
 		margin-top: rem-calc(11px); // magic number to align to vote baseline
 	}
+}
+
+.author {
+	color: $secondary-text-color;
+	font-size: $small-font-size;
+	
+    &:before {
+      content: '\2014 \0020';
+    }
+}
+
+.edit-button {
+  @include disable-mouse-outline;
+  position: absolute;
+
+  color: $secondary-text-color;
+  font-size: $small-font-size;
+
+  top: 0;
+  right: 0;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: $primary-text-color;
+  }
 }

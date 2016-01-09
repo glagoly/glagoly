@@ -15,5 +15,6 @@ prefix(P)                   -> route(P).
 
 route(<<>>)                 -> index;
 route(<<"index">>)          -> index;
+route(<<"create">>)         -> create;
 route(<<"static/spa/index",_/binary>>) -> index;
 route(_)                    -> index.

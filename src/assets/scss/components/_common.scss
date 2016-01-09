@@ -1,0 +1,26 @@
+$default-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+$small-font: rem-calc(14);
+$vote-font-size: rem-calc(40);
+$default-margin: rem-calc(20);
+
+.top-bar {
+	box-shadow: $default-shadow;
+}
+
+@mixin panel {
+	background-color: $panel-color;
+	border-radius: 2px;
+	box-shadow: $default-shadow;
+}
+
+.panel {
+	@include grid-column-row();
+	@include panel();
+	margin-top: $default-margin;
+	max-width: 33em;
+}
+
+::placeholder {
+	color: $hint-text-color;
+}

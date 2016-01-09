@@ -154,7 +154,7 @@ gulp.task('build', function(done) {
 // Start a server with LiveReload to preview the site in
 gulp.task('server', ['build'], function() {
   browser.init({
-    proxy: 'localhost:8001'
+    proxy: 'localhost:7001'
   });
 });
 

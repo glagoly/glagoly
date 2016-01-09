@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html class="no-js" lang="en">
   <head>
@@ -6,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>glagoly</title>
-    <link rel="stylesheet" href="assets/css/app.css">
+    <link rel="stylesheet" href="static/css/app.css">
   </head>
   <body>
   <div class="top-bar">
@@ -19,15 +18,43 @@
     </div>
   </div>
     <div class="panel">
-    	<h1>Create voting</h1>
+    	<input type="text" class="title-input" placeholder="Poll" value="Poll">
     
-    	<div class="altenative">
-    		<div class="vote-column">
+    	<ol class="voting">
+    		<li>
     			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
-    		</div>
-    		<div class="text-column">
-    			<textarea></textarea>
-    		</div>
+    			Mauris vestibulum facilisis diam quis tincidunt. Nam vehicula elementum magna hendrerit venenatis. Nunc ut ante a lorem posuere.
+    			<span class="author">you</span>
+    			<button class="edit-button">edit</button>
+    		</li>
+    		<li>
+    			proposal deleted <a href="">restore</a>
+    		</li>
+    		<li class="edit-form">
+    			<div class="vote-column">
+    				<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			</div>
+    			<div class="text-column">
+    				<textarea></textarea>
+    				<button class="button expanded">add alternative</button>
+    			</div>
+    		</li>
+    		<li class="edit-form">
+    			<div class="vote-column">
+    				<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			</div>
+    			<div class="text-column">
+    				<textarea></textarea>
+    				<div class="expanded button-group">
+    					<a class="button">delete</a>
+    					<a class="button">save</a>
+    					<a class="button">cancel</a>
+    				</div>
+    			</div>
+    		</li>
+    	</ol>
+    	<div class="altenative">
+    		
     	</div>
     
     	<div class="altenative">
@@ -71,6 +98,6 @@
     	
     </div>
 
-    <script src="assets/js/app.js"></script>
+    <script src="static/js/app.js"></script>
   </body>
 </html>
