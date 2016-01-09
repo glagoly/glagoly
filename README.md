@@ -1,14 +1,29 @@
 # bjorn
 Online voting platform
 
-
 ## To build localy
 
-Install [foudnation cli](http://foundation.zurb.com/sites/docs/installation.html#command-line-tool.html) and run:
+Install npm or update npm to latest version:
 
-  foudnation watch
+    sudo npm install npm -g
 
-## todo
+After you get them insall npm dependencies:
+    
+    npm install
 
-[ ] Share on facebook to start discussion and to make comments (like on gurtom.mobi)
-[ ] Add alternative on vote
+Insall bower globally:
+
+    npm install -g bower
+     
+Install bower dependencies:
+
+    bower install
+
+Run gulp:
+
+    gulp
+
+## Todo
+
+- [ ] Share on facebook to start discussion and to make comments (like on gurtom.mobi)
+- [ ] Add alternative on vote
