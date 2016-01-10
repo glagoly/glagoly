@@ -3,23 +3,21 @@
 	@include button-style($accent-color, auto);
 }
 
-.title-input {
+input.title-input {
 	font-size: $h1-font-size;
 	height: ($h1-font-size + ($form-spacing * 2));
-	margin-top: $default-margin;
+	margin-top: $global-margin;
 }
 
-ol.results-winners,
-ol.results-others,
-ol.voting
+ol.alternatives
 {
 	list-style: none;
 	margin-left: 0;
 
 	li {
-		display: block;
+		@include grid-row();
 		position: relative;
-		margin-top: $default-margin;
+		margin-top: $global-margin;
 	}
 }
 

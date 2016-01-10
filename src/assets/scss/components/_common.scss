@@ -24,3 +24,6 @@ $default-margin: rem-calc(20);
 ::placeholder {
 	color: $hint-text-color;
 }
+.hidden {
+	display: none;
+}
