@@ -45,6 +45,7 @@ $header-sizes: (
     'h6': 18,
   ),
 );
+
 $h1-font-size: rem-calc(map-get(map-get($header-sizes, small), 'h1'));
 
 $small-font-size: rem-calc(14px);

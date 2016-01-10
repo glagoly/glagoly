@@ -73,27 +73,29 @@ ol.results-others > li
 }
 
 .author {
-	color: $secondary-text-color;
-	font-size: $small-font-size;
+	@include small-text;
 	
     &:before {
       content: '\2014 \0020';
     }
 }
 
-.edit-button {
-  @include disable-mouse-outline;
+li.delete-alternative {
+	@include small-text;
+}
+
+ul.corner-buttons {
+  padding-left: 0;
+  list-style: none;
+  
   position: absolute;
-
-  color: $secondary-text-color;
-  font-size: $small-font-size;
-
   top: 0;
   right: 0;
-  cursor: pointer;
 
-  &:hover,
-  &:focus {
-    color: $primary-text-color;
+  @include small-text;
+
+  li {
+  	margin: 0 $default-margin 0 0;
+  	display: inline-block;
   }
 }

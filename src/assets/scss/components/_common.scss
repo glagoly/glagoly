@@ -27,3 +27,25 @@ $default-margin: rem-calc(20);
 .hidden {
 	display: none;
 }
+
+a.ajax {
+	text-decoration: underline dotted;
+	&:hover {
+		text-decoration: underline dotted;
+	}
+}
+
+@mixin small-text() {
+	color: $secondary-text-color;
+	font-size: $small-font-size;
+	
+	a { 
+		color: $secondary-text-color;
+		font-size: $small-font-size;
+
+		&:hover,
+    	&:focus {
+      		color: $primary-text-color;
+    	}
+	}
+}

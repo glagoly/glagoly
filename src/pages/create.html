@@ -2,11 +2,14 @@
 	<input type="text" class="title-input" placeholder="Poll" value="Poll">
 
 	<ol class="alternatives" id="alternatives">
-		<li>
+		<li data-alternative-id="10000">
 			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
 			Mauris vestibulum facilisis diam quis tincidunt. Nam vehicula elementum magna hendrerit venenatis. Nunc ut ante a lorem posuere.
 			<span class="author">you</span>
-			<button class="edit-button">edit</button>
+			<ul class="corner-buttons">
+				<li><a class="delete-button ajax" href="#">delete</a></li>
+				<li><a class="edit-button ajax" href="#">edit</a></li>
+			</ul>
 		</li>
 
 		<li class="edit-form" id="add-form">
@@ -24,10 +27,9 @@
 			</div>
 			<div class="text-column">
 				<textarea></textarea>
-				<div class="expanded button-group">
-					<a class="button">delete</a>
-					<a class="button">save</a>
+				<div class="button-group float-right">
 					<a class="button">cancel</a>
+					<a class="button">save</a>
 				</div>
 			</div>
 		</li>
@@ -35,12 +37,16 @@
 			<input class="vote" type="number" min="-100" max="100" placeholder="&plusmn;7">
 			<span class="text"></span>
 			<span class="author"></span>
-			<button class="edit-button">edit</button>
+			<ul class="corner-buttons">
+				<li><button>delete</button></li>
+				<li><button>edit</button></li>
+			</ul>
+		</li>
+		<li class="delete-alternative" id="delete-alternative">
+			<a href="#" class="ajax">restore</a> deleted alternative 
 		</li>
 	</ol>
-			<li>
-			proposal deleted <a href="">restore</a>
-		</li>
+
 	<div class="altenative">
 		
 	</div>
