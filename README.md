@@ -1,5 +1,4 @@
-# bjorn
-Online voting platform
+# glagoly - online voting platform
 
 ## To build localy
 
@@ -26,4 +25,5 @@ Run gulp:
 ## Todo
 
 - [ ] Share on facebook to start discussion and to make comments (like on gurtom.mobi)
-- [ ] Add alternative on vote
+- [+] Add alternative on vote
+- [ ] Add https
