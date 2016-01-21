@@ -1,4 +1,4 @@
 $(document).foundation();
 
-$(document).ready(voteForm.init);
+$(document).ready(VoteForm.init);
 

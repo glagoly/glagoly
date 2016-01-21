@@ -2,17 +2,27 @@
 	<input type="text" class="title-input" placeholder="Poll" value="Poll">
 
 	<ol class="alternatives" id="alternatives">
-		<li data-alternative-id="10000">
+		<li id="alt-100" data-alt-id="100">
 			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
-			Mauris vestibulum facilisis diam quis tincidunt. Nam vehicula elementum magna hendrerit venenatis. Nunc ut ante a lorem posuere.
-			<span class="author">you</span>
+			<span class="text">Mauris vestibulum facilisis diam quis tincidunt. Nam vehicula elementum magna hendrerit venenatis. Nunc ut ante a lorem posuere.</span>
+			<span class="author">Ben</span>
 			<ul class="corner-buttons">
-				<li><a class="delete-button ajax" href="#">delete</a></li>
-				<li><a class="edit-button ajax" href="#">edit</a></li>
+				<li><a class="delete-button ajax">delete</a></li>
+				<li><a class="edit-button ajax">edit</a></li>
 			</ul>
 		</li>
 
-		<li class="edit-form" id="add-form">
+		<li id="alt-101" data-alt-id="101">
+			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+			<span class="text">Proin commodo vestibulum velit nec laoreet. Sed vehicula nibh augue, et aliquam diam eleifend quis. Morbi enim ante, mollis sed.</span>
+			<span class="author">Chuk</span>
+			<ul class="corner-buttons">
+				<li><a class="delete-button ajax">delete</a></li>
+				<li><a class="edit-button ajax">edit</a></li>
+			</ul>
+		</li>
+
+		<li class="edit-form" id="alt-add">
 			<div class="vote-column">
 				<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
 			</div>
@@ -21,69 +31,41 @@
 				<button class="button float-right" id="add-button">add alternative</button>
 			</div>
 		</li>
-		<li class="edit-form">
+
+		<li class="edit-form hidden" id="alt-edit" data-alt-id="edit">
 			<div class="vote-column">
 				<input class="vote" type="number"  min="-100" max="100" placeholder="&plusmn;7">
 			</div>
 			<div class="text-column">
-				<textarea></textarea>
+				<textarea class="text"></textarea>
 				<div class="button-group float-right">
-					<a class="button">cancel</a>
-					<a class="button">save</a>
+					<a class="button secondary cancel-button">cancel</a>
+					<a class="button save-button">save</a>
 				</div>
 			</div>
 		</li>
-		<li class="hidden" id="alternative-template">
+
+		<li class="hidden" id="alt-new" data-alt-id="new">
 			<input class="vote" type="number" min="-100" max="100" placeholder="&plusmn;7">
 			<span class="text"></span>
 			<span class="author"></span>
 			<ul class="corner-buttons">
-				<li><button>delete</button></li>
-				<li><button>edit</button></li>
+				<li><a class="delete-button ajax" href="#">delete</a></li>
+				<li><a class="edit-button ajax" href="#">edit</a></li>
 			</ul>
 		</li>
-		<li class="delete-alternative" id="delete-alternative">
-			<a href="#" class="ajax">restore</a> deleted alternative 
+
+		<li class="hidden delete-alternative" id="alt-restore" data-alt-id="restore">
+			<a href="#" class="ajax restore-button">restore</a> deleted alternative 
 		</li>
 	</ol>
-
-	<div class="altenative">
-		
-	</div>
-
-	<div class="altenative">
-		<div class="vote-column">
-			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
-		</div>
-		<div class="text-column">
-			<textarea></textarea>
-		</div>
-	</div>
-			
-	<div class="altenative">
-		<div class="vote-column">
-			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
-		</div>
-		<div class="text-column">
-			<textarea></textarea>
-		</div>
-	</div>
-
-	<div class="altenative">
-		<div class="vote-column">
-			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
-		</div>
-		<div class="text-column">
-			<textarea></textarea>
-		</div>
-	</div>
 
 	<div class="row collapse">
 		<div class="large-6 columns">
 			<label>
-	  			<input type="text" aria-describedby="nameDescription" placeholder="Your name">
+	  			<input type="text" aria-describedby="nameDescription" required placeholder="Your name">
 			</label>
-			<p class="help-text" id="nameDescription">YOur name for other to know whos asking.</p>
+			<p class="help-text" id="nameDescription">Enter your name meainingful to other voters</p>
 		</div>
 		<div class="large-5 columns">
 			<a href="results.html" class="button main expanded">Create voting</a>
