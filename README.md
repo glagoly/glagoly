@@ -24,5 +24,6 @@ Run gulp:
 
 ## Todo
 
+- [ ] Remove unused css and js
 - [ ] Share on facebook to start discussion and to make comments (like on gurtom.mobi)
 - [ ] Add https

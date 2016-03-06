@@ -1,7 +1,27 @@
 var VoteForm = (function () {
+    //  wirde storage
     var count = 1;
-    var data = [];
+    var changes = [];
 
+    var updateAlt(id, text) {
+        var alt = {
+            author: 'you',
+            text: text,
+        }
+        changes[id] =
+
+        return alt;
+    };
+
+    var addAlt(text) {
+        
+    };
+
+    var deleteAlt(id) {
+
+    };
+
+    // dom events
     var getById = function (id, type) {
         return $("#alt-" + (type ? type + "-" : "") + id).first();
     };
@@ -22,7 +42,7 @@ var VoteForm = (function () {
         }
 
         var alt = getById('new').clone(true);
-        id = count++;
+        
         setId(alt, id);
         alt.find(".vote").val(form.find('.vote').val());
         alt.find(".text").text(form.find('.text').val());
@@ -93,6 +113,9 @@ var VoteForm = (function () {
     };
 
     return {
+        data: function() {
+
+        },
         init: function() {
             if (!$("#vote-form")) {
                 return ;
