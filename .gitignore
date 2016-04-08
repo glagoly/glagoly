@@ -12,3 +12,6 @@ sample
 
 .rebar
 .eunit
+
+# Mnesia
+Mnesia*
