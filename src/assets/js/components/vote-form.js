@@ -3,21 +3,21 @@ var VoteForm = (function () {
     var count = 1;
     var changes = [];
 
-    var updateAlt(id, text) {
+    var updateAlt = function(id, text) {
         var alt = {
             author: 'you',
             text: text,
         }
-        changes[id] =
+        // changes[id] =
 
         return alt;
     };
 
-    var addAlt(text) {
+    var addAlt = function(text) {
         
     };
 
-    var deleteAlt(id) {
+    var deleteAlt = function(id) {
 
     };
 
@@ -112,6 +112,11 @@ var VoteForm = (function () {
         MotionUI.replace(edit, alt, 'fade', true);
     };
 
+    var createEvent = function(event) {
+        alert('create)');
+        create("test create");
+    };
+
     return {
         data: function() {
 
@@ -120,7 +125,7 @@ var VoteForm = (function () {
             if (!$("#vote-form")) {
                 return ;
             }
-            
+            $("#create").click(createEvent);
             $("#add-button").click(addEvent);
             $("#alt-add textarea").keypress(function(e){
                 var code = e.keyCode ? e.keyCode : e.which;

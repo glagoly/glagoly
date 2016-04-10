@@ -7,13 +7,14 @@ metainfo() ->
     #schema{name=sample,tables=[]
     }.
 
-log_level() -> error.
+log_level() -> info.
 
-log_modules() ->
+log_modules() -> 
   [
-    login,
-    n2o_nitrogen,
-    n2o_session,
-    doc,
-    index
+%    login,
+    create
+ %   n2o_nitrogen,
+  %  n2o_session,
+   % doc,
+    %index
   ].

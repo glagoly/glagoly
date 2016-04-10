@@ -55,6 +55,14 @@ var PATHS = {
     'bower_components/foundation-sites/js/foundation.tooltip.js',
     // Moption UI
     'bower_components/motion-ui/dist/motion-ui.js',
+    // N20
+    'deps/n2o/priv/protocols/bert.js',
+    'deps/n2o/priv/protocols/client.js',
+    'deps/n2o/priv/protocols/nitrogen.js',
+    'deps/n2o/priv/bullet.js',
+    'deps/n2o/priv/n2o.js',
+    'deps/n2o/priv/utf8.js',
+    'deps/n2o/priv/validation.js',
     // App
     'src/assets/js/!(app.js)**/*.js',
     'src/assets/js/app.js'
