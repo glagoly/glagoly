@@ -1,5 +1,5 @@
 var VoteForm = (function () {
-    //  wirde storage
+    //  wired storage
     var count = 1;
     var changes = [];
 
@@ -113,8 +113,14 @@ var VoteForm = (function () {
     };
 
     var createEvent = function(event) {
-        alert('create)');
-        create("test create");
+        create($('#title').val().trim());
+        return false;
+    };
+
+    var titleChange = function(event) {
+        var title = $('#title').val().trim();
+        title = (title !== '') ? title : 'poll';
+        $('#create').val('Create ' + title.toLowerCase());
     };
 
     return {
@@ -140,6 +146,8 @@ var VoteForm = (function () {
             $(".edit-button").click(editEvent);
             $(".cancel-button").click(cancelEvent);
             $(".save-button").click(saveEvent);
+
+            $("#title").change(titleChange);
             $("#alt-edit textarea").keypress(function(e){
                 var code = e.keyCode ? e.keyCode : e.which;
                 if(code == 13)
