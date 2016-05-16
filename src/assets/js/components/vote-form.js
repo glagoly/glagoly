@@ -1,25 +1,34 @@
 var VoteForm = (function () {
     //  wired storage
     var count = 1;
-    var changes = [];
+    var changes = {};
 
     var updateAlt = function(id, text) {
-        var alt = {
-            author: 'you',
-            text: text,
-        }
-        // changes[id] =
+        changes[id].author = 'you';
+        changes[id].text = text;
 
-        return alt;
+        return changes[id];
     };
 
     var addAlt = function(text) {
-        
+        var id = 'new-' + (++count);
+
+        changes[id] = {
+            id: id,
+            new: true,
+            text: text
+        };
+
+        return changes[id];
     };
 
     var deleteAlt = function(id) {
-
+        changes[id].deleted = true;
     };
+
+    var restoreAlt = function(id) {
+        changes[id].deleted = false;  
+    }
 
     // dom events
     var getById = function (id, type) {
@@ -41,11 +50,12 @@ var VoteForm = (function () {
             return;
         }
 
+        data = addAlt(form.find('.text').val());
+
         var alt = getById('new').clone(true);
-        
-        setId(alt, id);
+        setId(alt, data.id);
         alt.find(".vote").val(form.find('.vote').val());
-        alt.find(".text").text(form.find('.text').val());
+        alt.find(".text").text(data.text);
         alt.find(".author").html("you");
    
         form.before(alt);
@@ -58,6 +68,7 @@ var VoteForm = (function () {
 
     var deleteEvent = function(event) {
         var id = getId(this);
+        deleteAlt(id);
         var restore = getById('restore').clone(true);
         setId(restore, id, 'restore');
         
@@ -66,6 +77,7 @@ var VoteForm = (function () {
 
     var restoreEvent = function(event) {
         var id = getId(this);
+        restoreAlt(id);
         var restore = getById(id, 'restore');
 
         MotionUI.replace(restore, getById(id), 'fade', true);
@@ -94,8 +106,9 @@ var VoteForm = (function () {
         }
 
         if (text != alt.find(".text").text()) {
+            var data = updateAlt(id, text);
             alt.find(".text").text(text);
-            alt.find(".author").html("you");
+            alt.find(".author").html(data.author);
         }
         
         alt.find(".vote").val(edit.find('.vote').val());
@@ -113,7 +126,8 @@ var VoteForm = (function () {
     };
 
     var createEvent = function(event) {
-        create($('#title').val().trim());
+        var title = $('#title').val().trim();
+        create({title: title, changes: changes});
         return false;
     };
 
