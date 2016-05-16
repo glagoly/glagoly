@@ -10,14 +10,32 @@ main() ->
 
 event(_) -> ok.
 
-create_poll(Title) ->
-	Id = kvs:next_id(poll, 1),
-	Poll = #poll{id = Id, title = Title},
-	kvs:put(Poll),
-	Id.
+update_alternative(PollId, Id, Text, true, _) ->
+	kvs:add(#alternative{
+		id=kvs:next_id(alternative, 1),
+		feed_id={poll, PollId}, 
+		text=Text}).
 
-api_event(create, Title, _) ->
-	Id = create_poll(Title),
-	wf:info(?MODULE,"Unknown Event: ~p~n",[Id]),
+update_alternative(PollId, Id, Props) ->
+	update_alternative(
+		PollId,
+		Id,
+		filter:string(proplists:get_value(<<"text">>, Props), 128, undefined),
+		proplists:get_value(<<"new">>, Props),
+		proplists:get_value(<<"deleted">>, Props)
+	).
+
+update_alternatives(PollId, {Changes}) ->
+	lists:map(fun({Id, {Props}}) -> update_alternative(PollId, Id, Props) end, Changes).
+
+create_poll(Title) ->
+	Poll = #poll{id = kvs:next_id(poll, 1), title = filter:string(Title, 20, <<"poll">>)},
+	kvs:put(Poll),
+	Poll#poll.id.
+
+api_event(create, Data, _) ->
+	{Props} = jsone:decode(list_to_binary(Data)),
+	Id = create_poll(proplists:get_value(<<"title">>, Props)),
+	update_alternatives(Id, proplists:get_value(<<"changes">>, Props)),
 	wf:redirect("/poll?id=" ++ wf:to_list(Id)).
 	
