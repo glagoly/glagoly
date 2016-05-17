@@ -2,6 +2,9 @@
 -compile(export_all).
 -include_lib("eunit/include/eunit.hrl").
 
+key_group_test() ->
+	?assertEqual(
+		[{10, [11, 12]}, {0, [1]}], vote_core:key_group([{0, 1}, {10, 11}, {10, 12}])).
 
 transpose_test() ->
 	M = [[1,2,3],

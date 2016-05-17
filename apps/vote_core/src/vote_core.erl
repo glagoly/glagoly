@@ -1,10 +1,21 @@
 -module(vote_core).
 -compile(export_all).
 
+key_group([]) -> [];
+key_group(L) -> key_group_sorted(lists:keysort(1, L)).
+
+key_group_sorted([{Key, Value} | L]) ->
+	{I, Current, Acc} = lists:foldl(fun({Key, Value}, {I, Current, Acc}) -> 
+		case Key =:= I of
+			true -> {I, Current ++ [Value], Acc};
+			_ -> {Key, [Value], Acc ++ [{I, Current}]}
+		end
+	end, {Key, [Value], []}, L),
+	lists:reverse(Acc ++ [{I, Current}]).
+
 %% A New Monotonic, Clone-Independent,
 %% Reversal Symmetric, and Condorcet-Consistent
 %% Single-Winner Election Method
-
 
 %% M[i,j] = M[j,i]
 transpose([[]|_]) -> [];
