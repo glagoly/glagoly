@@ -58,7 +58,7 @@ var VoteForm = (function () {
         alt.find(".text").text(data.text);
         alt.find(".author").html("you");
    
-        form.before(alt);
+        $("#alternatives").append(alt);
         MotionUI.animateIn(alt, 'slide-in-up ease-out');
 
         form.find('.vote').val('');
@@ -125,9 +125,22 @@ var VoteForm = (function () {
         MotionUI.replace(edit, alt, 'fade', true);
     };
 
-    var createEvent = function(event) {
-        var title = $('#title').val().trim();
-        create({title: title, changes: changes});
+    var getVotes = function() {
+        var votes = {};
+        $('#alternatives > li').each(function() {
+            votes[$(this).data("alt-id")] = $(this).find('.vote').val();
+        });
+        
+        return votes;
+    };
+
+    var submitEvent = function(event) {
+        create({
+            title: $('#title').val().trim(),
+            name: $('#name').val().trim(),
+            votes: getVotes(),
+            changes: changes
+        });
         return false;
     };
 
@@ -145,7 +158,7 @@ var VoteForm = (function () {
             if (!$("#vote-form")) {
                 return ;
             }
-            $("#create").click(createEvent);
+            $("#main").submit(submitEvent);
             $("#add-button").click(addEvent);
             $("#alt-add textarea").keypress(function(e){
                 var code = e.keyCode ? e.keyCode : e.which;

@@ -33,6 +33,18 @@
     	</div>
     
     	<ol class="alternatives" id="alternatives">
+    		<li id="alt-100" data-alt-id="100">
+    			<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
+    			<span class="text">Mauris vestibulum facilisis diam quis tincidunt. Nam vehicula elementum magna hendrerit venenatis. Nunc ut ante a lorem posuere.</span>
+    			<span class="author">Ben</span>
+    			<ul class="corner-buttons">
+    				<li><a class="delete-button ajax">delete</a></li>
+    				<li><a class="edit-button ajax">edit</a></li>
+    			</ul>
+    		</li>
+    	</ol>
+    
+    	<ol class="alternatives">
     		<li class="edit-form" id="alt-add">
     			<div class="vote-column">
     				<input type="number" class="vote" min="-100" max="100" placeholder="&plusmn;7">
@@ -71,10 +83,10 @@
     		</li>
     	</ol>
     
-    	<form class="row collapse">
+    	<form class="row collapse" id="main">
     		<div class="large-6 columns">
     			<label>
-    	  			<input type="text" aria-describedby="nameDescription" required placeholder="Your name">
+    	  			<input type="text" id="name" aria-describedby="nameDescription" required placeholder="Your name">
     			</label>
     			<p class="help-text" id="nameDescription">Enter your name meainingful to other voters</p>
     		</div>
