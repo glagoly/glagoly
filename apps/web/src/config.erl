@@ -17,7 +17,8 @@ log_level() -> info.
 log_modules() -> %all.
   [
   %  kvs,
-    create
+    create,
+    index
   %  poll
  %   n2o_nitrogen,
   %  n2o_session,

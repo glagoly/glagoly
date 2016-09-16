@@ -3,14 +3,13 @@
 -include_lib("n2o/include/wf.hrl").
 -include_lib("nitro/include/nitro.hrl").
 
-peer()    -> wf:to_list(wf:peer(?REQ)).
-message() -> wf:js_escape(wf:html_encode(wf:to_list(wf:q(message)))).
-main()    -> #dtl{file="index",app=sample,bindings=[{body,body()}]}.
-body()    -> [ #p{body=hi},
-			   #panel{id=history}, #textbox{id=message},
-               #button{id=send,body="Chat",postback=chat,source=[message]} ].
+main() -> 
+	wf:info(?MODULE,"main loaded",[""]),
+	#dtl{file="index", app=sample, bindings=[{create_button, #button{body="create poll",postback=create} }]}.
 
-event(init) -> wf:reg(room);
-event(chat) -> wf:send(room,{client,{peer(),message()}});
-event({client,{P,M}}) -> wf:insert_bottom(history,#panel{id=history,body=[P,": ",M,#br{}]});
+event(create) -> 
+	wf:info(?MODULE,"create",[""]),
+	Id = vote_core:uuid(),
+	wf:redirect("/edit?id=" ++ wf:to_list(Id));
+
 event(Event) -> wf:info(?MODULE,"Unknown Event: ~p~n",[Event]).
