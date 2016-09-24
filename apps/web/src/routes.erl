@@ -17,5 +17,5 @@ route(<<>>)                 -> index;
 route(<<"index">>)          -> index;
 route(<<"create">>)         -> create;
 route(<<"poll">>)           -> poll;
-route(<<"static/spa/index",_/binary>>) -> index;
+route(<<"edit">>)           -> edit;
 route(_)                    -> index.
