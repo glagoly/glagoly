@@ -1,3 +1,19 @@
 <div class="panel" id="vote-form">
-	\{{ vote_body }}
+	\{{ title }}
+
+	<div class="callout secondary" data-closable="slide-out-left">
+		<ol>
+			<li>Start by adding your most preferable alternative and rank it with positive number (+7 is fine)</li>
+			<li>Add some less preferable alternatives and rate them</li>
+			<li>Add other alternatives and leave them without rating</li>
+		</ol>
+		<p></p>
+		<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<ol class="alternatives">
+		\{{ alts }}
+	</ol>
 </div>

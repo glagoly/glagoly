@@ -12,12 +12,13 @@ metainfo() ->
       #table{name=vote,container=feed,fields=record_info(fields,vote)}
     ]}.
 
-log_level() -> info.
+log_level() -> debug.
 
 log_modules() -> %all.
   [
   %  kvs,
     create,
+    vote_core,
     index
   %  poll
  %   n2o_nitrogen,
