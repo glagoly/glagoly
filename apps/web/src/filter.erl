@@ -9,7 +9,7 @@ string(Binary, Length, Default) ->
   	end.
 
 int(Binary, Min, Max, Default) when is_binary(Binary) -> 
-	int(binary_to_integer(Binary), Min, Max, Default);
+	int(wf:to_integer(Binary), Min, Max, Default);
 
 int(Int, _, _, Default) when is_integer(Int) =/= true -> Default;
 

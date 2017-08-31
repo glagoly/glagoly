@@ -43,6 +43,13 @@ event(add_alt) ->
 
 event(_) -> ok.
 
+filter_vote(Vote) -> filter:int(Vote, -3, 7, 0).
+
+filter_votes(Votes) -> [{ wf:to_integer(hd(V)), filter_vote(hd(tl(V))) } || V <- Votes].
+
+
 api_event(vote, Data, _) ->
 	{Props} = jsone:decode(list_to_binary(Data)),
-	wf:info(?MODULE,"Props: ~p~n",[Props]).
+	Vt = proplists:get_value(<<"votes">>, Props),
+	Votes = filter_votes(Vt),
+	wf:info(?MODULE,"Props: ~p~n",[Votes, Vt]).
