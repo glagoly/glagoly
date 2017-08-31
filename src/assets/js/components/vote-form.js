@@ -125,65 +125,24 @@ var VoteForm = (function () {
         MotionUI.replace(edit, alt, 'fade', true);
     };
 
-    var getVotes = function() {
-        var votes = {};
-        $('#alternatives > li').each(function() {
-            votes[$(this).data("alt-id")] = $(this).find('.vote').val();
-        });
-        
-        return votes;
-    };
-
-    var submitEvent = function(event) {
-        create({
-            title: $('#title').val().trim(),
+    var submitEvent = function() {
+        vote({
             name: $('#name').val().trim(),
-            votes: getVotes(),
-            changes: changes
+            votes: $('#alts input[id^="vote"]').map(function() {
+                // love jquery for double braces
+                return [[this.id.substring(4), $(this).val()]] 
+            }).get()
         });
+
         return false;
     };
 
-    var titleChange = function(event) {
-        var title = $('#title').val().trim();
-        title = (title !== '') ? title : 'poll';
-        $('#create').val('Create ' + title.toLowerCase());
-    };
-
     return {
-        data: function() {
-
-        },
         init: function() {
             if (!$("#vote-form")) {
                 return ;
             }
-            $("#main").submit(submitEvent);
-            $("#add-button").click(addEvent);
-            $("#alt-add textarea").keypress(function(e){
-                var code = e.keyCode ? e.keyCode : e.which;
-                if(code == 13)
-                {
-                    addEvent(e); e.preventDefault();
-                }     
-                
-            });
-            $(".delete-button").click(deleteEvent);
-            $(".restore-button").click(restoreEvent);
-            $(".edit-button").click(editEvent);
-            $(".cancel-button").click(cancelEvent);
-            $(".save-button").click(saveEvent);
-
-            $("#title").change(titleChange);
-            $("#alt-edit textarea").keypress(function(e){
-                var code = e.keyCode ? e.keyCode : e.which;
-                if(code == 13)
-                {
-                    saveEvent(e); e.preventDefault();
-                }
-
-            });
-            
+            $("#vote-form").submit(submitEvent);
         },
     };
 })();

@@ -17,7 +17,7 @@
       </ul>
     </div>
   </div>
-    <div class="panel" id="vote-form">
+    <div class="panel">
       <h1>poll</h1>
     
       <div class="callout secondary" data-closable="slide-out-left">
@@ -40,8 +40,17 @@
           {{ alt_form }}
         </li>
       </ol>
+
+      <form class="row collapse" id="vote-form">
+        <div class="large-6 columns">
+          <input type="text" id="name" required placeholder="your name">
+          <p class="help-text">enter your name meainingful to other voters</p>
+        </div>
+        <div class="large-5 columns">
+          <input type="submit" class="button main expanded" id="create" value="create poll">
+        </div>
+      </form>
     </div>
-    
 
     <script>{{ script }}</script>
     <script src="static/js/app.js"></script>
