@@ -6,14 +6,13 @@
 
 poll_id() -> wf:to_list(wf:q(<<"id">>)).
 
+poll_alts() -> kvs:entries(kvs:get(feed, {poll, poll_id()}), alt, undefined).
+
 alt(Alt, Vote) ->
 	[#li{body=[
 		#input{id="vote" ++ wf:to_list(Alt#alt.id), type=number, value=Vote, class=vote, min=-100, max=100, placeholder=0},
 		#span{class=text, body=Alt#alt.text}
 	]}].
-
-alts() -> 
-	[alt(Alt, "") || Alt <- kvs:entries(kvs:get(feed, {poll, poll_id()}), alt, undefined)].
 
 alt_form() ->
 	[#panel{class='vote-column', body=[
@@ -27,7 +26,7 @@ alt_form() ->
 vote_page()->
 	wf:wire(#api{name=vote}),
 	#dtl{file="edit", bindings=[
-		{alts, alts()},
+		{alts, [alt(Alt, "") || Alt <- poll_alts()]},
 		{alt_form, alt_form()}
 	]}.
 
@@ -43,13 +42,16 @@ event(add_alt) ->
 
 event(_) -> ok.
 
-filter_vote(Vote) -> filter:int(Vote, -3, 7, 0).
-
-filter_votes(Votes) -> [{ wf:to_integer(hd(V)), filter_vote(hd(tl(V))) } || V <- Votes].
-
+prepare_prefs(Votes) -> 
+	% to pairs of ints
+	P1 = [{ filter:int(hd(tl(V)), -3, 7, 0), wf:to_integer(hd(V))} || V <- Votes],
+	% remove not incorrect alt ids and zero prefs,
+	Alts = [Alt#alt.id || Alt <- poll_alts()],
+	lists:filter(fun({P, A}) -> (P /= 0) and lists:member(A, Alts) end, P1).
 
 api_event(vote, Data, _) ->
 	{Props} = jsone:decode(list_to_binary(Data)),
-	Vt = proplists:get_value(<<"votes">>, Props),
-	Votes = filter_votes(Vt),
-	wf:info(?MODULE,"Props: ~p~n",[Votes, Vt]).
+	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props)),
+	Name = filter:string(proplists:get_value(<<"name">>, Props), 32, <<"anon">>),
+	Vote = #vote{id=kvs:next_id(vote, 1), feed_id={poll, poll_id()}, name=Name, prefs=some},
+	kvs:add(Vote).

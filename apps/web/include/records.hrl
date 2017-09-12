@@ -3,4 +3,4 @@
 -record(poll, {id, title}).
 -record(share, {id, poll_id}).
 -record(alt, {?ITERATOR(feed), text}).
--record(vote, {?ITERATOR(feed), votes}).
+-record(vote, {?ITERATOR(feed), name, prefs}).

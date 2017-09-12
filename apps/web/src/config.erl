@@ -21,7 +21,8 @@ log_modules() -> %all.
     vote_core,
     index,
     edit,
-    filter
+    filter,
+    kvs
   %  poll
  %   n2o_nitrogen,
   %  n2o_session,
