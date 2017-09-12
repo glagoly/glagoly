@@ -45,4 +45,4 @@ key_group_sorted([{Key, Value} | L]) ->
 uuid() ->
     <<U0:32, U1:16, _:4, U2:12, _:2, U3:30, U4:32>> = crypto:rand_bytes(16),
     U = base64:encode_to_string(<<U0:32, U1:16, 4:4, U2:12, 2#10:2, U3:30, U4:32>>),
-    re:replace(U, "\\+", "-", [global, {return, list}]).
+    lists:sublist(re:replace(U, "\\+", "-", [global, {return, list}]), 22).
