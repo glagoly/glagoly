@@ -20,7 +20,7 @@ Install bower dependencies:
 
 Run gulp:
 
-    gulp
+    npm run start
 
 ## Todo
 
