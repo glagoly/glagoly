@@ -3,9 +3,23 @@
 
 -record(poll, {alts, prefs}).
 
-new(Alts) -> #poll{alts = sets:from_list([sq | Alts]), prefs = matrix:new([sq | Alts])}.
+new() -> #poll{alts = [sq], prefs = #{{sq, sq} => 0}}.
 
-prefs(Poll) -> matrix:to_list(Poll#poll.prefs).
+prefs(Poll) -> maps:to_list(Poll#poll.prefs).
+
+alts(Poll) -> Poll#poll.alts.
+
+maps_copy(Source, Dest, Map) ->
+	maps:put(Dest, maps:get(Source, Map, 0), Map).
+
+add_alt(Alt, Poll) -> 
+	Alts = ordsets:add_element(Alt, Poll#poll.alts),
+	#poll{alts = Alts, prefs = lists:foldl(fun(Alt2, Acc) -> 
+		Acc2 = maps_copy({sq, Alt2}, {Alt, Alt2}, Acc),
+		maps_copy({Alt2, sq}, {Alt2, Alt}, Acc2)
+	end, Poll#poll.prefs, Alts)}.
+
+
 
 fold_votes(_, [], Prefs, Rest) -> {Prefs, Rest};
 fold_votes(Fun, [Votes | Tail], Prefs, Rest) ->
@@ -17,8 +31,7 @@ fold_votes(Fun, [Votes | Tail], Prefs, Rest) ->
 	fold_votes(Fun, Tail, Prefs2, Rest2).
 
 normalize_ballot(Ballot, Alts) -> 
-	B = maps:from_list(Ballot),
-	[{Alt, maps:get(Alt, B, 0)} || Alt <- Alts].
+	B = maps:from_list(Ballot), [{Alt, maps:get(Alt, B, 0)} || Alt <- Alts].
 	
 
 add_ballot(Up, Down, Poll) -> add_ballot(Up, Down, Poll, 1).
