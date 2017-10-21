@@ -16,6 +16,11 @@ fold_votes(Fun, [Votes | Tail], Prefs, Rest) ->
 	end, Prefs, Votes2),
 	fold_votes(Fun, Tail, Prefs2, Rest2).
 
+normalize_ballot(Ballot, Alts) -> 
+	B = maps:from_list(Ballot),
+	[{Alt, maps:get(Alt, B, 0)} || Alt <- Alts].
+	
+
 add_ballot(Up, Down, Poll) -> add_ballot(Up, Down, Poll, 1).
 
 add_ballot(Up, Down, Poll, Weight) -> 

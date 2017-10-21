@@ -6,6 +6,11 @@ key_group_test() ->
 	?assertEqual(
 		[{10, [12, 11]}, {0, [1]}], vote_core:key_group([{0, 1}, {10, 11}, {10, 12}])).
 
+normalize_ballot_test() ->
+	?assertEqual([
+		{1, 1}, {2, 0}], 
+		vote_core:normalize_ballot([{1, 1}, {3, 1}], [1, 2])).
+
 add_ballot_test() ->
 	Poll = vote_core:new([a, b, c]),
 	Poll2 = vote_core:add_ballot([[a,b], [c]], [], Poll),
