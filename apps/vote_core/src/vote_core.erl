@@ -36,17 +36,18 @@ add_ballot(Ballot, Poll, Weight) ->
 	B = normalize_ballot(Ballot, alts(Poll)),
 	#poll{alts = Poll#poll.alts, prefs = add_votes(B, Poll#poll.prefs, Weight)}.
 
-key_group([]) -> [];
-key_group(L) -> key_group_sorted(lists:keysort(1, L)).
-
-key_group_sorted([{Key, Value} | L]) ->
-	{I, Current, Acc} = lists:foldl(fun({Key, Value}, {I, Current, Acc}) -> 
-		case Key =:= I of
-			true -> {I, [Value | Current], Acc};
-			_ -> {Key, [Value], [{I, Current} | Acc]}
+pop_sq(Order) ->
+	lists:foldl(fun(L, {Pos, Cur, Order2}) -> 
+		case lists:member(sq, L) of
+			true ->  {Cur, Cur + 1, Order2 ++ [lists:delete(sq, L)]};
+			_ -> {Pos, Cur + 1, Order2 ++ [L]}
 		end
-	end, {Key, [Value], []}, L),
-	[{I, Current} | Acc].
+	end, {undefined, 0, []}, Order).
+
+number_result(Order) ->
+	{P, L, Order2} = pop_sq(Order),
+	lists:zip(lists:seq(P, P - L + 1, -1), Order2).
+
 
 %% Create a UUID v4 (random) as a base64 string
 %% "+" are replaced with "-"

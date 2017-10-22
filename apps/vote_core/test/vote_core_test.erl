@@ -2,9 +2,10 @@
 -compile(export_all).
 -include_lib("eunit/include/eunit.hrl").
 
-key_group_test() ->
+number_result_test() ->
 	?assertEqual(
-		[{10, [12, 11]}, {0, [1]}], vote_core:key_group([{0, 1}, {10, 11}, {10, 12}])).
+		[{1,[b,d]},{0,[a]},{-1,[c]}], 
+		vote_core:number_result([[b, d], [sq, a], [c]])).
 
 add_alt_test() ->
 	P = vote_core:new(),
