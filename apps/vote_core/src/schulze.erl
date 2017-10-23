@@ -16,20 +16,20 @@ min_d(A,B) -> case gt(A,B) of true -> B; _ -> A	end.
 max_d(A,B) -> case gt(A,B) of true -> A; _ -> B	end.
 
 %% P[i,j] = {N[i,j], N[j,i]}
-init(N) -> dict:map(fun ({R, C}, V) -> {V, dict:fetch({C, R}, N)} end, N).
+init(N) -> maps:map(fun ({R, C}, V) -> {V, maps:get({C, R}, N)} end, N).
 
 strongest_path(P, Alts) ->
-	sets:fold(fun (I, P2) ->
-		dict:map(fun ({J, K}, Pjk) ->
+	lists:foldl(fun (I, P2) ->
+		maps:map(fun ({J, K}, Pjk) ->
 			case (I =/= J) and (I =/= K) and (J =/= K) of
-				true -> max_d(Pjk, min_d(dict:fetch({J, I}, P2), dict:fetch({I, K}, P2)));
+				true -> max_d(Pjk, min_d(maps:get({J, I}, P2), maps:get({I, K}, P2)));
 				_ -> Pjk
 			end
 		end, P2)
 	end, P, Alts).
 
 order(P, Alts) ->
-	O = sets:from_list([{J, I} || {{J, I}, Pji} <- dict:to_list(P), J =/= I, gt(Pji, dict:fetch({I, J}, P))]),
+	O = sets:from_list([{J, I} || {{J, I}, Pji} <- maps:to_list(P), J =/= I, gt(Pji, maps:get({I, J}, P))]),
 	order(O, [], Alts).
 
 order(_, Result, []) -> Result;
