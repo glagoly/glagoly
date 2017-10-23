@@ -31,5 +31,10 @@ add_ballot_test() ->
 		{{sq,1},1},{{sq,2},0},{{sq,sq},0}]), 
 		lists:sort(vote_core:prefs(P4))).
 
-
-
+result_test() -> 
+P2 = vote_core:add_alt(1, vote_core:new()),
+	P3 = vote_core:add_alt(2, P2),
+	P4 = vote_core:add_ballot([{1, -1}, {2, 1}], P3),
+	?assertEqual(
+		[{1, [2]}, {0, []}, {-1, [1]}],
+		vote_core:result(P4)).

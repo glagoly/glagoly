@@ -9,6 +9,11 @@ prefs(Poll) -> maps:to_list(Poll#poll.prefs).
 
 alts(Poll) -> Poll#poll.alts.
 
+result(Poll) ->
+	P = schulze:init(Poll#poll.prefs),
+	S = schulze:strongest_path(P, alts(Poll)),
+	number_result(schulze:order(S, alts(Poll))).
+
 maps_copy(Source, Dest, Map) ->	maps:put(Dest, maps:get(Source, Map, 0), Map).
 
 add_alt(Alt, Poll) -> 
