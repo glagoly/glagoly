@@ -16,6 +16,6 @@ prefix(P)                   -> route(P).
 route(<<>>)                 -> index;
 route(<<"index">>)          -> index;
 route(<<"create">>)         -> create;
-route(<<"poll">>)           -> poll;
+route(<<"result">>)         -> result;
 route(<<"edit">>)           -> edit;
 route(_)                    -> index.

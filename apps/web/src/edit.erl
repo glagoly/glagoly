@@ -54,4 +54,5 @@ api_event(vote, Data, _) ->
 	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props)),
 	Name = filter:string(proplists:get_value(<<"name">>, Props), 32, <<"anon">>),
 	Vote = #vote{id=kvs:next_id(vote, 1), feed_id={poll, poll_id()}, name=Name, prefs=some},
-	kvs:add(Vote).
+	kvs:add(Vote),
+	wf:redirect("/result?id=" ++ wf:to_list(poll_id())).
