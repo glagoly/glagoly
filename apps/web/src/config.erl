@@ -22,6 +22,7 @@ log_modules() -> %all.
     index,
     edit,
     filter,
+    result,
     kvs
   %  poll
  %   n2o_nitrogen,

@@ -24,6 +24,5 @@ Run gulp:
 
 ## Todo
 
-- [ ] Remove unused css and js
-- [ ] Share on facebook to start discussion and to make comments (like on gurtom.mobi)
+- [ ] Change order of args, so ballot and results have consistent view
 - [ ] Add https
