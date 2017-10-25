@@ -28,14 +28,11 @@ strongest_path(P, Alts) ->
 		end, P2)
 	end, P, Alts).
 
-order(P, Alts) ->
-	O = sets:from_list([{J, I} || {{J, I}, Pji} <- maps:to_list(P), J =/= I, gt(Pji, maps:get({I, J}, P))]),
-	order(O, [], Alts).
+order(P, Alts) -> order(P, Alts, []).
 
-order(_, Result, []) -> Result;
-order(O, Result, Rest) -> 
-	{Winners, Rest2} = lists:partition(fun (W) -> is_winner(O, W, Rest) end, Rest),
-	order(O, Result ++ [Winners], Rest2).
-
-is_winner(O, W, Rest) -> 
-	lists:all(fun (C) -> not sets:is_element({C, W}, O) end, Rest).
+order(_, [], Result) -> Result;
+order(P, Rest, Result) ->
+	{W, R} = lists:partition(fun (W) ->	
+		lists:all(fun (O) -> not gt(maps:get({O, W}, P), maps:get({W, O}, P)) end, Rest)
+	end, Rest),
+	order(P, R, Result ++ [W]).
