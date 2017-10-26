@@ -15,12 +15,16 @@ calc_result() ->
 	V = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), Alts),
 	Ballots = [Alt#vote.prefs || Alt <- poll_votes()],
 	P = lists:foldl(fun vote_core:add_ballot/2, V, Ballots),
-	R = vote_core:result(P),
-	wf:info(?MODULE, "prefs", R).
+	vote_core:result(P).
 
-results() ->
-	calc_result(),
-	[].
+alt(Ids, Pos) ->
+	Alts = [kvs:get(alt, Id) || Id <- Ids],
+	R =[#li{body=[
+		#span{class=vote, body=wf:to_list(Pos)},
+		#span{class=text, body=Alt#alt.text}
+	]} || {ok, Alt} <- Alts].
+
+results() -> [alt(Ids, P) || {Ids, P} <- calc_result()].
 
 main() ->
  	case kvs:get(poll, poll_id()) of

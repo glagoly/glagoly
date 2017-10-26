@@ -24,5 +24,4 @@ Run gulp:
 
 ## Todo
 
-- [ ] Change order of args, so ballot and results have consistent view
 - [ ] Add https
