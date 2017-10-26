@@ -4,7 +4,7 @@
 
 number_result_test() ->
 	?assertEqual(
-		[{1,[b,d]},{0,[a]},{-1,[c]}], 
+		[{[b,d], 1},{[a], 0},{[c], -1}], 
 		vote_core:number_result([[b, d], [sq, a], [c]])).
 
 add_alt_test() ->
@@ -36,5 +36,5 @@ P2 = vote_core:add_alt(1, vote_core:new()),
 	P3 = vote_core:add_alt(2, P2),
 	P4 = vote_core:add_ballot([{1, -1}, {2, 1}], P3),
 	?assertEqual(
-		[{1, [2]}, {0, []}, {-1, [1]}],
+		[{[2], 1}, {[], 0}, {[1], -1}],
 		vote_core:result(P4)).

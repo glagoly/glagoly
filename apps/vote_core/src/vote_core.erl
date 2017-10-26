@@ -51,7 +51,7 @@ pop_sq(Order) ->
 
 number_result(Order) ->
 	{P, L, Order2} = pop_sq(Order),
-	lists:zip(lists:seq(P, P - L + 1, -1), Order2).
+	lists:zip(Order2, lists:seq(P, P - L + 1, -1)).
 
 
 %% Create a UUID v4 (random) as a base64 string
