@@ -7,7 +7,7 @@
 
 metainfo() -> 
     #schema{name=glagoly,tables=[
-      #table{name=poll,fields=record_info(fields,poll)},
+      #table{name=poll,fields=record_info(fields, poll)},
       #table{name=alt,container=feed,fields=record_info(fields,alt)},
       #table{name=vote,container=feed,fields=record_info(fields,vote)}
     ]}.
