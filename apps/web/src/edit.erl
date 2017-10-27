@@ -23,16 +23,26 @@ alt_form() ->
 				postback=add_alt, source=[alt_vote, alt_text]}
 	]}].
 
-vote_page()->
+title(#poll{user=User, title=Title})->
+	wf:info(?MODULE,"user",wf:user()),
+	wf:info(?MODULE,"poll user", User),
+	case wf:user() of
+		User -> #textbox{id=title, maxlength=20, 
+			class='title-input', placeholder=Title, value=Title};
+		_ -> #h1{body = Title}
+	end.
+
+vote_page(Poll)->
 	wf:wire(#api{name=vote}),
 	#dtl{file="edit", bindings=[
+		{title, title(Poll)},
 		{alts, [alt(Alt, "") || Alt <- poll_alts()]},
 		{alt_form, alt_form()}
 	]}.
 
 main() ->
 	case kvs:get(poll, poll_id()) of
-		{ok, Poll} -> vote_page();
+		{ok, Poll} -> vote_page(Poll);
 		_ -> wf:state(status,404), "Poll not found" end.
 
 event(add_alt) ->
