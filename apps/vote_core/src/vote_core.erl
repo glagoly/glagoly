@@ -54,6 +54,13 @@ number_result(Order) ->
 	lists:zip(Order2, lists:seq(P, P - L + 1, -1)).
 
 
+rotate(List, Seed) ->
+	_ = rand:seed(exsp, {Seed, Seed, Seed}),
+	lists:foldl(fun (E, L) ->
+		{H, T} = lists:split(rand:uniform(length(L) + 1) - 1, L),
+		H ++ [E] ++ T
+	end, [], List).
+
 %% Create a UUID v4 (random) as a base64 string
 %% "+" are replaced with "-"
 %% source avtobiff/erlang-uuid

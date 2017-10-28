@@ -38,3 +38,9 @@ P2 = vote_core:add_alt(1, vote_core:new()),
 	?assertEqual(
 		[{[2], 1}, {[], 0}, {[1], -1}],
 		vote_core:result(P4)).
+
+
+rotate_test() ->
+	?assertEqual(
+		vote_core:rotate([1,2,3,4], 10),
+		vote_core:rotate([1,2,3,4], 10)).
