@@ -6,6 +6,13 @@
 
 poll_id() -> wf:to_list(wf:q(<<"id">>)).
 
+poll() ->
+	case kvs:get(poll, poll_id()) of
+		{ok, Poll} -> Poll;
+		_ -> undefined
+	end.
+
+
 poll_alts() -> kvs:entries(kvs:get(feed, {alts, poll_id()}), alt, undefined).
 
 alt(Alt, Vote) ->
@@ -32,6 +39,13 @@ title(#poll{user=User, title=Title})->
 		_ -> #h1{body = Title}
 	end.
 
+update_title(Poll, Title) ->
+	User = wf:user(),
+	case Poll#poll.user of
+		 User -> kvs:put(Poll#poll{title = Title});
+		_ -> ok
+	end.
+
 vote_page(Poll)->
 	wf:wire(#api{name=vote}),
 	#dtl{file="edit", bindings=[
@@ -41,9 +55,10 @@ vote_page(Poll)->
 	]}.
 
 main() ->
-	case kvs:get(poll, poll_id()) of
-		{ok, Poll} -> vote_page(Poll);
-		_ -> wf:state(status,404), "Poll not found" end.
+	case poll() of
+		undefined -> wf:state(status,404), "Poll not found";
+		Poll -> vote_page(Poll)
+	end.
 
 event(add_alt) ->
 	Alt = #alt{id=kvs:next_id(alt, 1), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
@@ -63,6 +78,8 @@ api_event(vote, Data, _) ->
 	{Props} = jsone:decode(list_to_binary(Data)),
 	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props)),
 	Name = filter:string(proplists:get_value(<<"name">>, Props), 32, <<"anon">>),
+	Title = filter:string(proplists:get_value(<<"title">>, Props), 32, <<"poll">>),
+	update_title(poll(), Title),
 	Vote = #vote{id=kvs:next_id(vote, 1), feed_id={votes, poll_id()}, name=Name, prefs=Prefs},
 	kvs:add(Vote),
 	wf:redirect("/result?id=" ++ wf:to_list(poll_id())).
