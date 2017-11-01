@@ -31,8 +31,6 @@ alt_form() ->
 	]}].
 
 title(#poll{user=User, title=Title})->
-	wf:info(?MODULE,"user",wf:user()),
-	wf:info(?MODULE,"poll user", User),
 	case wf:user() of
 		User -> #textbox{id=title, maxlength=20, 
 			class='title-input', placeholder=Title, value=Title};
@@ -46,18 +44,23 @@ update_title(Poll, Title) ->
 		_ -> ok
 	end.
 
-vote_page(Poll)->
+name(undefined) -> <<"">>;
+name(Ballot) -> Ballot#ballot.name.
+
+edit_page(Poll)->
 	wf:wire(#api{name=vote}),
+	Ballot = feed:get_ballot(wf:user(), poll_id()),
 	#dtl{file="edit", bindings=[
 		{title, title(Poll)},
 		{alts, [alt(Alt, "") || Alt <- poll_alts()]},
-		{alt_form, alt_form()}
+		{alt_form, alt_form()},
+		{name, name(Ballot)}
 	]}.
 
 main() ->
 	case poll() of
 		undefined -> wf:state(status,404), "Poll not found";
-		Poll -> vote_page(Poll)
+		Poll -> edit_page(Poll)
 	end.
 
 event(add_alt) ->
@@ -76,10 +79,10 @@ prepare_prefs(Votes) ->
 
 api_event(vote, Data, _) ->
 	{Props} = jsone:decode(list_to_binary(Data)),
+	User = session:ensure_user(),
 	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props)),
 	Name = filter:string(proplists:get_value(<<"name">>, Props), 32, <<"anon">>),
 	Title = filter:string(proplists:get_value(<<"title">>, Props), 32, <<"poll">>),
 	update_title(poll(), Title),
-	Vote = #vote{id=kvs:next_id(vote, 1), feed_id={votes, poll_id()}, name=Name, prefs=Prefs},
-	kvs:add(Vote),
+	feed:put_ballot(User, poll_id(), Name, Prefs),
 	wf:redirect("/result?id=" ++ wf:to_list(poll_id())).

@@ -8,12 +8,12 @@ poll_id() -> wf:to_list(wf:q(<<"id">>)).
 
 poll_alts() -> kvs:entries(kvs:get(feed, {alts, poll_id()}), alt, undefined).
 
-poll_votes() -> kvs:entries(kvs:get(feed, {votes, poll_id()}), vote, undefined).
+poll_ballots() -> kvs:entries(kvs:get(feed, {ballot, poll_id()}), ballot, undefined).
 
 calc_result() ->
 	Alts = [Alt#alt.id || Alt <- poll_alts()],
 	V = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), Alts),
-	Ballots = [Alt#vote.prefs || Alt <- poll_votes()],
+	Ballots = [Alt#ballot.prefs || Alt <- poll_ballots()],
 	P = lists:foldl(fun vote_core:add_ballot/2, V, Ballots),
 	vote_core:result(P).
 
