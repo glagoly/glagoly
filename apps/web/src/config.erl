@@ -8,8 +8,9 @@
 metainfo() -> 
     #schema{name=glagoly,tables=[
       #table{name=poll,fields=record_info(fields, poll)},
+      #table{name=user_ballot,fields=record_info(fields, user_ballot)},
       #table{name=alt,container=feed,fields=record_info(fields,alt)},
-      #table{name=vote,container=feed,fields=record_info(fields,vote)}
+      #table{name=ballot,container=feed,fields=record_info(fields,ballot)}
     ]}.
 
 log_level() -> debug.
@@ -23,7 +24,9 @@ log_modules() -> %all.
     edit,
     filter,
     result,
-    kvs
+    kvs,
+    feed,
+    user
   %  poll
  %   n2o_nitrogen,
   %  n2o_session,
