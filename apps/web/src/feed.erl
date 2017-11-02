@@ -1,10 +1,7 @@
 -module(feed).
 -compile(export_all).
 -include_lib("records.hrl").
-
-put_user_vote(User, Poll, Id) ->
-	kvs:put(#user_poll{id = {User, Poll}, vote=Id}).
-
+	
 create_poll(User) ->
 	Id = vote_core:uuid(),
 	kvs:put(#poll{id = Id, user=User, title = <<"poll">>}),
@@ -12,16 +9,20 @@ create_poll(User) ->
 
 get_vote(User, Poll) ->
 	Vote = case kvs:get(user_poll, {User, Poll}) of
-		{ok, Id} -> case kvs:get(vote, Id) of {ok, V} -> V;	_ -> undefined end;
+		{ok, U} -> 
+			case kvs:get(vote, U#user_poll.vote) of 
+				{ok, V} -> V;	
+				_ -> undefined 
+			end;
 		_ -> undefined
 	end.
-	
 
-put_ballot(User, Poll, Name, Prefs) -> ok.
-	% Id = case kvs:get(user_poll, {User, Poll}) of
-	% 	{ok, U} -> U#user_ballot.ballot;
-	% 	_ -> kvs:next_id(ballot, 1)
-	% end,
-	% Ballot = #ballot{id=Id, feed_id={votes, Poll}, name=Name, prefs=Prefs},
-	% kvs:add(Ballot),
-	%put_user_ballot(User, Poll, Id).
+put_vote(User, Poll, Name, Ballot) ->
+	case get_vote(User, Poll) of
+		undefined -> 
+			Id = kvs:next_id(vote, 1),
+			kvs:add(#vote{id=Id, feed_id={votes, Poll}, name=Name, ballot=Ballot}),
+			kvs:put(#user_poll{id = {User, Poll}, vote=Id});
+		Vote -> 
+			kvs:put(Vote#vote{name=Name, ballot=Ballot})
+	end.

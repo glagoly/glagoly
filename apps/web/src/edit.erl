@@ -84,5 +84,5 @@ api_event(vote, Data, _) ->
 	Name = filter:string(proplists:get_value(<<"name">>, Props), 32, <<"anon">>),
 	Title = filter:string(proplists:get_value(<<"title">>, Props), 32, <<"poll">>),
 	update_title(poll(), Title),
-	feed:put_ballot(User, poll_id(), Name, Prefs),
+	feed:put_vote(User, poll_id(), Name, Prefs),
 	wf:redirect("/result?id=" ++ wf:to_list(poll_id())).
