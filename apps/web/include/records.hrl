@@ -2,5 +2,5 @@
 
 -record(poll, {id, user, title}).
 -record(alt, {?ITERATOR(feed), user, text}).
--record(ballot, {?ITERATOR(feed), user, name, prefs}).
--record(user_ballot, {id, ballot}).
+-record(vote, {?ITERATOR(feed), user, name, ballot}).
+-record(user_poll, {id, vote}).

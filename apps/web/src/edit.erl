@@ -45,16 +45,16 @@ update_title(Poll, Title) ->
 	end.
 
 name(undefined) -> <<"">>;
-name(Ballot) -> Ballot#ballot.name.
+name(Vote) -> Vote#vote.name.
 
 edit_page(Poll)->
 	wf:wire(#api{name=vote}),
-	Ballot = feed:get_ballot(wf:user(), poll_id()),
+	Vote = feed:get_vote(wf:user(), poll_id()),
 	#dtl{file="edit", bindings=[
 		{title, title(Poll)},
 		{alts, [alt(Alt, "") || Alt <- poll_alts()]},
 		{alt_form, alt_form()},
-		{name, name(Ballot)}
+		{name, name(Vote)}
 	]}.
 
 main() ->

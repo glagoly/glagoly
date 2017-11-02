@@ -8,9 +8,9 @@
 metainfo() -> 
     #schema{name=glagoly,tables=[
       #table{name=poll,fields=record_info(fields, poll)},
-      #table{name=user_ballot,fields=record_info(fields, user_ballot)},
+      #table{name=user_poll,fields=record_info(fields, user_poll)},
       #table{name=alt,container=feed,fields=record_info(fields,alt)},
-      #table{name=ballot,container=feed,fields=record_info(fields,ballot)}
+      #table{name=vote,container=feed,fields=record_info(fields,vote)}
     ]}.
 
 log_level() -> debug.
