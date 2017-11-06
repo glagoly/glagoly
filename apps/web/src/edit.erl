@@ -47,12 +47,16 @@ update_title(Poll, Title) ->
 name(undefined) -> <<"">>;
 name(Vote) -> Vote#vote.name.
 
+alts(Alts, undefined) -> alts(Alts, #vote{ballot = []});
+alts(Alts, #vote{ballot = Ballot}) ->
+	[alt(Alt, wf:to_list(V)) || {V, Alt} <- feed:user_alts(Alts, Ballot)].
+
 edit_page(Poll)->
 	wf:wire(#api{name=vote}),
 	Vote = feed:get_vote(wf:user(), poll_id()),
 	#dtl{file="edit", bindings=[
 		{title, title(Poll)},
-		{alts, [alt(Alt, "") || Alt <- poll_alts()]},
+		{alts, alts(poll_alts(), Vote)},
 		{alt_form, alt_form()},
 		{name, name(Vote)}
 	]}.

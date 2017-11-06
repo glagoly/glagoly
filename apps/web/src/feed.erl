@@ -17,6 +17,10 @@ get_vote(User, Poll) ->
 		_ -> undefined
 	end.
 
+user_alts(Alts, Ballot) -> 
+	B = maps:from_list(Ballot),
+	[ {maps:get(Alt#alt.id, B, 0), Alt} || Alt <- Alts].
+
 put_vote(User, Poll, Name, Ballot) ->
 	case get_vote(User, Poll) of
 		undefined -> 
