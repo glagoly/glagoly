@@ -40,7 +40,10 @@ P2 = vote_core:add_alt(1, vote_core:new()),
 		vote_core:result(P4)).
 
 
-rotate_test() ->
+rand_seq_test() ->
 	?assertEqual(
-		vote_core:rotate([1,2,3,4], 10),
-		vote_core:rotate([1,2,3,4], 10)).
+		vote_core:rand_seq(4, 10),
+		vote_core:rand_seq(4, 10)),
+	?assertEqual(
+		lists:sort(vote_core:rand_seq(4, 10)),
+		[1,2,3,4]).
