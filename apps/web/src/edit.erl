@@ -49,7 +49,7 @@ name(Vote) -> Vote#vote.name.
 
 alts(Alts, undefined) -> alts(Alts, #vote{ballot = []});
 alts(Alts, #vote{ballot = Ballot}) ->
-	[alt(Alt, wf:to_list(V)) || {V, Alt} <- feed:user_alts(Alts, Ballot)].
+	[alt(Alt, wf:to_list(V)) || {V, P, Alt} <- feed:user_alts(Alts, Ballot, session:seed())].
 
 edit_page(Poll)->
 	wf:wire(#api{name=vote}),

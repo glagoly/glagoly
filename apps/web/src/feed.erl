@@ -17,9 +17,10 @@ get_vote(User, Poll) ->
 		_ -> undefined
 	end.
 
-user_alts(Alts, Ballot) -> 
+user_alts(Alts, Ballot, Seed) -> 
 	B = maps:from_list(Ballot),
-	[ {maps:get(Alt#alt.id, B, 0), Alt} || Alt <- Alts].
+	A = lists:zip(vote_core:rand_seq(length(Alts), Seed), Alts),
+	lists:reverse(lists:sort([ {maps:get(Alt#alt.id, B, 0), Pos, Alt} || {Pos, Alt} <- A])).
 
 put_vote(User, Poll, Name, Ballot) ->
 	case get_vote(User, Poll) of

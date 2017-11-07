@@ -7,3 +7,9 @@ ensure_user() ->
 		undefined -> wf:user(kvs:next_id(user, 1));
 		U -> U
 	end.
+
+seed() -> 
+	case wf:user() of 
+		undefined -> erlang:binary_to_integer(wf:session_id(), 16);
+		U -> U
+	end.
