@@ -7,6 +7,10 @@ create_poll(User) ->
 	kvs:put(#poll{id = Id, user=User, title = <<"poll">>}),
 	Id.
 
+user_name(I, _, I) -> i;
+user_name(User, Poll, I) ->
+	case get_vote(User, Poll) of undefined -> []; V -> V#vote.name end.
+
 get_vote(User, Poll) ->
 	Vote = case kvs:get(user_poll, {User, Poll}) of
 		{ok, U} -> 

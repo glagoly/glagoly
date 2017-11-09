@@ -15,10 +15,15 @@ poll() ->
 
 poll_alts() -> kvs:entries(kvs:get(feed, {alts, poll_id()}), alt, undefined).
 
+author(i) -> <<"<i>I</i>">>;
+author([]) -> <<"anonymous">>;
+author(N) -> N.
+
 alt(Alt, Vote) ->
 	[#li{body=[
 		#input{id="vote" ++ wf:to_list(Alt#alt.id), type=number, value=Vote, class=vote, min=-100, max=100, placeholder=0},
-		#span{class=text, body=Alt#alt.text}
+		#span{class=text, body=Alt#alt.text},
+		#span{class=author, body=author(feed:user_name(Alt#alt.user, poll_id(), wf:user()))}
 	]}].
 
 alt_form() ->
@@ -68,7 +73,7 @@ main() ->
 	end.
 
 event(add_alt) ->
-	Alt = #alt{id=kvs:next_id(alt, 1), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
+	Alt = #alt{id=kvs:next_id(alt, 1), user=session:ensure_user(), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
 	kvs:add(Alt),
 	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote)));
 
