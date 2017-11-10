@@ -23,7 +23,7 @@ alt(Alt, Vote) ->
 	[#li{body=[
 		#input{id="vote" ++ wf:to_list(Alt#alt.id), type=number, value=Vote, class=vote, min=-100, max=100, placeholder=0},
 		#span{class=text, body=Alt#alt.text},
-		#span{class=author, body=author(feed:user_name(Alt#alt.user, poll_id(), wf:user()))}
+		#span{class=author, body=author(polls:user_name(Alt#alt.user, poll_id(), wf:user()))}
 	]}].
 
 alt_form() ->
@@ -54,11 +54,11 @@ name(Vote) -> Vote#vote.name.
 
 alts(Alts, undefined) -> alts(Alts, #vote{ballot = []});
 alts(Alts, #vote{ballot = Ballot}) ->
-	[alt(Alt, wf:to_list(V)) || {V, P, Alt} <- feed:user_alts(Alts, Ballot, session:seed())].
+	[alt(Alt, wf:to_list(V)) || {V, P, Alt} <- polls:user_alts(Alts, Ballot, session:seed())].
 
 edit_page(Poll)->
 	wf:wire(#api{name=vote}),
-	Vote = feed:get_vote(wf:user(), poll_id()),
+	Vote = polls:get_vote(wf:user(), poll_id()),
 	#dtl{file="edit", bindings=[
 		{title, title(Poll)},
 		{alts, alts(poll_alts(), Vote)},
@@ -93,5 +93,5 @@ api_event(vote, Data, _) ->
 	Name = filter:string(proplists:get_value(<<"name">>, Props), 32, <<"anon">>),
 	Title = filter:string(proplists:get_value(<<"title">>, Props), 32, <<"poll">>),
 	update_title(poll(), Title),
-	feed:put_vote(User, poll_id(), Name, Prefs),
+	polls:put_vote(User, poll_id(), Name, Prefs),
 	wf:redirect("/result?id=" ++ wf:to_list(poll_id())).

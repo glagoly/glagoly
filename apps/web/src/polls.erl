@@ -1,8 +1,8 @@
--module(feed).
+-module(polls).
 -compile(export_all).
 -include_lib("records.hrl").
 	
-create_poll(User) ->
+create(User) ->
 	Id = vote_core:uuid(),
 	kvs:put(#poll{id = Id, user=User, title = <<"poll">>}),
 	Id.
