@@ -127,8 +127,8 @@ var VoteForm = (function () {
 
     var submitEvent = function() {
         vote({
-            title: $('#title').val().trim(),
-            name: $('#name').val().trim(),
+            title: $('#title').val(),
+            name: $('#name').val(),
             votes: $('#alts input[id^="vote"]').map(function() {
                 // love jquery for double braces
                 return [[this.id.substring(4), $(this).val()]] 

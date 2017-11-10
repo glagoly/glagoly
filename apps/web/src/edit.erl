@@ -89,9 +89,9 @@ prepare_prefs(Votes) ->
 api_event(vote, Data, _) ->
 	{Props} = jsone:decode(list_to_binary(Data)),
 	User = session:ensure_user(),
-	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props)),
-	Name = filter:string(proplists:get_value(<<"name">>, Props), 32, <<"anon">>),
-	Title = filter:string(proplists:get_value(<<"title">>, Props), 32, <<"poll">>),
+	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props, [])),
+	Name = filter:string(proplists:get_value(<<"name">>, Props, []), 32, <<"anon">>),
+	Title = filter:string(proplists:get_value(<<"title">>, Props, []), 32, <<"poll">>),
 	update_title(poll(), Title),
 	polls:put_vote(User, poll_id(), Name, Prefs),
 	wf:redirect("/result?id=" ++ wf:to_list(poll_id())).
