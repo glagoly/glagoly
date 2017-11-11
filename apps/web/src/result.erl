@@ -6,25 +6,27 @@
 
 poll_id() -> wf:to_list(wf:q(<<"id">>)).
 
-poll_alts() -> kvs:entries(kvs:get(feed, {alts, poll_id()}), alt, undefined).
+name_list(L) ->
+	I = wf:user(),
+	wf:info(?MODULE,"Props: ~p~n",[I, L]),
+	L2 = lists:map(fun
+		({U, _}) when U == I -> "<i>I</i>"; 
+		({_, N}) -> wf:to_list(N)
+	end, L),
+	wf:info(?MODULE,"Props: ~p~n",[L2]),
+	string:join(L2, ", ").
 
-poll_votes() -> kvs:entries(kvs:get(feed, {votes, poll_id()}), vote, undefined).
-
-calc_result() ->
-	Alts = [Alt#alt.id || Alt <- poll_alts()],
-	V = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), Alts),
-	Ballots = [V#vote.ballot || V <- poll_votes()],
-	P = lists:foldl(fun vote_core:add_ballot/2, V, Ballots),
-	vote_core:result(P).
-
-alt(Ids, Pos) ->
+alt(Ids, Pos, Supps) ->
 	Alts = [kvs:get(alt, Id) || Id <- Ids],
 	R =[#li{body=[
 		#span{class=vote, body=wf:to_list(Pos)},
-		#span{class=text, body=Alt#alt.text}
+		#span{class=text, body=Alt#alt.text},
+		#span{class=supps, body=name_list(dict:fetch(Alt#alt.id, Supps))}
 	]} || {ok, Alt} <- Alts].
 
-results() -> [alt(Ids, P) || {Ids, P} <- calc_result()].
+results() -> 
+	Supps = polls:supporters(poll_id()),
+	[alt(Ids, P, Supps) || {Ids, P} <- polls:result(poll_id())].
 
 main() ->
  	case kvs:get(poll, poll_id()) of
