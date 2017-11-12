@@ -12,18 +12,20 @@ poll() ->
 		_ -> undefined
 	end.
 
-
 poll_alts() -> kvs:entries(kvs:get(feed, {alts, poll_id()}), alt, undefined).
 
-author(i) -> <<"<i>I</i>">>;
-author([]) -> <<"anonymous">>;
-author(N) -> N.
+author(I, _, I) -> <<"<i>I</i>">>;
+author(User, Poll, _) ->
+	case polls:get_vote(User, Poll) of
+		#vote{name = []} -> <<"anonymous">>;
+		#vote{name = Name} -> Name
+	end.
 
 alt(Alt, Vote) ->
 	[#li{body=[
 		#input{id="vote" ++ wf:to_list(Alt#alt.id), type=number, value=Vote, class=vote, min=-100, max=100, placeholder=0},
 		#span{class=text, body=Alt#alt.text},
-		#span{class=author, body=author(polls:user_name(Alt#alt.user, poll_id(), wf:user()))}
+		#span{class=author, body=author(Alt#alt.user, poll_id(), wf:user())}
 	]}].
 
 alt_form() ->
@@ -49,9 +51,6 @@ update_title(Poll, Title) ->
 		_ -> ok
 	end.
 
-name(undefined) -> <<"">>;
-name(Vote) -> Vote#vote.name.
-
 alts(Alts, undefined) -> alts(Alts, #vote{ballot = []});
 alts(Alts, #vote{ballot = Ballot}) ->
 	[alt(Alt, wf:to_list(V)) || {V, P, Alt} <- polls:user_alts(Alts, Ballot, session:seed())].
@@ -63,7 +62,7 @@ edit_page(Poll)->
 		{title, title(Poll)},
 		{alts, alts(poll_alts(), Vote)},
 		{alt_form, alt_form()},
-		{name, name(Vote)}
+		{name, Vote#vote.name}
 	]}.
 
 main() ->
