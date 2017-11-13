@@ -17,5 +17,6 @@ route(<<>>)                 -> index;
 route(<<"index">>)          -> index;
 route(<<"create">>)         -> create;
 route(<<"result">>)         -> result;
+route(<<"my">>)             -> view_my;
 route(<<"edit">>)           -> edit;
 route(_)                    -> index.
