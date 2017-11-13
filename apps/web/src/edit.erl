@@ -83,7 +83,8 @@ prepare_prefs(Votes) ->
 	P1 = [{ wf:to_integer(A), filter:int(V, -3, 7, 0)} || [A, V] <- Votes],
 	% remove not incorrect alt ids and zero prefs,
 	Alts = [Alt#alt.id || Alt <- poll_alts()],
-	lists:filter(fun({A, V}) -> (V /= 0) and lists:member(A, Alts) end, P1).
+	P2 = lists:filter(fun({A, V}) -> (V /= 0) and lists:member(A, Alts) end, P1),
+	lists:keysort(2, P2).
 
 api_event(vote, Data, _) ->
 	{Props} = jsone:decode(list_to_binary(Data)),

@@ -8,12 +8,10 @@ poll_id() -> wf:to_list(wf:q(<<"id">>)).
 
 name_list(L) ->
 	I = wf:user(),
-	wf:info(?MODULE,"Props: ~p~n",[I, L]),
 	L2 = lists:map(fun
 		({U, _}) when U == I -> "<i>I</i>"; 
 		({_, N}) -> wf:to_list(N)
 	end, L),
-	wf:info(?MODULE,"Props: ~p~n",[L2]),
 	string:join(L2, ", ").
 
 alt(Ids, Pos, Supps) ->

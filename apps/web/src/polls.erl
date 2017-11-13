@@ -1,10 +1,19 @@
 -module(polls).
 -compile(export_all).
 -include_lib("records.hrl").
-	
+
+add_my(User, Poll) ->
+	case kvs:index(my_poll, user_poll, {User, Poll}) of
+		[] -> kvs:add(#my_poll{id=kvs:next_id(my_poll, 1), feed_id={my_polls, User}, user_poll={User, Poll}});
+		M -> M
+	end.
+
+my(User) -> kvs:entries(kvs:get(feed, {my_polls, User}), my_poll, 10).
+
 create(User) ->
 	Id = vote_core:uuid(),
 	kvs:put(#poll{id = Id, user=User, title = <<"poll">>}),
+	add_my(User, Id),
 	Id.
 
 alts(Id) -> kvs:entries(kvs:get(feed, {alts, Id}), alt, undefined).
@@ -25,14 +34,10 @@ supporters(Id) ->
 		lists:foldl(fun (A, S) -> dict:append(A, {U, Vote#vote.name}, S) end, Sups, Ballot)
 	end, dict:from_list([{A, []} || A <- alt_ids(Id)]), votes(Id)).
 
-user_name(I, _, I) -> i;
-user_name(User, Poll, I) ->
-	case get_vote(User, Poll) of undefined -> []; V -> V#vote.name end.
-
 user_alts(Alts, Ballot, Seed) -> 
 	B = maps:from_list(Ballot),
 	A = lists:zip(vote_core:rand_seq(length(Alts), Seed), Alts),
-	lists:reverse(lists:sort([ {maps:get(Alt#alt.id, B, 0), Pos, Alt} || {Pos, Alt} <- A])).
+	lists:reverse(lists:sort([{maps:get(Alt#alt.id, B, 0), Pos, Alt} || {Pos, Alt} <- A])).
 
 first([], Default) -> Default;
 first([First | _], _) -> First.
@@ -40,6 +45,7 @@ first([First | _], _) -> First.
 get_vote(User, Poll) ->	first(kvs:index(vote, user_poll, {User, Poll}), #vote{}).
 
 put_vote(User, Poll, Name, Ballot) ->
+	add_my(User, Poll),
 	case get_vote(User, Poll) of
 		#vote{id = []} -> 
 			Id = kvs:next_id(vote, 1),
