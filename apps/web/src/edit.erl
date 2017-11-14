@@ -12,7 +12,8 @@ poll() ->
 		_ -> undefined
 	end.
 
-poll_alts() -> kvs:entries(kvs:get(feed, {alts, poll_id()}), alt, undefined).
+can_edit(User, #poll{user = U}) -> U == User.
+can_edit(User, Poll, #alt{user = U}) -> can_edit(User, Poll) or (U == User).
 
 author(I, _, I) -> <<"<i>I</i>">>;
 author(User, Poll, _) ->
@@ -21,11 +22,15 @@ author(User, Poll, _) ->
 		#vote{name = Name} -> Name
 	end.
 
-alt(Alt, Vote) ->
+alt(Alt, Vote, Edit) ->
 	[#li{body=[
 		#input{id="vote" ++ wf:to_list(Alt#alt.id), type=number, value=Vote, class=vote, min=-100, max=100, placeholder=0},
 		#span{class=text, body=Alt#alt.text},
-		#span{class=author, body=author(Alt#alt.user, poll_id(), wf:user())}
+		#span{class=author, body=author(Alt#alt.user, poll_id(), wf:user())},
+		case Edit of
+			true -> #span{class=buttons, body = <<"edit">>};
+			_ -> []
+		end
 	]}].
 
 alt_form() ->
@@ -37,11 +42,11 @@ alt_form() ->
 				postback=add_alt, source=[alt_vote, alt_text]}
 	]}].
 
-title(#poll{user=User, title=Title})->
-	case wf:user() of
-		User -> #textbox{id=title, maxlength=20, 
-			class='title-input', placeholder=Title, value=Title};
-		_ -> #h1{body = Title}
+title(User, Poll)->
+	case can_edit(User, Poll) of
+		true -> #textbox{id=title, maxlength=20, 
+			class='title-input', placeholder=Poll#poll.title, value=Poll#poll.title};
+		_ -> #h1{body = Poll#poll.title}
 	end.
 
 update_title(Poll, Title) ->
@@ -51,16 +56,17 @@ update_title(Poll, Title) ->
 		_ -> ok
 	end.
 
-alts(Alts, undefined) -> alts(Alts, #vote{ballot = []});
-alts(Alts, #vote{ballot = Ballot}) ->
-	[alt(Alt, wf:to_list(V)) || {V, P, Alt} <- polls:user_alts(Alts, Ballot, session:seed())].
+alts(User, Poll, #vote{ballot = Ballot}) ->
+	Alts = polls:user_alts(polls:alts(Poll#poll.id), Ballot, session:seed()),
+	[alt(Alt, wf:to_list(V), can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts].
 
 edit_page(Poll)->
 	wf:wire(#api{name=vote}),
-	Vote = polls:get_vote(wf:user(), poll_id()),
+	User = wf:user(),
+	Vote = polls:get_vote(User, poll_id()),
 	#dtl{file="edit", bindings=[
-		{title, title(Poll)},
-		{alts, alts(poll_alts(), Vote)},
+		{title, title(User, Poll)},
+		{alts, alts(User, Poll, Vote)},
 		{alt_form, alt_form()},
 		{name, Vote#vote.name}
 	]}.
@@ -74,7 +80,7 @@ main() ->
 event(add_alt) ->
 	Alt = #alt{id=kvs:next_id(alt, 1), user=session:ensure_user(), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
 	kvs:add(Alt),
-	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote)));
+	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote), true));
 
 event(_) -> ok.
 
@@ -82,7 +88,7 @@ prepare_prefs(Votes) ->
 	% to pairs of ints
 	P1 = [{ wf:to_integer(A), filter:int(V, -3, 7, 0)} || [A, V] <- Votes],
 	% remove not incorrect alt ids and zero prefs,
-	Alts = [Alt#alt.id || Alt <- poll_alts()],
+	Alts = polls:alt_ids(poll_id()),
 	P2 = lists:filter(fun({A, V}) -> (V /= 0) and lists:member(A, Alts) end, P1),
 	lists:keysort(2, P2).
 
