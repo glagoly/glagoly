@@ -7,7 +7,7 @@
 poll_id() -> wf:to_list(wf:q(<<"id">>)).
 
 name_list(L) ->
-	I = wf:user(),
+	I = usr:id(),
 	L2 = lists:map(fun
 		({U, _}) when U == I -> "<i>I</i>"; 
 		({_, N}) -> wf:to_list(N)

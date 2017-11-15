@@ -26,7 +26,7 @@ alt(Alt, Vote, Edit) ->
 	[#li{body=[
 		#input{id="vote" ++ wf:to_list(Alt#alt.id), type=number, value=Vote, class=vote, min=-100, max=100, placeholder=0},
 		#span{class=text, body=Alt#alt.text},
-		#span{class=author, body=author(Alt#alt.user, poll_id(), wf:user())},
+		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
 			true -> #span{class=buttons, body = <<"edit">>};
 			_ -> []
@@ -50,19 +50,19 @@ title(User, Poll)->
 	end.
 
 update_title(Poll, Title) ->
-	User = wf:user(),
+	User = usr:id(),
 	case Poll#poll.user of
 		 User -> kvs:put(Poll#poll{title = Title});
 		_ -> ok
 	end.
 
 alts(User, Poll, #vote{ballot = Ballot}) ->
-	Alts = polls:user_alts(polls:alts(Poll#poll.id), Ballot, session:seed()),
+	Alts = polls:user_alts(polls:alts(Poll#poll.id), Ballot, usr:seed()),
 	[alt(Alt, wf:to_list(V), can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts].
 
 edit_page(Poll)->
 	wf:wire(#api{name=vote}),
-	User = wf:user(),
+	User = usr:id(),
 	Vote = polls:get_vote(User, poll_id()),
 	#dtl{file="edit", bindings=[
 		{title, title(User, Poll)},
@@ -78,7 +78,7 @@ main() ->
 	end.
 
 event(add_alt) ->
-	Alt = #alt{id=kvs:next_id(alt, 1), user=session:ensure_user(), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
+	Alt = #alt{id=kvs:next_id(alt, 1), user=usr:ensure(), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
 	kvs:add(Alt),
 	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote), true));
 
@@ -94,7 +94,7 @@ prepare_prefs(Votes) ->
 
 api_event(vote, Data, _) ->
 	{Props} = jsone:decode(list_to_binary(Data)),
-	User = session:ensure_user(),
+	User = usr:ensure(),
 	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props, [])),
 	Name = filter:string(proplists:get_value(<<"name">>, Props, []), 32, <<"anon">>),
 	Title = filter:string(proplists:get_value(<<"title">>, Props, []), 32, <<"poll">>),

@@ -1,8 +1,11 @@
--module(session).
+-module(usr).
+% usr because user is taken by erlang
 -compile(export_all).
 -include_lib("n2o/include/wf.hrl").
 
-ensure_user() ->
+id() -> wf:user().
+
+ensure() ->
 	case wf:user() of
 		undefined -> wf:user(kvs:next_id(user, 1));
 		U -> U
