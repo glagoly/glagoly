@@ -22,9 +22,15 @@ author(User, Poll, _) ->
 		#vote{name = Name} -> Name
 	end.
 
+vote_input(Id, <<"0">>) -> vote_input(Id, []);
+vote_input(Id, "0") -> vote_input(Id, []);
+
+vote_input(Id, Value) ->
+	#input{id=Id, name=Id, type=number, value=Value, class=vote, min=-3, max=7, placeholder=0}.
+
 alt(Alt, Vote, Edit) ->
 	[#li{body=[
-		#input{id="vote" ++ wf:to_list(Alt#alt.id), type=number, value=Vote, class=vote, min=-100, max=100, placeholder=0},
+		vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),
 		#span{class=text, body=Alt#alt.text},
 		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
@@ -35,7 +41,7 @@ alt(Alt, Vote, Edit) ->
 
 alt_form() ->
 	[#panel{class='vote-column', body=[
-		#input{id=alt_vote, type=number, class=vote, min=-100, max=100, placeholder=0}
+		vote_input(alt_vote, [])
 	]}, #panel{class='text-column', body=[
 		#textarea{id=alt_text, class=text},
 		#button{id=send, class=[button, 'float-right'], body="add alternative", 
