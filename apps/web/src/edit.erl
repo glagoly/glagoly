@@ -34,7 +34,9 @@ alt(Alt, Vote, Edit) ->
 		#span{class=text, body=Alt#alt.text},
 		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
-			true -> #span{class=buttons, body = <<"edit">>};
+			true -> #span{class=buttons, body = [
+				#link{id="del" ++ wf:to_list(Alt#alt.id), body="delete", postback=del_alt, source=[{some, "number(1)"}]}
+			]};
 			_ -> []
 		end
 	]}].
@@ -87,6 +89,9 @@ event(add_alt) ->
 	Alt = #alt{id=kvs:next_id(alt, 1), user=usr:ensure(), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
 	kvs:add(Alt),
 	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote), true));
+
+event(del_alt) ->
+	wf:info(?MODULE,"Delete: ~p~n",[wf:q(some)]);
 
 event(_) -> ok.
 

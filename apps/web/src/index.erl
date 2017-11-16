@@ -8,7 +8,7 @@ main() ->
 	#dtl{file="index", app=sample, bindings=[{create_button, #button{body="create poll",postback=create} }]}.
 
 event(create) -> 
-	Id = polls:create(session:ensure_user()),
+	Id = polls:create(usr:ensure()),
 	wf:redirect("/edit?id=" ++ wf:to_list(Id));
 
 event(_) -> ok.
