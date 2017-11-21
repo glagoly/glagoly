@@ -28,6 +28,14 @@ vote_input(Id, "0") -> vote_input(Id, []);
 vote_input(Id, Value) ->
 	#input{id=Id, name=Id, type=number, value=Value, class=vote, min=-3, max=7, placeholder=0}.
 
+alt_link(Postback, Body, Alt) ->
+	#link{
+		id=wf:to_list([Postback, Alt#alt.id]),
+		body=Body,
+		postback=Postback,
+		source=[{id, wf:to_list(["number(", Alt#alt.id, ")"])}]
+	}.
+
 alt(Alt, Vote, Edit) ->
 	[#li{body=[
 		vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),
@@ -35,7 +43,7 @@ alt(Alt, Vote, Edit) ->
 		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
 			true -> #span{class=buttons, body = [
-				#link{id="del" ++ wf:to_list(Alt#alt.id), body="delete", postback=del_alt, source=[{some, "number(1)"}]}
+				alt_link(del_alt, "delete", Alt)
 			]};
 			_ -> []
 		end
@@ -91,7 +99,15 @@ event(add_alt) ->
 	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote), true));
 
 event(del_alt) ->
-	wf:info(?MODULE,"Delete: ~p~n",[wf:q(some)]);
+	Poll = poll(),
+	AltId = wf:to_integer(wf:q(id)),
+	case polls:get_alt(Poll, AltId) of
+		undefined -> no;
+		Alt -> case can_edit(usr:id(), Poll, Alt) of
+			true -> kvs:put(Alt#alt{hidden = true});
+			_ -> no
+		end
+	end;
 
 event(_) -> ok.
 
