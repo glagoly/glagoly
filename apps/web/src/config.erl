@@ -26,7 +26,8 @@ log_modules() -> %all.
     result,
     kvs,
     feed,
-    user
+    usr,
+    polls
   %  poll
  %   n2o_nitrogen,
   %  n2o_session,

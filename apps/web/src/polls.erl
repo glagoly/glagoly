@@ -16,7 +16,7 @@ create(User) ->
 	add_my(User, Id),
 	Id.
 
-alts(Id) -> kvs:entries(kvs:get(feed, {alts, Id}), alt, undefined).
+alts(Id) -> [A || A <- kvs:entries(kvs:get(feed, {alts, Id}), alt, undefined), A#alt.hidden == undefined].
 alt_ids(Id) -> [Alt#alt.id || Alt <- alts(Id)].
 
 votes(Id) -> kvs:entries(kvs:get(feed, {votes, Id}), vote, undefined).
@@ -52,4 +52,15 @@ put_vote(User, Poll, Name, Ballot) ->
 			kvs:add(#vote{id=Id, feed_id={votes, Poll}, user_poll={User, Poll}, name=Name, ballot=Ballot});
 		Vote -> 
 			kvs:put(Vote#vote{name=Name, ballot=Ballot})
+	end.
+
+get_alt(#poll{id = PollId}, Id) ->
+	case kvs:get(alt, Id) of 
+		{ok, Alt} -> 
+			case Alt of
+			% not that clear, but we get the alt only from this poll
+				#alt{feed_id={alts, PollId}} -> Alt;
+				_ -> undefined
+			end;
+		_ -> undefined
 	end.
