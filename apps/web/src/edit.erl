@@ -4,6 +4,8 @@
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("records.hrl").
 
+-define(ALT_ID(A), "alt" ++ wf:to_list(A#alt.id)).
+
 poll_id() -> wf:to_list(wf:q(<<"id">>)).
 
 poll() ->
@@ -36,8 +38,12 @@ alt_link(Postback, Body, Alt) ->
 		source=[{id, wf:to_list(["number(", Alt#alt.id, ")"])}]
 	}.
 
+restore_alt(Alt) -> [#li{id = ?ALT_ID(Alt), body=[
+		alt_link(restore_alt, "Restore", Alt), " deleted alterntive"
+	]}].
+
 alt(Alt, Vote, Edit) ->
-	[#li{body=[
+	[#li{id = ?ALT_ID(Alt), body=[
 		vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),
 		#span{class=text, body=Alt#alt.text},
 		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
@@ -104,7 +110,9 @@ event(del_alt) ->
 	case polls:get_alt(Poll, AltId) of
 		undefined -> no;
 		Alt -> case can_edit(usr:id(), Poll, Alt) of
-			true -> kvs:put(Alt#alt{hidden = true});
+			true -> 
+				kvs:put(Alt#alt{hidden = true}),
+				wf:update(?ALT_ID(Alt), restore_alt(Alt));
 			_ -> no
 		end
 	end;
