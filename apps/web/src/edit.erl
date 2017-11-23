@@ -99,23 +99,35 @@ main() ->
 		Poll -> edit_page(Poll)
 	end.
 
-event(add_alt) ->
-	Alt = #alt{id=kvs:next_id(alt, 1), user=usr:ensure(), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
-	kvs:add(Alt),
-	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote), true));
-
-event(del_alt) ->
+alt_event(Fun) -> 
 	Poll = poll(),
 	AltId = wf:to_integer(wf:q(id)),
 	case polls:get_alt(Poll, AltId) of
 		undefined -> no;
 		Alt -> case can_edit(usr:id(), Poll, Alt) of
-			true -> 
-				kvs:put(Alt#alt{hidden = true}),
-				wf:update(?ALT_ID(Alt), restore_alt(Alt));
+			true -> Fun(Poll, Alt);
 			_ -> no
 		end
-	end;
+	end.
+
+event(add_alt) ->
+	Alt = #alt{id=kvs:next_id(alt, 1), user=usr:ensure(), feed_id={alts, poll_id()}, text=wf:q(alt_text)},
+	kvs:add(Alt),
+	wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote), true));
+
+event(del_alt) -> 
+	alt_event(fun (Poll, Alt) ->
+		kvs:put(Alt#alt{hidden = true}),
+		wf:update(?ALT_ID(Alt), restore_alt(Alt))
+	end);
+
+event(restore_alt) ->
+	alt_event(fun (Poll, Alt) ->
+		kvs:put(Alt#alt{hidden = false}),
+		V = polls:get_vote(usr:id(), poll_id()),
+		B = maps:from_list(V#vote.ballot),
+		wf:update(?ALT_ID(Alt), alt(Alt, wf:to_list(maps:get(Alt#alt.id, B, 0)), true))
+	end);
 
 event(_) -> ok.
 
@@ -128,7 +140,7 @@ prepare_prefs(Votes) ->
 	lists:keysort(2, P2).
 
 api_event(vote, Data, _) ->
-	{Props} = jsone:decode(list_to_binary(Data)),
+	Props = jsone:decode(list_to_binary(Data), [{object_format, proplist}]),
 	User = usr:ensure(),
 	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props, [])),
 	Name = filter:string(proplists:get_value(<<"name">>, Props, []), 32, <<"anon">>),

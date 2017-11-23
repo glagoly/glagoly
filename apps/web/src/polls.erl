@@ -16,7 +16,7 @@ create(User) ->
 	add_my(User, Id),
 	Id.
 
-alts(Id) -> [A || A <- kvs:entries(kvs:get(feed, {alts, Id}), alt, undefined), A#alt.hidden == undefined].
+alts(Id) -> [A || A <- kvs:entries(kvs:get(feed, {alts, Id}), alt, undefined), A#alt.hidden /= true].
 alt_ids(Id) -> [Alt#alt.id || Alt <- alts(Id)].
 
 votes(Id) -> kvs:entries(kvs:get(feed, {votes, Id}), vote, undefined).
