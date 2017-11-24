@@ -30,29 +30,36 @@ vote_input(Id, "0") -> vote_input(Id, []);
 vote_input(Id, Value) ->
 	#input{id=Id, name=Id, type=number, value=Value, class=vote, min=-3, max=7, placeholder=0}.
 
-alt_link(Postback, Body, Alt) ->
+alt_link(Postback, Body, Alt) -> alt_link(Postback, Body, Alt, []).
+alt_link(Postback, Body, Alt, Source) ->
 	#link{
 		id=wf:to_list([Postback, Alt#alt.id]),
 		body=Body,
 		postback=Postback,
-		source=[{id, wf:to_list(["number(", Alt#alt.id, ")"])}]
+		source=[{id, wf:to_list(["number(", Alt#alt.id, ")"])}] ++ Source
 	}.
 
 restore_alt(Alt) -> [#li{id = ?ALT_ID(Alt), body=[
 		alt_link(restore_alt, "Restore", Alt), " deleted alterntive"
 	]}].
 
-alt(Alt, Vote, Edit) ->
-	[#li{id = ?ALT_ID(Alt), body=[
-		vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),
+alt_text(Alt, Edit) ->
+	#span{id=?ALT_ID(Alt) ++ "text", body = [
 		#span{class=text, body=Alt#alt.text},
 		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
 			true -> #span{class=buttons, body = [
-				alt_link(del_alt, "delete", Alt)
+				alt_link(del_alt, "delete", Alt),
+				alt_link(edit_alt, "edit", Alt)
 			]};
 			_ -> []
 		end
+	]}.
+
+alt(Alt, Vote, Edit) ->
+	[#li{id = ?ALT_ID(Alt), body=[
+		vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),
+		alt_text(Alt, Edit)
 	]}].
 
 alt_form() ->
@@ -119,6 +126,29 @@ event(del_alt) ->
 	alt_event(fun (Poll, Alt) ->
 		kvs:put(Alt#alt{hidden = true}),
 		wf:update(?ALT_ID(Alt), restore_alt(Alt))
+	end);
+
+event(edit_alt) ->
+	alt_event(fun (Poll, Alt) ->
+		Id = ?ALT_ID(Alt) ++ "text",
+		wf:update(Id, #panel{id=Id, body = [
+			#textarea{id=?ALT_ID(Alt) ++ "new", body=Alt#alt.text},
+			alt_link(cancel_edit_alt, "cancel", Alt),
+			alt_link(update_alt, "save", Alt, [?ALT_ID(Alt) ++ "new"])
+		]})
+	end);
+
+event(cancel_edit_alt) ->
+	alt_event(fun (Poll, Alt) ->
+		wf:update(?ALT_ID(Alt) ++ "text", alt_text(Alt, true))
+	end);
+
+event(update_alt) ->
+	alt_event(fun (Poll, Alt) ->
+		wf:info(?MODULE,"Votes: ~p~n",[?ALT_ID(Alt) ++ "new"]),
+		New = Alt#alt{user=usr:id(), text=wf:q(?ALT_ID(Alt) ++ "new")},
+		kvs:put(New),
+		wf:update(?ALT_ID(Alt) ++ "text", alt_text(New, true))
 	end);
 
 event(restore_alt) ->
