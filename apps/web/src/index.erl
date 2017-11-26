@@ -20,5 +20,4 @@ event(_) -> ok.
 
 api_event(fb_login, Data, _) ->
 	Token = jsone:decode(list_to_binary(Data)),
-	wf:info(?MODULE,"Token: ~p~n",[Token]).
-
+	usr:fb_login(Token).
