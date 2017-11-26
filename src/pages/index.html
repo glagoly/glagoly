@@ -10,6 +10,7 @@ layout: index
     the fastest way <br>to make micro-desicions
   </h2>
   \{{ create_button }}
+  \{{ login_button }}
 </div>
 
 <div class="row">
@@ -82,6 +83,20 @@ layout: index
 
 
 <script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      fb_login(response.authResponse.accessToken);
+    } else if (response.status === 'not_authorized') {
+      alert('Please log into this app.');
+    } else {
+      alert('Please log into Facebook.');
+    }
+  }
+
+
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '\{{ fb_app_id }}',
@@ -101,4 +116,10 @@ layout: index
      js.src = "https://connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
+
+  function onLoginClick() {
+    FB.login(function(response) {
+      statusChangeCallback(response);
+    }, {scope: 'public_profile,email'});
+  };
 </script>
