@@ -145,7 +145,6 @@ event(cancel_edit_alt) ->
 
 event(update_alt) ->
 	alt_event(fun (Poll, Alt) ->
-		wf:info(?MODULE,"Votes: ~p~n",[?ALT_ID(Alt) ++ "new"]),
 		New = Alt#alt{user=usr:id(), text=wf:q(?ALT_ID(Alt) ++ "new")},
 		kvs:put(New),
 		wf:update(?ALT_ID(Alt) ++ "text", alt_text(New, true))
