@@ -16,7 +16,7 @@ poll({User, Poll}) ->
 		#span{class=poll, body=P#poll.title}
 	]}}.
 
-my() -> U = wf:user(), [poll(P#my_poll.user_poll) || P <- polls:my(U)].
+my() -> U = usr:id(), [poll(P#my_poll.user_poll) || P <- polls:my(U)].
 	
 main() ->
 	#dtl{file="my", bindings=[
