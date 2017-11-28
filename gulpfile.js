@@ -2,7 +2,6 @@ var $        = require('gulp-load-plugins')();
 var argv     = require('yargs').argv;
 var browser  = require('browser-sync');
 var gulp     = require('gulp');
-var panini   = require('panini');
 var rimraf   = require('rimraf');
 var sequence = require('run-sequence');
 var sherpa   = require('style-sherpa');
@@ -27,7 +26,7 @@ var PATHS = {
     'bower_components/foundation-sites/scss',
     'bower_components/motion-ui/src/'
   ],
-  dist: 'apps/web/priv',
+  dist: 'apps/web/priv/static',
   javascript: [
     'bower_components/jquery/dist/jquery.js',
     'bower_components/what-input/what-input.js',
@@ -53,7 +52,7 @@ var PATHS = {
     'bower_components/foundation-sites/js/foundation.tabs.js',
     'bower_components/foundation-sites/js/foundation.toggler.js',
     'bower_components/foundation-sites/js/foundation.tooltip.js',
-    // Moption UI
+    // Motion UI
     'bower_components/motion-ui/dist/motion-ui.js',
     // N20
     'deps/n2o/priv/protocols/bert.js',
@@ -79,26 +78,7 @@ gulp.task('clean', function(done) {
 // This task skips over the "img", "js", and "scss" folders, which are parsed separately
 gulp.task('copy', function() {
   gulp.src(PATHS.assets)
-    .pipe(gulp.dest(PATHS.dist + '/static/'));
-});
-
-// Copy page templates into finished HTML files
-gulp.task('pages', function() {
-  gulp.src('src/pages/**/*.{html,hbs,handlebars}')
-    .pipe(panini({
-      root: 'src/pages/',
-      layouts: 'src/layouts/',
-      partials: 'src/partials/',
-      data: 'src/data/',
-      helpers: 'src/helpers/'
-    }))
-    .pipe(gulp.dest(PATHS.dist + '/templates/'));
-});
-
-gulp.task('pages:reset', function(cb) {
-  panini.refresh();
-  gulp.run('pages');
-  cb();
+    .pipe(gulp.dest(PATHS.dist));
 });
 
 // Compile Sass into CSS
@@ -123,10 +103,10 @@ gulp.task('sass', function() {
     .pipe($.autoprefixer({
       browsers: COMPATIBILITY
     }))
-    .pipe(uncss)
+    // .pipe(uncss)
     .pipe(minifycss)
     .pipe($.if(!isProduction, $.sourcemaps.write()))
-    .pipe(gulp.dest(PATHS.dist + '/static/css'));
+    .pipe(gulp.dest(PATHS.dist + '/css'));
 });
 
 // Combine JavaScript into one file
@@ -142,7 +122,7 @@ gulp.task('javascript', function() {
     .pipe($.concat('app.js'))
     .pipe(uglify)
     .pipe($.if(!isProduction, $.sourcemaps.write()))
-    .pipe(gulp.dest(PATHS.dist + '/static/js'));
+    .pipe(gulp.dest(PATHS.dist + '/js'));
 });
 
 // Copy images to the "dist" folder
@@ -154,12 +134,12 @@ gulp.task('images', function() {
 
   return gulp.src('src/assets/img/**/*')
     .pipe(imagemin)
-    .pipe(gulp.dest(PATHS.dist + '/static/img'));
+    .pipe(gulp.dest(PATHS.dist + '/img'));
 });
 
 // Build the "dist" folder by running all of the above tasks
 gulp.task('build', function(done) {
-  sequence('clean', ['pages', 'sass', 'javascript', 'images', 'copy'], done);
+  sequence('clean', ['sass', 'javascript', 'images', 'copy'], done);
 });
 
 // Start a server with LiveReload to preview the site in
@@ -172,10 +152,7 @@ gulp.task('server', ['build'], function() {
 // Build the site, run the server, and watch for file changes
 gulp.task('default', ['build', 'server'], function() {
   gulp.watch(PATHS.assets, ['copy', browser.reload]);
-  gulp.watch(['src/pages/**/*.html'], ['pages', browser.reload]);
-  gulp.watch(['src/{layouts,partials}/**/*.html'], ['pages:reset', browser.reload]);
   gulp.watch(['src/assets/scss/**/*.scss'], ['sass', browser.reload]);
   gulp.watch(['src/assets/js/**/*.js'], ['javascript', browser.reload]);
   gulp.watch(['src/assets/img/**/*'], ['images', browser.reload]);
-  gulp.watch(['src/styleguide/**'], ['styleguide', browser.reload]);
 });
