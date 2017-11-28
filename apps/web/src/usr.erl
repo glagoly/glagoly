@@ -13,7 +13,7 @@ id() ->
 ensure() ->
 	case wf:user() of
 		{_, U} -> U;
-		_ -> wf:user({temp, kvs:next_id(user, 1)})
+		_ -> U = kvs:next_id(user, 1), wf:user({temp, U}), U
 	end.
 
 seed() -> erlang:binary_to_integer(wf:session_id(), 16).
