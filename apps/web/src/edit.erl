@@ -6,7 +6,7 @@
 
 -define(ALT_ID(A), "alt" ++ wf:to_list(A#alt.id)).
 
-poll_id() -> wf:to_list(wf:q(<<"id">>)).
+poll_id() -> wf:to_list(wf:q(<<"ll">>)).
 
 poll() ->
 	case kvs:get(poll, poll_id()) of
