@@ -4,8 +4,11 @@
 
 add_my(User, Poll) ->
 	case kvs:index(my_poll, user_poll, {User, Poll}) of
-		[] -> kvs:add(#my_poll{id=kvs:next_id(my_poll, 1), feed_id={my_polls, User}, user_poll={User, Poll}});
-		M -> M
+		[E] -> 
+			{ok, E2} = kvs:unlink(E),
+			kvs:link(E2);
+		_ -> 
+			kvs:add(#my_poll{id=kvs:next_id(my_poll, 1), feed_id={my_polls, User}, user_poll={User, Poll}})
 	end.
 
 my(User) -> kvs:entries(kvs:get(feed, {my_polls, User}), my_poll, 10).

@@ -10,11 +10,11 @@ alt([{A, _} | _]) -> {ok, Alt} = kvs:get(alt, A), Alt#alt.text.
 poll({User, Poll}) ->
 	{ok, P} = kvs:get(poll, Poll),
 	V = polls:get_vote(User, Poll),
-	#li{body = #link{href = Poll, body = [
+	#li{body = [
 		#span{class=alt, body=alt(V#vote.ballot)},
 		<<" in ">>,
-		#span{class=poll, body=P#poll.title}
-	]}}.
+		#link{href = "p?ll=" ++ Poll, body = #span{class=poll, body=P#poll.title}}
+	]}.
 
 my() -> U = usr:id(), [poll(P#my_poll.user_poll) || P <- polls:my(U)].
 	
