@@ -22,6 +22,6 @@ Run gulp:
 
     npm run start
 
-## Todo
+## Build front
 
-- [ ] Add https
+	gulp build --production
