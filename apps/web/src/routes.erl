@@ -14,9 +14,7 @@ prefix(<<"/",P/binary>>)    -> route(P);
 prefix(P)                   -> route(P).
 
 route(<<>>)                 -> index;
-route(<<"index">>)          -> index;
-route(<<"create">>)         -> create;
 route(<<"result">>)         -> result;
 route(<<"my">>)             -> view_my;
 route(<<"p">>)              -> edit;
-route(_)                    -> index.
+route(_)                    -> view_404.
