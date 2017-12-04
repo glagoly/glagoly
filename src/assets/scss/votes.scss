@@ -5,7 +5,7 @@
 
 input.title-input {
 	font-size: $h1-font-size;
-	height: ($h1-font-size + ($form-spacing * 2));
+	height: (rem-calc($h1-font-size) + ($form-spacing * 2));
 	margin-top: $global-margin;
 }
 
@@ -34,7 +34,7 @@ ol.alternatives
 }
 
 input.vote {
-	height: ($vote-font-size + ($form-spacing * 0.65));
+	height: (rem-calc($vote-font-size) + ($form-spacing * 0.65));
 }
 
 ol.results-winners

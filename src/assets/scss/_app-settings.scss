@@ -35,18 +35,4 @@ $input-font-size: 1rem;
 $input-background: $panel-color;
 $input-background-focus: $panel-color;
 
-$header-sizes: (
-  small: (
-    'h1': 48 / 16 * 18,
-    'h2': 40 / 16 * 18,
-    'h3': 31 / 16 * 18,
-    'h4': 25 / 16 * 18,
-    'h5': 20 / 16 * 18,
-    'h6': 18,
-  ),
-);
-
-$h1-font-size: rem-calc(map-get(map-get($header-sizes, small), 'h1'));
-
 $small-font-size: rem-calc(14px);
-
