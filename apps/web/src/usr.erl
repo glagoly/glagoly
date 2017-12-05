@@ -23,7 +23,7 @@ logout() -> wf:user(undefined).
 login({_, undefined}) -> no;
 login(Creds) -> 
 	wf:user({pers, case kvs:get(login, Creds) of
- 		{ok, #login{user = U}} -> U;
+ 		{ok, #login{user = U}} -> polls:merge_user(U, id()), U;
  		_ -> U = ensure(), kvs:put(#login{creds = Creds, user=U}), U
  	end}).
 	

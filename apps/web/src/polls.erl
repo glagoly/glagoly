@@ -11,7 +11,8 @@ add_my(User, Poll) ->
 			kvs:add(#my_poll{id=kvs:next_id(my_poll, 1), feed_id={my_polls, User}, user_poll={User, Poll}})
 	end.
 
-my(User) -> kvs:entries(kvs:get(feed, {my_polls, User}), my_poll, 10).
+my(User) -> my(User, 10).
+my(User, Count) -> kvs:entries(kvs:get(feed, {my_polls, User}), my_poll, Count).
 
 create(User) ->
 	Id = vote_core:uuid(),
@@ -67,3 +68,15 @@ get_alt(#poll{id = PollId}, Id) ->
 			end;
 		_ -> undefined
 	end.
+
+merge_user(_, undefined) -> no;
+
+merge_user(Old, New) ->
+	[kvs:put(P#poll{user=Old}) || P <- kvs:index(poll, user, New)],
+	[kvs:put(A#alt{user=Old}) || A <- kvs:index(alt, user, New)],
+	lists:map(fun(#my_poll{id=Id, user_poll={_, P}}) -> 
+		kvs:delete(my_poll, Id),
+		V = get_vote(New, P),
+		kvs:remove(vote, V#vote.id),
+		put_vote(Old, P, V#vote.name, V#vote.ballot)
+	end, my(New, undefined)).
