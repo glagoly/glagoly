@@ -13,8 +13,7 @@ prefix(<<"/ws/",P/binary>>) -> route(P);
 prefix(<<"/",P/binary>>)    -> route(P);
 prefix(P)                   -> route(P).
 
-route(<<>>)                 -> index;
+route(<<>>)                 -> view_index;
 route(<<"result">>)         -> result;
-route(<<"my">>)             -> view_my;
 route(<<"p">>)              -> edit;
 route(_)                    -> view_404.
