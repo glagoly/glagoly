@@ -1,0 +1,61 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ description }}">
+    <title>{{ title }} @ glagoly</title>
+    <link rel="stylesheet" href="static/css/app.css">
+  </head>
+  <body>
+   
+    {{ body }}
+    
+    <script>
+      // This is called with the results from from FB.getLoginStatus().
+      function statusChangeCallback(response) {
+        console.log('statusChangeCallback');
+        if (response.status === 'connected') {
+          // Logged into your app and Facebook.
+          fb_login(response.authResponse.accessToken);
+        } else if (response.status === 'not_authorized') {
+          alert('Please log into this app.');
+        } else {
+          alert('Please log into Facebook.');
+        }
+      }
+    
+    
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '{{ fb_app_id }}',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v2.8'
+        });
+          
+        FB.AppEvents.logPageView();   
+          
+      };
+    
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    
+      function onLoginClick() {
+        FB.login(function(response) {
+          statusChangeCallback(response);
+        }, {scope: 'public_profile,email'});
+      };
+    </script>
+
+    <script>{{ script }}</script>
+    <script src="static/js/app.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </body>
+</html>

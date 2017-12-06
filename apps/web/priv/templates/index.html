@@ -1,146 +1,88 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>glagoly</title>
-    <link rel="stylesheet" href="static/css/app.css">
-  </head>
-  <body>
-    <div class="top-bar">
-      <div class="column row">
-        <div class="top-bar-right">
-          <a href="#">log in</a>
-        </div>
-      </div>
-    </div>
 
-    <div class="cta">
-      <h1>
-        <img class="logo" src="/static/img/logo-light.svg"><br/>glagoly
-      </h1>
-      <h2>
-        the fastest way <br>to make micro-desicions
-      </h2>
-      {{ create_button }}
-      {{ login_button }}
-      {{ logout_button }}
+<div class="top-bar">
+  <div class="column row">
+    <div class="top-bar-right">
+      <a href="#">log in</a>
     </div>
-    
-    <div class="row">
-      <div class="large-4 columns">
-        <div class="card">
-          <h2>Wise collective desicions</h2>
-          <p>Not only "yes", "no" and "abstain". You can hear and chose other alternatives:</p>
-          <ul>  
-            <li>paint fenster in red;</li>
-            <li>paint fenster in blue;</li>
-            <li>remove fenster and make bicyle parking.</li>
-          </ul>
-          <a href="p?ll=sample-poll" class="button primary">vote on sample desicion</a>
-        </div>
-      </div>
-    
-      <div class="large-4 columns">
-        <div class="card">
-          <h2>Easy meeting schedule</h2>
-          <p>With glagoluy you can vote not only on meeting time, but choose also place and activity:</p>
-          <ul>  
-            <li>Play baseball on backyard on Saturday morning;</li>
-            <li>Drink beer at Frieds Bar on Friday evening;</li>
-            <li>Make a skype conference on Friday evening.</li>
-          </ul>
-          <a href="p?ll=sample-schedule" class="button primary">vote on sample meeting schedule</a>
-        </div>
-      </div>
-      
-      <div class="large-4 columns">
-        <div class="card">
-          <h2>Fun rated lists</h2>
-          <p>NOt only for work but for fun. Create any ranked lists, including playlists for your party:</p>
-          <ul>  
-            <li>add all cristmas yop 100 to playlist;</li>
-            <li>add ABBA hapy neyear to playlist;</li>
-            <li>play univerity anthem every hour;</li>
-          </ul>
-          <a href="p?ll=sample-list" class="button primary">vote on sample playlist</a>
-        </div>
-      </div>
-    </div>
-    
-    <div class="row">
-      <div class="large-4 large-offset-2 columns">
-        <div class="card">
-          <h2>Magic sience inside</h2>
-          <p>Throug being simple to usem glagoly backed by voting sience:</p>
-          <ul>  
-            <li>Schulze method for ranking votes;</li>
-            <li>Robbinson rotation for diskarding donkey votes.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="large-4 end columns">
-        <div class="card">
-          <h2>Free as in speech</h2>
-          <p>Glago9ly is open source. Fell free to get it source, modify, install or learn.</p>
-    
-          <a aria-label="Star glagoly/glagoly on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/glagoly/glagoly#stargazers_count" data-count-href="/glagoly/glagoly/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/glagoly/glagoly" class="github-button">Star</a>
-        </div>
-      </div>
-    
-    </div>
-    
-    <div class="cta">
-      <h2>Start poll in less then 5 minutes</h2>
-      <a href="create" class="button large main">create poll</a>
-    </div>
-    
-    
-    <script>
-      // This is called with the results from from FB.getLoginStatus().
-      function statusChangeCallback(response) {
-        console.log('statusChangeCallback');
-        if (response.status === 'connected') {
-          // Logged into your app and Facebook.
-          fb_login(response.authResponse.accessToken);
-        } else if (response.status === 'not_authorized') {
-          alert('Please log into this app.');
-        } else {
-          alert('Please log into Facebook.');
-        }
-      }
-    
-    
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '{{ fb_app_id }}',
-          cookie     : true,
-          xfbml      : true,
-          version    : 'v2.8'
-        });
-          
-        FB.AppEvents.logPageView();   
-          
-      };
-    
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "https://connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    
-      function onLoginClick() {
-        FB.login(function(response) {
-          statusChangeCallback(response);
-        }, {scope: 'public_profile,email'});
-      };
-    </script>
+  </div>
+</div>
 
-    <script>{{ script }}</script>
-    <script src="static/js/app.js"></script>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
-</html>
+<div class="cta">
+  <h1>
+    <img class="logo" src="/static/img/logo-light.svg"><br/>glagoly
+  </h1>
+  <h2>
+    the fastest way <br>to make micro-desicions
+  </h2>
+  {{ create_button }}
+  {{ login_button }}
+  {{ logout_button }}
+</div>
+
+<div class="row">
+  <div class="large-4 columns">
+    <div class="card">
+      <h2>Wise collective desicions</h2>
+      <p>Not only "yes", "no" and "abstain". You can hear and chose other alternatives:</p>
+      <ul>  
+        <li>paint fenster in red;</li>
+        <li>paint fenster in blue;</li>
+        <li>remove fenster and make bicyle parking.</li>
+      </ul>
+      <a href="p?ll=sample-poll" class="button primary">vote on sample desicion</a>
+    </div>
+  </div>
+
+  <div class="large-4 columns">
+    <div class="card">
+      <h2>Easy meeting schedule</h2>
+      <p>With glagoluy you can vote not only on meeting time, but choose also place and activity:</p>
+      <ul>  
+        <li>Play baseball on backyard on Saturday morning;</li>
+        <li>Drink beer at Frieds Bar on Friday evening;</li>
+        <li>Make a skype conference on Friday evening.</li>
+      </ul>
+      <a href="p?ll=sample-schedule" class="button primary">vote on sample meeting schedule</a>
+    </div>
+  </div>
+  
+  <div class="large-4 columns">
+    <div class="card">
+      <h2>Fun rated lists</h2>
+      <p>NOt only for work but for fun. Create any ranked lists, including playlists for your party:</p>
+      <ul>  
+        <li>add all cristmas yop 100 to playlist;</li>
+        <li>add ABBA hapy neyear to playlist;</li>
+        <li>play univerity anthem every hour;</li>
+      </ul>
+      <a href="p?ll=sample-list" class="button primary">vote on sample playlist</a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-4 large-offset-2 columns">
+    <div class="card">
+      <h2>Magic sience inside</h2>
+      <p>Throug being simple to usem glagoly backed by voting sience:</p>
+      <ul>  
+        <li>Schulze method for ranking votes;</li>
+        <li>Robbinson rotation for diskarding donkey votes.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="large-4 end columns">
+    <div class="card">
+      <h2>Free as in speech</h2>
+      <p>Glago9ly is open source. Fell free to get it source, modify, install or learn.</p>
+
+      <a aria-label="Star glagoly/glagoly on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/glagoly/glagoly#stargazers_count" data-count-href="/glagoly/glagoly/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/glagoly/glagoly" class="github-button">Star</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta">
+  <h2>Start poll in less then 5 minutes</h2>
+  <a href="create" class="button large main">create poll</a>
+</div>
