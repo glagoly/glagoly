@@ -37,6 +37,7 @@ about() ->
 	]).
 
 main() ->
+	wf:info(?MODULE,"User: ~p",[usr:id()]),
 	case usr:id() of
 		undefined -> about();
 		User -> my(User)

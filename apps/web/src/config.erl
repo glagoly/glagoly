@@ -21,7 +21,7 @@ log_modules() -> %all.
   %  kvs,
     create,
     vote_core,
-    index,
+    view_index,
     edit,
     filter,
     result,
