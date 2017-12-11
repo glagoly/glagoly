@@ -37,5 +37,5 @@ Run gulp:
 
     sudo apt-get update
 
-    sudo apt-get install make esl-erlang
+    sudo apt-get install make inotify-tools esl-erlang
 
