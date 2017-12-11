@@ -8,6 +8,7 @@ npm-debug.log
 deps
 .applist
 ebin
+web
 sample
 
 .rebar

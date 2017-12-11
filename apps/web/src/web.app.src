@@ -2,6 +2,6 @@
   [{description, ""},
    {vsn, "2.10"},
    {registered, []},
-   {applications, [kernel, stdlib, n2o, asn1, public_key, ssl, inets]},
+   {applications, [kernel, stdlib, n2o, kvs, asn1, public_key, ssl, inets]},
    {mod, { web, []}},
    {env, []} ]}.

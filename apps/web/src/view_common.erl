@@ -5,7 +5,7 @@
 
 
 bindings() -> [
-		{fb_app_id, wf:config(glagoly, fb_app_id)}
+		{fb_app_id, wf:config(web, fb_app_id)}
 	].
 
 page(Bindings) -> 

@@ -16,9 +16,9 @@ metainfo() ->
 
 log_level() -> debug.
 
-log_modules() -> %all.
+log_modules() -> % all.
   [
-  %  kvs,
+    kvs,
     create,
     vote_core,
     view_index,
@@ -28,8 +28,8 @@ log_modules() -> %all.
     kvs,
     feed,
     usr,
-    polls
-  %  poll
+    polls,
+    web
  %   n2o_nitrogen,
   %  n2o_session,
    % doc,
