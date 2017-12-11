@@ -24,4 +24,9 @@ Run gulp:
 
 ## Build front
 
-	gulp build --production
+    gulp build --production
+
+## On prod
+    
+    make console
+    make start
