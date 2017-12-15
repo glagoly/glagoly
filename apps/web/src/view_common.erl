@@ -3,6 +3,16 @@
 -include_lib("n2o/include/wf.hrl").
 -include_lib("nitro/include/nitro.hrl").
 
+wf_update(Target, Elements) ->
+	Pid = self(),
+	Ref = make_ref(),
+	spawn(fun() -> R = wf:render(Elements), Pid ! {R, Ref, wf:actions()} end),
+	{Render, Ref, Actions} = receive {_, Ref, _} = A -> A end,
+	wf:wire(wf:f(
+		"(function(){ qi('~s').outerHTML = '~s'; })();",
+		[Target, Render])),
+	wf:wire(wf:render(Actions)).
+
 top_bar() ->
 	#panel{class='top-bar', body=[
 		#link{body="logout", delegate=view_common, postback=logout}
