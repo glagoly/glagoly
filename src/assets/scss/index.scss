@@ -1,20 +1,18 @@
 .cta {
 	background: $primary-color url('/static/img/background.png');
 	background-size: cover;    
-	padding: rem-calc(50) 0;
+	padding-bottom: rem-calc(50);
 
 	box-shadow: $default-shadow;
 	text-align: center;
+
 	h1 {
+		padding-top: rem-calc(40);
 		color: $primary-color-text;
 		font-size: rem-calc(150);
 		line-height: 0.7em;
 	}
 
-	small {
-		color: $primary-color-light;
-		font-size: rem-calc(30);
-	}
 
 	h2 {
 		color: $primary-color-text;
@@ -25,6 +23,10 @@
 		@include button(false, $button-background, $button-background-hover, $primary-color-text);
 	}
 
+	.top-link {
+		color: $primary-color-text;
+		font-weight: bold;
+	}
 }
 
 

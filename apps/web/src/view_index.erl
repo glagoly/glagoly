@@ -33,8 +33,7 @@ about() ->
 	view_common:page([
 		{title, "schulze polls online"},
 		{body, #dtl{file="index", app=sample, bindings=[ 
-			{create_button, #button{body="create poll",postback=create}},
-			{login_button, #button{body="login",onclick="onLoginClick();"}}
+			{create_button, #button{body="create poll",postback=create}}
 		]}}
 	]).
 
