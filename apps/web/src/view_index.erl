@@ -12,17 +12,20 @@ poll({User, Poll}) ->
 	V = polls:get_vote(User, Poll),
 	#li{body = [
 		#span{class=alt, body=alt(V#vote.ballot)},
-		<<" in ">>,
+		" in ",
 		#link{href = "p?ll=" ++ Poll, body = #span{class=poll, body=P#poll.title}}
 	]}.
 
+my_body(User, Js_escape) -> [
+	view_common:top_bar(),
+	#dtl{file="my", js_escape=Js_escape, bindings=[ 
+		{polls, #ul{ body = [poll(P#my_poll.user_poll) || P <- polls:my(User)]}}
+	]}].
 
 my(User) ->
 	view_common:page([
 		{title, "my polls"},
-		{body, #dtl{file="my", app=sample, bindings=[ 
-			{polls, [poll(P#my_poll.user_poll) || P <- polls:my(User)]}
-		]}}
+		{body, my_body(User, false)}
 	]).
 
 about() ->
@@ -31,26 +34,20 @@ about() ->
 		{title, "schulze polls online"},
 		{body, #dtl{file="index", app=sample, bindings=[ 
 			{create_button, #button{body="create poll",postback=create}},
-			{login_button, #button{body="login",onclick="onLoginClick();"}},
-			{logout_button, #button{body="logout",postback=logout}}
+			{login_button, #button{body="login",onclick="onLoginClick();"}}
 		]}}
 	]).
 
 main() ->
-	wf:info(?MODULE,"User: ~p",[usr:id()]),
 	case usr:id() of
 		undefined -> about();
 		User -> my(User)
 	end.
 
-event(logout) -> usr:logout();
-
 event(create) -> 
 	Id = polls:create(usr:ensure()),
-	wf:redirect("/p?ll=" ++ wf:to_list(Id));
+	wf:redirect("/p?ll=" ++ wf:to_list(Id)).
 
-event(_) -> ok.
-
-api_event(fb_login, Data, _) ->
-	Token = jsone:decode(list_to_binary(Data)),
-	usr:fb_login(Token).
+api_event(fb_login, Token, _) ->
+	U = usr:fb_login(Token),
+	view_common:wf_update(body, my_body(U, true)).

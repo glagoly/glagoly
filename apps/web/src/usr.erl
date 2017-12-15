@@ -28,11 +28,12 @@ login(Creds) ->
  	end}).
 	
 fb_login(Token) ->
+	Token2 = jsone:decode(list_to_binary(Token)),
 	Url = wf:to_list([
 		"https://graph.facebook.com/v2.11/me",
-		"?access_token=", Token]),
+		"?access_token=", Token2]),
 	{ok, {{_, 200, _}, _, Body}} = httpc:request(Url),
 	Props = jsone:decode(list_to_binary(Body), [{object_format, proplist}]),
 	Id = proplists:get_value(<<"id">>, Props),
-	login({facebook, Id}).
-	
+	login({facebook, Id}),
+	id().
