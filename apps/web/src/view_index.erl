@@ -28,13 +28,17 @@ my(User) ->
 		{body, my_body(User, false)}
 	]).
 
+sample_buttons() -> [
+		{sample_poll, #button{body="vote on sample decision", class=[button, primary], postback=sample_poll}}
+	].
+
 about() ->
 	wf:wire(#api{name=fb_login}),
 	view_common:page([
 		{title, "schulze polls online"},
 		{body, #dtl{file="index", app=sample, bindings=[ 
 			{create_button, #button{body="create poll",postback=create}}
-		]}}
+		] ++ sample_buttons()}}
 	]).
 
 main() ->
@@ -42,6 +46,10 @@ main() ->
 		undefined -> about();
 		User -> my(User)
 	end.
+
+event(sample_poll) ->
+	Id = samples:create(poll),
+	wf:redirect("/p?ll=" ++ wf:to_list(Id));
 
 event(create) -> 
 	Id = polls:create(usr:ensure()),
