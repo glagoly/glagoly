@@ -1,8 +1,4 @@
 
-.main {
-	@include button-style($accent-color, auto);
-}
-
 input.title-input {
 	font-size: $h1-font-size;
 	height: (rem-calc($h1-font-size) + ($form-spacing * 2));

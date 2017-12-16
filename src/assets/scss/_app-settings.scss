@@ -34,8 +34,16 @@ $foundation-palette: (
 $global-flexbox: false;
 
 $body-font-family: 'PT Serif', serif;  
-$header-font-family: $body-font-family;
 
 $topbar-background: $primary-color;
 $topbar-link-color: $primary-color-text;
 
+// 11. Button
+// ----------
+
+$button-sizes: (
+  tiny: 0.7rem,
+  small: 0.8rem,
+  default: 1rem,
+  large: 1.4rem,
+);

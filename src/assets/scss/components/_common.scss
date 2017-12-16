@@ -8,6 +8,10 @@ $default-margin: rem-calc(20);
 	box-shadow: $default-shadow;
 }
 
+.main {
+	@include button-style($accent-color, auto);
+}
+
 @mixin panel {
 	background-color: $panel-color;
 	border-radius: 2px;
