@@ -19,7 +19,8 @@ top_bar() ->
 	]}.
 
 bindings() -> [
-		{fb_app_id, wf:config(web, fb_app_id)}
+		{fb_app_id, wf:config(web, fb_app_id)},
+		{ga_id, wf:config(web, ga_id)}
 	].
 
 page(Bindings) -> 
