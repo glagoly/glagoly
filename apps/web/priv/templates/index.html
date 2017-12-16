@@ -16,65 +16,66 @@
 <div class="row">
   <div class="large-6 columns">
     <div class="card">
-      <h2>Wise collective desicions</h2>
-      <p>Not only "yes", "no" and "abstain". You can hear and chose other alternatives:</p>
+      <h2>wise collective decisions</h2>
+      <p>hear and choose all alternatives. not only “yes”, “no” or abstain":</p>
       <ul>  
-        <li>paint fenster in red;</li>
-        <li>paint fenster in blue;</li>
-        <li>remove fenster and make bicyle parking.</li>
+        <li>paint fence in red;</li>
+        <li>paint fence in blue;</li>
+        <li>remove fence and make bicycle parking.</li>
       </ul>
-      <a href="p?ll=sample-poll" class="button primary">vote on sample desicion</a>
+      {{ sample_poll }}
     </div>
   </div>
 
   <div class="large-6 columns">
     <div class="card">
-      <h2>Easy meeting schedule</h2>
-      <p>With glagoluy you can vote not only on meeting time, but choose also place and activity:</p>
+      <h2>fun rated lists</h2>
+      <p>create rated lists for fun. choose cocktails for your next party:</p>
       <ul>  
-        <li>Play baseball on backyard on Saturday morning;</li>
-        <li>Drink beer at Frieds Bar on Friday evening;</li>
-        <li>Make a skype conference on Friday evening.</li>
+        <li>cosmopolitan;</li>
+        <li>sex on the beach;</li>
+        <li>long island iced tea.</li>
       </ul>
-      <a href="p?ll=sample-schedule" class="button primary">vote on sample meeting schedule</a>
+      {{ sample_list }}
     </div>
   </div>
+
 </div>
 
 <div class="row">
   <div class="large-6 columns">
     <div class="card">
-      <h2>Fun rated lists</h2>
-      <p>NOt only for work but for fun. Create any ranked lists, including playlists for your party:</p>
-      <ul>  
-        <li>add all cristmas yop 100 to playlist;</li>
-        <li>add ABBA hapy neyear to playlist;</li>
-        <li>play univerity anthem every hour;</li>
+      <h2>easy meeting schedule</h2>
+      <p>choose meeting time, place and activity in one poll:</p>
+      <ul>
+        <li>play football on saturday morning;</li>
+        <li>make a barbecue on saturday morning;</li>
+        <li>drink beer at bar on friday evening.</li>
       </ul>
-      <a href="p?ll=sample-list" class="button primary">vote on sample playlist</a>
+      {{ sample_schedule }}
     </div>
   </div>
 
   <div class="large-6 columns">
     <div class="card">
-      <h2>Magic sience inside</h2>
-      <p>Throug being simple to usem glagoly backed by voting sience:</p>
+      <h2>science magic inside</h2>
+      <p>glagoly simple to use, but backed by voting science:</p>
       <ul>  
-        <li>Schulze method for ranking votes;</li>
-        <li>Robbinson rotation for diskarding donkey votes.</li>
+        <li>schulze method for ranking votes;</li>
+        <li>robson rotation to eliminate “donkey voting”.</li>
       </ul>
+      <h4>free as in speech</h4>
+      <p>glagoly is <a href="https://github.com/glagoly/glagoly">free software</a>. run for any purpose, study, change, and distribute it.</p>
     </div>
   </div>
 
 </div>
 
-<div class="cta">
-  <h2>Start poll in less then 5 minutes</h2>
-  <a href="create" class="button large main">create poll</a>
-</div>
+<br />
 
-<div class="row columns text-center">
-  <p><b>Free as in speech</b> Glago9ly is open source. Fell free to get it source, modify, install or learn.</p>
+<div class="cta">
+  <h2>make decision in less then 5 minutes</h2>
+  {{ create_button2 }}
 </div>
 
 </div>

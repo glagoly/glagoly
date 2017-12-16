@@ -29,7 +29,11 @@ my(User) ->
 	]).
 
 sample_buttons() -> [
-		{sample_poll, #button{body="vote on sample decision", class=[button, primary], postback=sample_poll}}
+		{P,  #button{body=T, class=[button, primary], postback=P}} || {P, T} <- [
+			{sample_poll, "vote on sample decision"},
+			{sample_schedule, "vote on sample meeting schedule"},
+			{sample_list, "vote on sample cocktail list"}
+		]
 	].
 
 about() ->
@@ -37,7 +41,8 @@ about() ->
 	view_common:page([
 		{title, "schulze polls online"},
 		{body, #dtl{file="index", app=sample, bindings=[ 
-			{create_button, #button{body="create poll",postback=create}}
+			{create_button, #button{body="create poll",postback=create}},
+			{create_button2, #button{body="create poll",postback=create}}
 		] ++ sample_buttons()}}
 	]).
 
@@ -47,9 +52,13 @@ main() ->
 		User -> my(User)
 	end.
 
-event(sample_poll) ->
-	Id = samples:create(poll),
-	wf:redirect("/p?ll=" ++ wf:to_list(Id));
+create_sample(Type) ->
+	Id = samples:create(Type),
+	wf:redirect("/p?ll=" ++ wf:to_list(Id)).
+
+event(sample_poll) -> create_sample(poll);
+event(sample_schedule) -> create_sample(schedule);
+event(sample_list) -> create_sample(list);
 
 event(create) -> 
 	Id = polls:create(usr:ensure()),
