@@ -40,6 +40,7 @@ about() ->
 	wf:wire(#api{name=fb_login}),
 	view_common:page([
 		{title, "schulze polls online"},
+		{description, "the fastest way to make micro-desicions, easy meeting schedule, fun rated lists"},
 		{body, #dtl{file="index", app=sample, bindings=[ 
 			{create_button, #button{body="create poll",postback=create}},
 			{create_button2, #button{body="create poll",postback=create}}
