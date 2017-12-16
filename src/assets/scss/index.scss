@@ -9,8 +9,11 @@
 	h1 {
 		padding-top: rem-calc(40);
 		color: $primary-color-text;
-		font-size: rem-calc(150);
-		line-height: 0.7em;
+	}
+
+	h1 span {
+		font-size: 300%;
+		line-height: 60%;
 	}
 
 
@@ -20,12 +23,16 @@
 	}
 
 	button {
-		@include button(false, $button-background, $button-background-hover, $primary-color-text);
+		@extend .button, .large, .main;
 	}
 
 	.top-link {
 		color: $primary-color-text;
 		font-weight: bold;
+	}
+
+	img.logo {
+		height: 1em;
 	}
 }
 
@@ -37,6 +44,3 @@
 	margin-top: rem-calc(30);
 }
 
-img.logo {
-	height: 1em;
-}
