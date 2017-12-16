@@ -5,7 +5,7 @@
 
 title(poll) -> "fence poll";
 title(schedule) -> "weekend schedule";
-title(list) -> "Coctail list".
+title(list) -> "cocktail list".
 
 alts(poll) -> [
 		{a, "paint fence in red"},
@@ -21,10 +21,15 @@ alts(schedule) -> [
 		{a, "drink beer at bar on friday evening"},
 		{e, "make a skype conference on sunday morning"},
 		{f, "just stay at home"}
-	].
+	];
 
-% alts(schedule) -> [];
-% alts(list) -> [].
+alts(list) -> [
+		{a, "cosmopolitan"},
+		{a, "sex on the beach"},
+		{a, "long island iced tea"},
+		{e, "blue hawaiian"},
+		{f, "nonalcoholic mojito"}
+	].
 
 ballots(_) -> [
 	{a, "Alice", [3, 1, 0, 0, -1]},
