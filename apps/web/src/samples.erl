@@ -3,19 +3,26 @@
 -include_lib("records.hrl").
 -include_lib("n2o/include/wf.hrl").
 
-polls() -> [poll, schedule, list].
-
 title(poll) -> "fence poll";
-title(schedule) -> "Weekend schedule";
+title(schedule) -> "weekend schedule";
 title(list) -> "Coctail list".
 
-alts(_) -> [
+alts(poll) -> [
 		{a, "paint fence in red"},
-		{a, "paint fence in blue"},
 		{a, "remove fence and make bicycle parking"},
+		{a, "paint fence in blue"},
 		{e, "replace fence with metal one"},
 		{f, "leave fence as is"}
+	];
+
+alts(schedule) -> [
+		{a, "play football on saturday morning"},
+		{a, "make a barbecue on saturday morning"},
+		{a, "drink beer at bar on friday evening"},
+		{e, "make a skype conference on sunday morning"},
+		{f, "just stay at home"}
 	].
+
 % alts(schedule) -> [];
 % alts(list) -> [].
 
@@ -24,8 +31,8 @@ ballots(_) -> [
 	{b, "Bob",   [1, 1, 0, 0, -1]},
 	{c, "Carol", [1, 0, 1, 0, -1]},
 	{d, "Dave",  [0, 0, 1, 0, -1]},
-	{e, "Erin",  [0, 1, 0, -1, -1]},
-	{f, "Frank", [0, 0, 0, 1, 1]}
+	{e, "Erin",  [0, 1, 0, 1, -1]},
+	{f, "Frank", [0, 0, 0, -1, 1]}
 ].
 
 create(Type) ->
