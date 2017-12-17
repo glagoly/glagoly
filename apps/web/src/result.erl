@@ -9,22 +9,33 @@ poll_id() -> wf:to_list(wf:q(<<"id">>)).
 name_list(L) ->
 	I = usr:id(),
 	L2 = lists:map(fun
-		({U, _}) when U == I -> "<i>I</i>"; 
-		({_, N}) -> wf:to_list(N)
+		({I, _}) -> "<i>I</i>"; 
+		({_, N}) -> wf:hte(wf:to_list(N))
 	end, L),
 	string:join(L2, ", ").
 
-alt(Ids, Pos, Supps) ->
+pos_format(P) when P > 0 -> "+" ++ wf:to_list(P);
+pos_format(P) when P == 0 -> "";
+pos_format(P) -> wf:to_list(P).
+
+li_class(Pos) when Pos < 1 -> looser;
+li_class(_) -> upwoted.
+
+result(Ids, Pos, Supps, Classes) ->
 	Alts = [kvs:get(alt, Id) || Id <- Ids],
-	R =[#li{body=[
-		#span{class=vote, body=wf:to_list(Pos)},
+	R =[#li{class=Classes ++ [li_class(Pos)] ,body=[
+		#span{class=vote, body=pos_format(Pos)},
 		#span{class=text, body=Alt#alt.text},
 		#span{class=supps, body=name_list(dict:fetch(Alt#alt.id, Supps))}
 	]} || {ok, Alt} <- Alts].
 
-results() -> 
+results([]) -> [];
+results([{Winners, Pw} | Other]) ->
 	Supps = polls:supporters(poll_id()),
-	[alt(Ids, P, Supps) || {Ids, P} <- polls:result(poll_id())].
+	O = [result(Ids, P, Supps, []) || {Ids, P} <- Other],
+	result(Winners, Pw, Supps, [winner]) ++ O.
+
+results() -> results(polls:result(poll_id())).
 
 main() ->
  	case kvs:get(poll, poll_id()) of

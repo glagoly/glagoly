@@ -22,6 +22,7 @@ log_modules() -> % all.
     create,
     vote_core,
     view_index,
+    view_poll,
     edit,
     filter,
     result,
