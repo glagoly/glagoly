@@ -41,5 +41,6 @@ fb_login(Token) ->
 	{ok, {{_, 200, _}, _, Body}} = httpc:request(Url),
 	Props = jsone:decode(list_to_binary(Body), [{object_format, proplist}]),
 	Id = proplists:get_value(<<"id">>, Props),
-	login({facebook, Id}),
-	id().
+	{_, U} = login({facebook, Id}),
+	U.
+

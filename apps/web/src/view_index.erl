@@ -4,8 +4,10 @@
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("records.hrl").
 
-alt([]) -> <<"No vote">>;
-alt([{A, _} | _]) -> {ok, Alt} = kvs:get(alt, A), Alt#alt.text.
+alt([]) -> <<"no vote">>;
+alt([{A, _} | _]) -> 
+	{ok, Alt} = kvs:get(alt, A), 
+	wf:html_encode(Alt#alt.text).
 
 poll({User, Poll}) ->
 	{ok, P} = kvs:get(poll, Poll),
@@ -13,13 +15,15 @@ poll({User, Poll}) ->
 	#li{body = [
 		#span{class=alt, body=alt(V#vote.ballot)},
 		" in ",
-		#link{href = "p?ll=" ++ Poll, body = #span{class=poll, body=P#poll.title}}
+		#link{href = "p?ll=" ++ Poll, body = #span{
+			class=poll, body=wf:html_encode(P#poll.title)
+		}}
 	]}.
 
 my_body(User, Js_escape) -> #panel{id=body, body=[
 	view_common:top_bar(),
 	#dtl{file="my", js_escape=Js_escape, bindings=[ 
-		{polls, #ul{ body = [poll(P#my_poll.user_poll) || P <- polls:my(User)]}}
+		{polls, #ol{class=alts, body=[poll(P#my_poll.user_poll) || P <- polls:my(User)]}}
 	]}]}.
 
 my(User) ->

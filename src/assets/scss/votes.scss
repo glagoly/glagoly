@@ -5,18 +5,6 @@ input.title-input {
 	margin-top: $global-margin;
 }
 
-ol.alternatives
-{
-	list-style: none;
-	margin-left: 0;
-
-	li {
-		@include grid-row();
-		position: relative;
-		margin-top: $global-margin;
-	}
-}
-
 .vote {
 	text-align: right;
 	display: inline-block;

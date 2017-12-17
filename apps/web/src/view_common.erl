@@ -18,7 +18,6 @@ poll_button(Class) ->
 	#button{body="create poll",class=Class,postback=create_poll, delegate=view_common}.
 
 top_bar() ->
-	wf:wire(#api{name=fb_login}),
 	#panel{class='top-bar', id='top-bar', body=#panel{class=[row, columns], body=[
 		#panel{class='top-bar-left', body = #ul{
 			class=menu, body=#li{class='menu-text', body=#link{
@@ -42,7 +41,8 @@ bindings() -> [
 		{ga_id, wf:config(web, ga_id)}
 	].
 
-page(Bindings) -> 
+page(Bindings) ->
+	wf:wire(#api{name=fb_login}),
 	#dtl{file="_page", bindings=bindings() ++ Bindings}.
 
 event(logout) ->

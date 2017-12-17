@@ -6,6 +6,19 @@ $default-margin: rem-calc(20);
 
 .top-bar {
 	box-shadow: $default-shadow;
+
+	.menu-text,
+	.menu .button {
+		padding: $button-padding;
+	}
+
+	a {
+		color: $primary-color-text;
+
+		&:hover {
+			color: $primary-color-light;		
+		}
+	}
 }
 
 .main {
@@ -23,11 +36,14 @@ $default-margin: rem-calc(20);
 	@include panel();
 	margin-top: $default-margin;
 	max-width: 33em;
+
+	
+}
+// weird foundation behaviour
+.panel:last-child:not(:first-child) {
+	float: none;
 }
 
-::placeholder {
-	color: $hint-text-color;
-}
 .hidden {
 	display: none;
 }
@@ -48,8 +64,21 @@ a.ajax {
 		font-size: $small-font-size;
 
 		&:hover,
-    	&:focus {
-      		color: $primary-text-color;
-    	}
+		&:focus {
+			color: $primary-text-color;
+		}
+	}
+}
+
+
+ol.alts
+{
+	list-style: none;
+	margin-left: 0;
+
+	li {
+		@include grid-row();
+		position: relative;
+		margin-top: $global-margin;
 	}
 }
