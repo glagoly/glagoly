@@ -15,5 +15,5 @@ prefix(P)                   -> route(P).
 
 route(<<>>)                 -> view_index;
 route(<<"result">>)         -> result;
-route(<<"p">>)              -> edit;
+route(<<"p">>)              -> view_poll;
 route(_)                    -> view_404.
