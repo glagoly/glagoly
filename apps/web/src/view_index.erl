@@ -23,7 +23,8 @@ poll({User, Poll}) ->
 my_body(User, Js_escape) -> #panel{id=body, body=[
 	view_common:top_bar(),
 	#dtl{file="my", js_escape=Js_escape, bindings=[ 
-		{polls, #ol{class=alts, body=[poll(P#my_poll.user_poll) || P <- polls:my(User)]}}
+		{polls, #ol{class=alts, body=[poll(P#my_poll.user_poll) || P <- polls:my(User)]}},
+		{is_temp, not usr:is_pers()}
 	]}]}.
 
 my(User) ->
