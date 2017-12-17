@@ -21,12 +21,15 @@ pos_format(P) -> wf:to_list(P).
 li_class(Pos) when Pos < 1 -> looser;
 li_class(_) -> upwoted.
 
+sups([]) -> "";
+sups(S) -> #span{class=supps, body=name_list(S)}.
+
 result(Ids, Pos, Supps, Classes) ->
 	Alts = [kvs:get(alt, Id) || Id <- Ids],
 	R =[#li{class=Classes ++ [li_class(Pos)] ,body=[
 		#span{class=vote, body=pos_format(Pos)},
-		#span{class=text, body=Alt#alt.text},
-		#span{class=supps, body=name_list(dict:fetch(Alt#alt.id, Supps))}
+		#span{class=text, body=wf:hte(Alt#alt.text)},
+		sups(dict:fetch(Alt#alt.id, Supps))
 	]} || {ok, Alt} <- Alts].
 
 results([]) -> [];

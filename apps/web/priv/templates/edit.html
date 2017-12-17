@@ -1,6 +1,7 @@
 <div class="panel">
-  <h1>{{ title_input }}</h1>
+  <form class="row collapse" id="vote-form" onsubmit="event.preventDefault(); voteSubmit();">
 
+  <h1>{{ title_input }}</h1>
   
   <div class="callout secondary" id="help-callout">
     <button class="close-button" onclick="closeHelp();">
@@ -28,13 +29,16 @@
     </li>
   </ol>
 
-  <form class="row collapse" id="vote-form">
+  <div class="row collapse">
     <div class="large-6 columns">
-      <input type="text" id="name" required placeholder="your name" value="{{ name }}">
-      <p class="help-text">enter your name meainingful to other voters</p>
+      <input type="text" id="name" required maxlength=32, placeholder="my name" value="{{ name }}">
+      <p class="help-text">name meainingful for other voters</p>
     </div>
     <div class="large-5 columns">
-      <input type="submit" class="button main expanded" id="create" value="create poll">
+      <input 
+        type="submit" class="button main expanded" id="create" 
+        value="{% if is_new %}create poll{% else %}vote{% endif %}">
     </div>
+  </div>
   </form>
 </div>

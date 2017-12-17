@@ -23,33 +23,31 @@ input.vote {
 	height: inherit;
 }
 
-ol.results-winners
-{
-	li.winner {
-		font-size: rem-calc(25);
-	}
-}
-
-ol.results-others > li
-{
-	font-size: $small-font;
-	
-	.vote {
-		font-size: $small-font;
-	}
-}
-
-
+.supps,
 .author {
 	@include secondary-text;
 	padding-left: 0.4em;
+}
 
-    &:before {
-      content: '\2014 \0020';
-    }
+.supps:before {
+    content: '\FF0B \0020';
+}
+.author:before {
+    content: '\2014 \0020';
 }
 
 .alts {
+	.winner.upwoted {
+		font-size: rem-calc(25);
+	}
+	.looser {
+		font-size: $small-font;
+		
+		.vote {
+			font-size: $small-font;
+		}	
+	}
+
 	.deleted {
 		@include secondary-text;
 		a {

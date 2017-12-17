@@ -19,23 +19,18 @@
   </div>
     <div class="panel">
     	<h1>{{ title }}</h1>
-    	{{ results }}
-    	<ol class="results-winners">
-    		<li class="winner"><span class="vote">+10</span>Mauris vestibulum facilisis diam quis tincidunt. Nam vehicula elementum magna hendrerit venenatis. Nunc ut ante a lorem posuere. </li>
-    		<li><span class="vote">+2</span>Quisque elementum sollicitudin arcu, dapibus blandit arcu finibus sed. Phasellus lacinia magna id est vestibulum, vitae posuere.</li>
-    		<li><span class="vote">+1</span>Nulla a erat arcu. Nam vel erat vitae purus faucibus posuere a et sapien. Quisque porta tempor consequat. Aliquam in leo nullam. 
-    		</li>
-    	</ol>
-    	<ol class="results-others">
-    		<li><span class="vote"></span>Proin commodo vestibulum velit nec laoreet. Sed vehicula nibh augue, et aliquam diam eleifend quis. Morbi enim ante, mollis sed.</li>
-    		<li><span class="vote">-1</span>Pellentesque vitae felis ligula. Phasellus faucibus id erat et mattis. Aliquam a eros sed tellus sagittis feugiat semper ut sed. </li>
-    	</ol>
+      <ol class="alts">
+       	{{ results }}
+      </ol>
+    	
+      <h2>invite others</h2>
+      <p></p>
     </div>
     
     <div class="panel">
-    	<h3>3 votes</h3>
-    	<p>Denys Potapov, Chuk, Ben</p>
-    	<p><a href="#">See individaul votes</a></p>
+    	<h2>remember me</h2>
+    	<p>login with facebook to change your vote later</p>
+      <a>login</a>
     </div>
 
     <script>{{ script }}</script>
