@@ -1,14 +1,14 @@
 
 input.title-input {
-	font-size: $h1-font-size;
-	height: (rem-calc($h1-font-size) + ($form-spacing * 2));
+	font-size: 100%;
+	height: inherit;
 	margin-top: $global-margin;
 }
 
 .vote {
 	text-align: right;
 	display: inline-block;
-	width: $vote-font-size * 2;
+	width: 13%;
 
 	font-size: $vote-font-size;
 	line-height: 1em;
@@ -18,7 +18,9 @@ input.title-input {
 }
 
 input.vote {
-	height: (rem-calc($vote-font-size) + ($form-spacing * 0.65));
+	float: left;
+	padding: ($input-padding / 3) $input-padding;
+	height: inherit;
 }
 
 ol.results-winners
@@ -37,49 +39,52 @@ ol.results-others > li
 	}
 }
 
-.altenative {
-	@include grid-row(6);
-}
-
-.vote-column {
-	@include grid-column(1 of 6, 0);
-	@include grid-column-collapse;
-}
-
-.text-column {
-	@include grid-column(5 of 6, 0);
-	@include grid-column-collapse;
-
-	textarea {
-		height: rem-calc(101px); // magic number to fit 3 rows
-		margin-top: rem-calc(11px); // magic number to align to vote baseline
-	}
-}
 
 .author {
-	@include small-text;
-	
+	@include secondary-text;
+	padding-left: 0.4em;
+
     &:before {
       content: '\2014 \0020';
     }
 }
 
-li.delete-alternative {
-	@include small-text;
-}
+.alts {
+	.deleted {
+		@include secondary-text;
+		a {
+			@extend .ajax;
+		}
+	}
 
-ul.corner-buttons {
-  padding-left: 0;
-  list-style: none;
-  
-  position: absolute;
-  top: 0;
-  right: 0;
+	.buttons {
+		padding-left: 0.4em;
 
-  @include small-text;
+		a {
+			padding-left: 0.4em;
+			@include secondary-text;
+			@extend .ajax;
+		}	
+	}
 
-  li {
-  	margin: 0 $default-margin 0 0;
-  	display: inline-block;
-  }
+	.edit_buttons {
+		clear: both;
+		@extend .row, .text-right;
+
+		a {
+			@extend .button;
+		}
+
+		a.cancel_edit_alt {
+			@extend .secondary;
+			margin-right: $default-margin;
+		}
+	}
+
+	textarea {
+		height: rem-calc(101px); // magic number to fit 3 rows
+		width: 80%;
+		float: right;
+		margin-top: rem-calc(11px); // magic number to align to vote baseline
+	}
 }

@@ -50,5 +50,8 @@ $button-sizes: (
 
 $topbar-padding: 0;
 $topbar-link-color: $primary-color-text;
+$topbar-unstack-breakpoint: small;
 
 $global-menu-padding: 0 0.7rem;
+
+$input-font-size: rem-calc($global-font-size);
