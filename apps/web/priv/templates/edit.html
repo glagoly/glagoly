@@ -1,68 +1,40 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>glagoly</title>
-    <link rel="stylesheet" href="static/css/app.css">
-  </head>
-  <body>
-  <div>
-  <div class="top-bar"><div class="row columns">
-    <div class="top-bar-left">
-      <ul class="menu">
-        <li class="menu-text">
-          <a href="/">
-            <img class="logo" src="/static/img/logo-light.svg"><sup>beta</sup>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="top-bar-right">
-    <ul class="menu">
-      <li><button type="button" class="button main">create poll</button></li>
-      <li><a href="#">log in</a></li>
-    </ul>
+<div class="panel">
+  <h1>{{ title_input }}</h1>
+
+  
+  <div class="callout secondary" id="help-callout">
+    <button class="close-button" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <ol>
+      {% if is_new %}
+      <li>add most preferable alternative and rate it with +7</li>
+      <li>add some less preferable alternatives and rate them with +5, +3, +1</li>
+      <li>add other alternatives and leave them without rating</li>
+      {% else %}
+      <li>add or rate the most preferable alternative with +7</li>
+      <li>rate less preferable alternatives with +5, +3, +1</li>
+      <li>rate unacceptable alternative with -3</li>
+      {% endif %}
+    </ol>
   </div>
-  </div></div>
-    <div class="panel">
-          {{ title }}
-        
-          <div class="callout secondary" data-closable="slide-out-left">
-            <ol>
-              <li>Start by adding your most preferable alternative and rank it with positive number (+7 is fine)</li>
-              <li>Add some less preferable alternatives and rate them</li>
-              <li>Add other alternatives and leave them without rating</li>
-            </ol>
-            <p></p>
-            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        
-          <ol class="alternatives" id="alts">
-            {{ alts }}
-          </ol>
-          <ol class="alternatives">
-            <li class="edit-form" id="alt-add">
-              {{ alt_form }}
-            </li>
-          </ol>
-    
-          <form class="row collapse" id="vote-form">
-            <div class="large-6 columns">
-              <input type="text" id="name" required placeholder="your name" value="{{ name }}">
-              <p class="help-text">enter your name meainingful to other voters</p>
-            </div>
-            <div class="large-5 columns">
-              <input type="submit" class="button main expanded" id="create" value="create poll">
-            </div>
-          </form>
-        </div>
-    
-        </div>
-    <script>{{ script }}</script>
-    <script src="static/js/app.js"></script>
-  </body>
-</html>
+
+  <ol class="alts" id="alts">
+    {{ alts }}
+  </ol>
+  <ol class="alternatives">
+    <li class="edit-form" id="alt-add">
+      {{ alt_form }}
+    </li>
+  </ol>
+
+  <form class="row collapse" id="vote-form">
+    <div class="large-6 columns">
+      <input type="text" id="name" required placeholder="your name" value="{{ name }}">
+      <p class="help-text">enter your name meainingful to other voters</p>
+    </div>
+    <div class="large-5 columns">
+      <input type="submit" class="button main expanded" id="create" value="create poll">
+    </div>
+  </form>
+</div>
