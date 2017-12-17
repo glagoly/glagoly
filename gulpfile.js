@@ -97,14 +97,15 @@ gulp.task('sass', function() {
   return gulp.src('src/assets/scss/app.scss')
     .pipe($.sourcemaps.init())
     .pipe($.sass({
-      includePaths: PATHS.sass
+      includePaths: PATHS.sass,
+      outputStyle: isProduction ? 'compressed' : 'nested'
     })
       .on('error', $.sass.logError))
     .pipe($.autoprefixer({
       browsers: COMPATIBILITY
     }))
     // .pipe(uncss)
-    .pipe(minifycss)
+    //.pipe(minifycss)
     .pipe($.if(!isProduction, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/css'));
 });
