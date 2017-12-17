@@ -14,6 +14,5 @@ prefix(<<"/",P/binary>>)    -> route(P);
 prefix(P)                   -> route(P).
 
 route(<<>>)                 -> view_index;
-route(<<"result">>)         -> result;
 route(<<"p">>)              -> view_poll;
 route(_)                    -> view_404.
