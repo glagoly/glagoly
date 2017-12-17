@@ -10,6 +10,12 @@ id() ->
 		_ -> undefined
 	end.
 
+is_pers() ->
+	case wf:user() of
+		{pers, _} -> true;
+		_ -> false
+	end.
+
 ensure() ->
 	case wf:user() of
 		{_, U} -> U;

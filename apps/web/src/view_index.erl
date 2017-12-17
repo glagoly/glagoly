@@ -16,11 +16,11 @@ poll({User, Poll}) ->
 		#link{href = "p?ll=" ++ Poll, body = #span{class=poll, body=P#poll.title}}
 	]}.
 
-my_body(User, Js_escape) -> [
+my_body(User, Js_escape) -> #panel{id=body, body=[
 	view_common:top_bar(),
 	#dtl{file="my", js_escape=Js_escape, bindings=[ 
 		{polls, #ul{ body = [poll(P#my_poll.user_poll) || P <- polls:my(User)]}}
-	]}].
+	]}]}.
 
 my(User) ->
 	view_common:page([
@@ -37,13 +37,12 @@ sample_buttons() -> [
 	].
 
 about() ->
-	wf:wire(#api{name=fb_login}),
 	view_common:page([
 		{title, "schulze polls online"},
 		{description, "the fastest way to make micro-desicions, easy meeting schedule, fun rated lists"},
 		{body, #dtl{file="index", app=sample, bindings=[ 
-			{create_button, #button{body="create poll",postback=create}},
-			{create_button2, #button{body="create poll",postback=create}}
+			{create_button, view_common:poll_button()},
+			{create_button2, view_common:poll_button()}
 		] ++ sample_buttons()}}
 	]).
 
@@ -59,11 +58,7 @@ create_sample(Type) ->
 
 event(sample_poll) -> create_sample(poll);
 event(sample_schedule) -> create_sample(schedule);
-event(sample_list) -> create_sample(list);
-
-event(create) -> 
-	Id = polls:create(usr:ensure()),
-	wf:redirect("/p?ll=" ++ wf:to_list(Id)).
+event(sample_list) -> create_sample(list).
 
 api_event(fb_login, Token, _) ->
 	U = usr:fb_login(Token),
