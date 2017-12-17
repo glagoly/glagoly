@@ -25,4 +25,21 @@ function voteSubmit() {
     return false;
 };
 
+// This is called with the results from from FB.getLoginStatus().
+function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    if (response.status === 'connected') {
+        // Logged into your app and Facebook.
+        fb_login(response.authResponse.accessToken);
+    } else if (response.status === 'not_authorized') {
+        alert('Please log into this app.');
+    } else {
+        alert('Please log into Facebook.');
+    }
+}
 
+function onLoginClick() {
+    FB.login(function(response) {
+        statusChangeCallback(response);
+    }, {scope: 'public_profile'});
+};
