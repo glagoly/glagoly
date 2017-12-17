@@ -68,7 +68,7 @@ alt_form() ->
 		vote_input(alt_vote, []),
 		#textarea{id=alt_text, maxlength=128, class=text},
 		#panel{class=edit_buttons, body = [
-			#button{id=send, class=[button, 'float-right'], body="add alternative", 
+			#link{id=send, class=[button], body="add alternative", 
 				postback=add_alt, source=[alt_vote, alt_text]}
 	]}]}.
 
@@ -104,7 +104,7 @@ edit_panel(Poll, Vote, Alts, Js_escape) ->
 name_list(L) ->
 	I = usr:id(),
 	L2 = lists:map(fun
-		({I, _}) -> "<i>I</i>"; 
+		({U, _}) when U == I -> "<i>I</i>"; 
 		({_, N}) -> wf:hte(wf:to_list(N))
 	end, L),
 	string:join(L2, ", ").

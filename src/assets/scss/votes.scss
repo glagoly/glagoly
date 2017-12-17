@@ -71,11 +71,11 @@ input.vote {
 
 		a {
 			@extend .button;
+			margin-right: $default-margin;
 		}
 
 		a.cancel_edit_alt {
 			@extend .secondary;
-			margin-right: $default-margin;
 		}
 	}
 
