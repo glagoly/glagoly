@@ -44,6 +44,7 @@ main() ->
  	case kvs:get(poll, poll_id()) of
  		{ok, Poll} -> #dtl{file="results", bindings=[
 			{title, wf:html_encode(Poll#poll.title)},
-			{results, results()}
+			{results, results()},
+			{poll_id, poll_id()}
 		]};
  		_ -> wf:state(status,404), "Poll not found" end.
