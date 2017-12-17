@@ -261,7 +261,6 @@ api_event(vote, Data, _) ->
 	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props, [])),
 	Name = filter:string(proplists:get_value(<<"name">>, Props, []), 32, <<"anon">>),
 	Title = filter:string(proplists:get_value(<<"title">>, Props, []), 32, <<"poll">>),
-	Poll = poll(),
-	update_title(Poll, Title),
+	update_title(poll(), Title),
 	polls:put_vote(User, poll_id(), Name, Prefs),
-	view_common:wf_update(edit_panel, results_panel(Poll, true)).
+	view_common:wf_update(edit_panel, results_panel(poll(), true)).
