@@ -33,9 +33,9 @@ result(Id) ->
 
 supporters(Id) ->
 	lists:foldl(fun (Vote, Sups) ->
-		Ballot = [A || {A, B} <- Vote#vote.ballot, B > 0, dict:is_key(A, Sups)],
+		Ballot = [{A, B} || {A, B} <- Vote#vote.ballot, B > 0, dict:is_key(A, Sups)],
 		{U, _} = Vote#vote.user_poll,
-		lists:foldl(fun (A, S) -> dict:append(A, {U, Vote#vote.name}, S) end, Sups, Ballot)
+		lists:foldl(fun ({A, B}, S) -> dict:append(A, {U, Vote#vote.name, B}, S) end, Sups, Ballot)
 	end, dict:from_list([{A, []} || A <- alt_ids(Id)]), votes(Id)).
 
 user_alts(Alts, Ballot, Seed) -> 

@@ -104,12 +104,12 @@ edit_panel(Poll, Vote, Alts, Js_escape) ->
 name_list(L) ->
 	I = usr:id(),
 	L2 = lists:map(fun
-		({U, _}) when U == I -> "<i>I</i>"; 
-		({_, N}) -> wf:hte(wf:to_list(N))
+		({U, _, P}) when U == I -> "<i>I</i>&nbsp;&#65291;" ++ wf:to_list(P) ++ ""; 
+		({_, N, P}) -> wf:hte(wf:to_list(N)) ++ "&nbsp;&#65291;" ++ wf:to_list(P)
 	end, L),
 	string:join(L2, ", ").
 
-pos_format(P) when P > 0 -> "+" ++ wf:to_list(P);
+pos_format(P) when P > 0 -> "&#65291;" ++ wf:to_list(P);
 pos_format(P) when P == 0 -> "";
 pos_format(P) -> wf:to_list(P).
 
