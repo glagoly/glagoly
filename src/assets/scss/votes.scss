@@ -8,13 +8,18 @@ input.title-input {
 .vote {
 	text-align: right;
 	display: inline-block;
-	width: 13%;
+	width: $vote-font-size * 1.7;
 
 	font-size: $vote-font-size;
 	line-height: 1em;
 
 	margin: 0;
 	margin-right: $default-margin;
+
+	@include breakpoint(medium) {
+		width: $vote-font-size-big * 1.7;
+		font-size: $vote-font-size-big;
+	}
 }
 
 input.vote {
@@ -35,6 +40,9 @@ input.vote {
 .author:before {
     content: '\2014\00A0';
 }
+
+$alt-text-size: $vote-font-size * 2 + $default-margin;
+$alt-text-size-big: $vote-font-size-big * 2 + $default-margin;
 
 .alts {
 	.winner.upwoted {
@@ -80,9 +88,14 @@ input.vote {
 	}
 
 	textarea {
+
 		height: rem-calc(101px); // magic number to fit 3 rows
-		width: 80%;
+		width: calc(100% - #{$alt-text-size});
 		float: right;
 		margin-top: rem-calc(11px); // magic number to align to vote baseline
+
+		@include breakpoint(medium) {
+			width: calc(100% - #{$alt-text-size-big});
+		}
 	}
 }
