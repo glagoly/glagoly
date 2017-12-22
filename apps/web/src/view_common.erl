@@ -3,6 +3,14 @@
 -include_lib("n2o/include/wf.hrl").
 -include_lib("nitro/include/nitro.hrl").
 
+
+ga_event(Category, Action) ->
+	case wf:config(web, ga_id) of
+		undefined -> no;
+		_ -> wf:wire("ga('send', 'event', '" ++ wf:to_list(Category) ++
+			"', '" ++  wf:to_list(Action) ++ "');")
+	end.
+
 wf_update(Target, Elements) ->
 	Pid = self(),
 	Ref = make_ref(),

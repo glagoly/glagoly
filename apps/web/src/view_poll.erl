@@ -263,4 +263,5 @@ api_event(vote, Data, _) ->
 	Title = filter:string(proplists:get_value(<<"title">>, Props, []), 32, <<"poll">>),
 	update_title(poll(), Title),
 	polls:put_vote(User, poll_id(), Name, Prefs),
-	view_common:wf_update(edit_panel, results_panel(poll(), true)).
+	view_common:wf_update(edit_panel, results_panel(poll(), true)),
+	view_common:ga_event(poll, vote).
