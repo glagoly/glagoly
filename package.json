@@ -1,13 +1,13 @@
 {
-  "name": "foundation-zurb-template",
+  "name": "glagoly",
   "version": "1.0.0",
-  "description": "Official ZURB Template for Foundation for Sites.",
+  "description": "Glagoly online decision making platform",
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp",
     "build": "gulp build --production"
   },
-  "author": "ZURB <foundation@zurb.com>",
+  "author": "Denys Potapov <denys.potapov@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.10.0",
@@ -30,11 +30,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zurb/foundation-zurb-template.git"
+    "url": "https://github.com/glagoly/glagoly.git"
   },
   "bugs": {
-    "url": "https://github.com/zurb/foundation-sites/issues",
-    "email": "foundation@zurb.com"
+    "url": "https://github.com/glagoly/glagoly/issues"
   },
   "private": true
 }
