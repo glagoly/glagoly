@@ -25,7 +25,23 @@ add_alt(Alt, Poll) ->
 
 normalize_ballot(Ballot, Alts) -> 
 	B = maps:from_list(Ballot), [{Alt, maps:get(Alt, B, 0)} || Alt <- Alts].
- 
+
+key_group([{Alt, Vote} | L]) ->
+	{I, Current, Acc} = lists:foldl(fun({Alt, Vote}, {I, Current, Acc}) -> 
+		case Vote of
+			I -> {I, Current ++ [Alt], Acc};
+			_ -> {Vote, [Alt], Acc ++ [{I, Current}]}
+		end
+	end, {Vote, [Alt], []}, L),
+	Acc ++ [{I, Current}].
+
+single_result(Poll, Ballot) ->
+	Alts = lists:delete(sq, alts(Poll)),
+	B = normalize_ballot(Ballot, Alts),
+	B2 = lists:reverse(lists:keysort(2, B)),
+	key_group(B2).
+
+
 add_vote({A, Va}, {B, Vb}, Prefs, Weight) when Va > Vb ->
 	maps:put({A, B}, maps:get({A, B}, Prefs) + Weight, Prefs);
 add_vote({_, V}, {_, V}, Prefs, _) -> Prefs;
