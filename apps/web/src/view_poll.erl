@@ -24,9 +24,16 @@ author(User, Poll, _) ->
 		#vote{name = Name} -> wf:html_encode(Name)
 	end.
 
-vote_input(Id, Value)  -> [	
-		#input{id=Id, name=Id, type=range, min=-3, max=7, value=Value}
-	].
+vote_input(Id, Value) ->
+	Class = case Value of
+		0 ->  "";
+		V when V > 0 -> "positive";
+		_ -> "negative"
+	end,
+	"<input class=\""++ Class ++"\" id=" ++ Id ++ " name=" ++ Id ++
+	" value=" ++ wf:to_list(Value) ++
+	" type=range min=-3 max=7 oninput=\"onSliderChange(this)\">".
+
 
 alt_link(Postback, Body, Alt) -> alt_link(Postback, Body, Alt, []).
 alt_link(Postback, Body, Alt, Source) ->
@@ -56,19 +63,20 @@ alt_text(Alt, Edit) ->
 	]}.
 
 alt(Alt, Vote, Edit) ->
+	Id = "vote" ++ wf:to_list(Alt#alt.id),
 	[#li{id = ?ALT_ID(Alt), class=with_vote, body=[
-		#span{class=vote, body=pos_format(Vote)},
+		#span{class=vote, id=Id ++ "text", body=pos_format(Vote)},
 		#panel{class=text, body=[
-			vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),		
+			vote_input(Id, Vote),		
 			alt_text(Alt, Edit)
 		]}
 	]}].
 
 alt_form() ->
 	#li{body=[
-		#span{class=vote, body=[]},
+		#span{class=vote, id=alt_votetext, body=[]},
 		#panel{class=text, body=[
-			vote_input(alt_vote, 0),
+			vote_input(wf:to_list(alt_vote), 0),
 			#textarea{id=alt_text, maxlength=128}
 		]},
 		#panel{class=edit_buttons, body = [
@@ -236,7 +244,7 @@ event(restore_alt) ->
 		kvs:put(Alt#alt{hidden = false}),
 		V = polls:get_vote(usr:id(), poll_id()),
 		B = maps:from_list(V#vote.ballot),
-		view_common:wf_update(?ALT_ID(Alt), alt(Alt, wf:to_list(maps:get(Alt#alt.id, B, 0)), true))
+		view_common:wf_update(?ALT_ID(Alt), alt(Alt, maps:get(Alt#alt.id, B, 0), true))
 	end);
 
 event(show_edit) ->
