@@ -108,8 +108,14 @@ $alt-text-size-big: $vote-font-size-big * 1.7;
 	}
 
 	textarea {
-		@extend .alt-float;
 		height: rem-calc(101px); // magic number to fit 3 rows
-		margin-top: rem-calc(11px); // magic number to align to vote baseline
 	}
+
+	.with_vote .vote{
+		padding-top: 2rem;
+	}
+}
+
+input[type="range"] { 
+	@include range-input-color($medium-gray);
 }

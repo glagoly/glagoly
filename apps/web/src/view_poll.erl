@@ -24,11 +24,9 @@ author(User, Poll, _) ->
 		#vote{name = Name} -> wf:html_encode(Name)
 	end.
 
-vote_input(Id, <<"0">>) -> vote_input(Id, []);
-vote_input(Id, "0") -> vote_input(Id, []);
-
-vote_input(Id, Value) ->
-	#input{id=Id, name=Id, type=number, value=Value, class=vote, min=-3, max=7, placeholder="0 "}.
+vote_input(Id, Value)  -> [	
+		#input{id=Id, name=Id, type=range, min=-3, max=7, value=Value}
+	].
 
 alt_link(Postback, Body, Alt) -> alt_link(Postback, Body, Alt, []).
 alt_link(Postback, Body, Alt, Source) ->
@@ -45,8 +43,8 @@ restore_alt(Alt) -> [#li{id = ?ALT_ID(Alt), class=deleted, body=[
 	]}].
 
 alt_text(Alt, Edit) ->
-	#span{id=?ALT_ID(Alt) ++ "text", body = [
-		#span{class=text, body=wf:html_encode(Alt#alt.text)},
+	#panel{id=?ALT_ID(Alt) ++ "text", body = [
+		#span{body=wf:html_encode(Alt#alt.text)},
 		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
 			true -> #span{class=buttons, body = [
@@ -58,15 +56,21 @@ alt_text(Alt, Edit) ->
 	]}.
 
 alt(Alt, Vote, Edit) ->
-	[#li{id = ?ALT_ID(Alt), body=[
-		vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),
-		alt_text(Alt, Edit)
+	[#li{id = ?ALT_ID(Alt), class=with_vote, body=[
+		#span{class=vote, body=pos_format(Vote)},
+		#panel{class=text, body=[
+			vote_input("vote" ++ wf:to_list(Alt#alt.id), Vote),		
+			alt_text(Alt, Edit)
+		]}
 	]}].
 
 alt_form() ->
 	#li{body=[
-		vote_input(alt_vote, []),
-		#textarea{id=alt_text, maxlength=128, class=text},
+		#span{class=vote, body=[]},
+		#panel{class=text, body=[
+			vote_input(alt_vote, 0),
+			#textarea{id=alt_text, maxlength=128}
+		]},
 		#panel{class=edit_buttons, body = [
 			#link{id=send, class=[button], body="add alternative", 
 				postback=add_alt, source=[alt_vote, alt_text]}
@@ -88,7 +92,7 @@ update_title(Poll, Title) ->
 
 alts(User, Poll, Alts, #vote{ballot = Ballot}) ->
 	Alts2 = polls:user_alts(Alts, Ballot, usr:seed()),
-	[alt(Alt, wf:to_list(V), can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts2].
+	[alt(Alt, V, can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts2].
 
 edit_panel(Poll, Vote, Alts, Js_escape) ->
 	wf:wire(#api{name=vote}),
@@ -111,7 +115,7 @@ name_list(L) ->
 
 pos_format(P) when P > 0 -> "&#65291;" ++ wf:to_list(P);
 pos_format(P) when P == 0 -> "";
-pos_format(P) -> wf:to_list(P).
+pos_format(P) -> "&mdash;" ++ wf:to_list(-P).
 
 li_class(Pos) when Pos < 1 -> looser;
 li_class(_) -> upwoted.
@@ -123,8 +127,10 @@ result(Ids, Pos, Supps, Classes) ->
 	Alts = [kvs:get(alt, Id) || Id <- Ids],
 	R =[#li{class=Classes ++ [li_class(Pos)] ,body=[
 		#span{class=vote, body=pos_format(Pos)},
-		#span{class=text, body=wf:hte(Alt#alt.text)},
-		sups(dict:fetch(Alt#alt.id, Supps))
+		#panel{class=text, body=[
+			wf:hte(Alt#alt.text),
+			sups(dict:fetch(Alt#alt.id, Supps))
+		]}
 	]} || {ok, Alt} <- Alts].
 
 results([]) -> [];
@@ -185,7 +191,7 @@ event(add_alt) ->
 	 	T -> 
 	 		Alt = #alt{id=kvs:next_id(alt, 1), user=usr:ensure(), feed_id={alts, poll_id()}, text=T},
 			kvs:add(Alt),
-			wf:insert_bottom(alts, alt(Alt, wf:q(alt_vote), true)),
+			wf:insert_bottom(alts, alt(Alt, wf:to_integer(wf:q(alt_vote)), true)),
 			wf:wire("clearAltForm();")
 	 end;
 	
