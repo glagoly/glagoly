@@ -30,10 +30,10 @@ key_group([{Alt, Vote} | L]) ->
 	{I, Current, Acc} = lists:foldl(fun({Alt, Vote}, {I, Current, Acc}) -> 
 		case Vote of
 			I -> {I, Current ++ [Alt], Acc};
-			_ -> {Vote, [Alt], Acc ++ [{I, Current}]}
+			_ -> {Vote, [Alt], Acc ++ [{Current, I}]}
 		end
 	end, {Vote, [Alt], []}, L),
-	Acc ++ [{I, Current}].
+	Acc ++ [{Current, I}].
 
 single_result(Poll, Ballot) ->
 	Alts = lists:delete(sq, alts(Poll)),
