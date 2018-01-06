@@ -6,8 +6,28 @@ function closeHelp() {
 
 function clearAltForm() {
     qi('alt_text').value = '';
-    qi('alt_vote').value = '';
+    qi('alt_vote').value = 0;
 };
+
+function onSliderChange(slider) {
+    slider.classList.remove('positive');
+    slider.classList.remove('negative');
+    var text =  qi(slider.id + 'text');
+
+    if (slider.value > 0) {
+        slider.classList.add('positive');
+        text.innerHTML = "&#65291;" + slider.value;
+    }
+    
+    if (slider.value < 0) {
+        slider.classList.add('negative');
+        text.innerHTML = "&mdash;"  + (-slider.value);
+    }
+    
+    if (slider.value == 0) {
+        text.innerHTML = "&nbsp;";
+    }
+}
 
 function voteSubmit() {
     var x = document.querySelectorAll("#alts input[id^=\"vote\"]");
