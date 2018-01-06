@@ -1,10 +1,8 @@
 {
-  "name": "foundation-ssg",
+  "name": "glagoly",
   "version": "1.0.0",
-  "authors": [
-    "ZURB <foundation@zurb.com>"
-  ],
-  "description": "Static site generator for Foundation for Sites.",
+  "author": "Denys Potapov <denys.potapov@gmail.com>",
+  "description": "Glagoly online decision making platform",
   "main": "gulpfile.js",
   "license": "MIT",
   "ignore": [

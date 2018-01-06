@@ -1,0 +1,13 @@
+@mixin range-input-color($color) {
+	&::-webkit-slider-thumb {
+		background: $color;
+	}
+
+	&::-moz-range-thumb {
+		background: $color;
+	}
+
+	&::-ms-thumb {
+		background: $color;
+	}
+}
