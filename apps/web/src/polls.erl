@@ -28,8 +28,13 @@ votes(Id) -> kvs:entries(kvs:get(feed, {votes, Id}), vote, undefined).
 result(Id) -> 
 	V = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), alt_ids(Id)),
 	Ballots = [V#vote.ballot || V <- votes(Id)],
-	P = lists:foldl(fun vote_core:add_ballot/2, V, Ballots),
-	vote_core:result(P).
+	case Ballots of
+		[B] -> vote_core:single_result(V, B);
+		_ -> 
+			P = lists:foldl(fun vote_core:add_ballot/2, V, Ballots),
+			vote_core:result(P)
+	end.
+	
 
 supporters(Id) ->
 	lists:foldl(fun (Vote, Sups) ->
