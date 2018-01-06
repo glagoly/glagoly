@@ -8,25 +8,19 @@ input.title-input {
 .vote {
 	text-align: right;
 	display: inline-block;
-	width: $vote-font-size * 1.7;
+	width: $vote-font-size * 1.1;
 
 	font-size: $vote-font-size;
 	line-height: 1em;
 
 	margin: 0;
-	margin-right: $default-margin;
 
 	@include breakpoint(medium) {
-		width: $vote-font-size-big * 1.7;
+		width: $vote-font-size-big * 1.1;
 		font-size: $vote-font-size-big;
 	}
 }
 
-input.vote {
-	float: left;
-	padding: ($input-padding / 3) $input-padding;
-	height: inherit;
-}
 
 .supps,
 .author {
@@ -41,12 +35,27 @@ input.vote {
     content: '\2014\00A0';
 }
 
-$alt-text-size: $vote-font-size * 2 + $default-margin;
-$alt-text-size-big: $vote-font-size-big * 2 + $default-margin;
+$alt-text-size: $vote-font-size * 1.7;
+$alt-text-size-big: $vote-font-size-big * 1.7;
+
+.alt-float {
+	width: calc(100% - #{$alt-text-size});
+	float: right;
+
+	@include breakpoint(medium) {
+		width: calc(100% - #{$alt-text-size-big});
+	}
+}
 
 .alts {
 	.winner.upwoted {
 		font-size: rem-calc(25);
+
+		.text {
+			@include breakpoint(medium) {
+				padding-top: 0.25rem; // magic number to align to vote baseline
+			}
+		}
 	}
 	.looser {
 		font-size: $small-font;
@@ -54,6 +63,9 @@ $alt-text-size-big: $vote-font-size-big * 2 + $default-margin;
 		.vote {
 			font-size: $small-font;
 		}	
+		.text {
+			padding-top: 0;
+		}
 	}
 
 	.deleted {
@@ -87,15 +99,17 @@ $alt-text-size-big: $vote-font-size-big * 2 + $default-margin;
 		}
 	}
 
-	textarea {
-
-		height: rem-calc(101px); // magic number to fit 3 rows
-		width: calc(100% - #{$alt-text-size});
-		float: right;
-		margin-top: rem-calc(11px); // magic number to align to vote baseline
+	.text {
+		@extend .alt-float;
 
 		@include breakpoint(medium) {
-			width: calc(100% - #{$alt-text-size-big});
+			padding-top: 0.75rem; // magic number to align to vote baseline
 		}
+	}
+
+	textarea {
+		@extend .alt-float;
+		height: rem-calc(101px); // magic number to fit 3 rows
+		margin-top: rem-calc(11px); // magic number to align to vote baseline
 	}
 }
