@@ -44,6 +44,8 @@
 @include foundation-top-bar;
 @include foundation-visibility-classes;
 @include foundation-float-classes;
+
+@import 'components/range_override';
 @include foundation-range-input;
 
 @import 'components/common';
