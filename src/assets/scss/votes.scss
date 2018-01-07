@@ -8,7 +8,7 @@ input.title-input {
 .vote {
 	text-align: right;
 	display: inline-block;
-	width: $vote-font-size * 1.1;
+	width: $vote-font-size * 1.7;
 
 	font-size: $vote-font-size;
 	line-height: 1em;
@@ -16,7 +16,7 @@ input.title-input {
 	margin: 0;
 
 	@include breakpoint(medium) {
-		width: $vote-font-size-big * 1.1;
+		width: $vote-font-size-big * 1.7;
 		font-size: $vote-font-size-big;
 	}
 }
@@ -39,11 +39,11 @@ $alt-text-size: $vote-font-size * 1.7;
 $alt-text-size-big: $vote-font-size-big * 1.7;
 
 .alt-float {
-	width: calc(100% - #{$alt-text-size});
+	width: calc(100% - #{$alt-text-size * 1.3});
 	float: right;
 
 	@include breakpoint(medium) {
-		width: calc(100% - #{$alt-text-size-big});
+		width: calc(100% - #{$alt-text-size-big * 1.3});
 	}
 }
 
