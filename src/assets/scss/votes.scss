@@ -127,3 +127,9 @@ input[type="range"].positive {
 input[type="range"].negative {
 	@include range-input-color($alert-color);
 }
+
+input[type="range"] {
+	@include mui-animation(shake(1%));
+	@extend .slow;
+	animation-duration: 0.5s;
+}
