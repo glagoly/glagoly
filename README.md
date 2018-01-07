@@ -28,6 +28,7 @@ Run gulp:
 
 ## On prod
     
+    cd /var/www/html/glagoly/
     make console
     make start
 
