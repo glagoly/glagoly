@@ -32,7 +32,7 @@ input.title-input {
 //    content: '\FF0B\00A0';
 }
 .author:before {
-    content: '\2014\00A0';
+	content: '\2014\00A0';
 }
 
 $alt-text-size: $vote-font-size * 1.7;
@@ -128,8 +128,17 @@ input[type="range"].negative {
 	@include range-input-color($alert-color);
 }
 
+@keyframes shake-little {
+	0%, 50% {
+		transform: translateX(2%);
+  	}
+	25%, 75% {
+		transform: translateX(-2%);
+	}
+}
+
 input[type="range"] {
-	@include mui-animation(shake(1%));
-	@extend .slow;
-	animation-duration: 0.5s;
+	height: 1.4rem;
+	animation-name:shake-little;
+	animation-duration: 0.7s;
 }
