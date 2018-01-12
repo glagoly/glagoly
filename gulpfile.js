@@ -84,15 +84,6 @@ gulp.task('copy', function() {
 // Compile Sass into CSS
 // In production, the CSS is compressed
 gulp.task('sass', function() {
-  var uncss = $.if(isProduction, $.uncss({
-    html: ['src/**/*.html'],
-    ignore: [
-      new RegExp('^meta\..*'),
-      new RegExp('^\.is-.*')
-    ]
-  }));
-
-  var minifycss = $.if(isProduction, $.minifyCss());
 
   return gulp.src('src/assets/scss/app.scss')
     .pipe($.sourcemaps.init())
@@ -104,8 +95,6 @@ gulp.task('sass', function() {
     .pipe($.autoprefixer({
       browsers: COMPATIBILITY
     }))
-    // .pipe(uncss)
-    //.pipe(minifycss)
     .pipe($.if(!isProduction, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/css'));
 });
