@@ -3,6 +3,7 @@
 -include_lib("n2o/include/wf.hrl").
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("records.hrl").
+-include_lib("web.hrl").
 
 -define(ALT_ID(A), "alt" ++ wf:to_list(A#alt.id)).
 
@@ -80,7 +81,7 @@ alt_form() ->
 			#textarea{id=alt_text, maxlength=128}
 		]},
 		#panel{class=edit_buttons, body = [
-			#link{id=send, class=[button], body="add alternative", 
+			#link{id=send, class=[button], body=?T("add alternative"), 
 				postback=add_alt, source=[alt_vote, alt_text]}
 	]}]}.
 
@@ -110,7 +111,8 @@ edit_panel(Poll, Vote, Alts, Js_escape) ->
 		{alts, alts(User, Poll, Alts, Vote)},
 		{alt_form, alt_form()},
 		{name, Vote#vote.name},
-		{is_new, (Alts == [])}
+		{poll_button, case Alts of [] -> ?T("create poll"); _ -> ?T("vote") end},
+		{is_new, Alts == []}
 	]}.
 
 name_list(L) ->
