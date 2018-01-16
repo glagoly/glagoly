@@ -162,7 +162,7 @@ poll_body(Poll, Alts, Js_escape)->
 	Vote = polls:get_vote(usr:id(), poll_id()),
 	#panel{id=body, body=[
 		view_common:top_bar(),
-		case Vote#vote.id of
+		case Vote#vote.ballot of
 			[] -> edit_panel(Poll, Vote, Alts, Js_escape);
 			_ -> results_panel(Poll, Js_escape)
 		end
