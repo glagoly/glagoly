@@ -1,6 +1,7 @@
 -module(polls).
 -compile(export_all).
 -include_lib("records.hrl").
+-include_lib("web.hrl").
 
 add_my(User, Poll) ->
 	case kvs:index(my_poll, user_poll, {User, Poll}) of
@@ -16,7 +17,7 @@ my(User, Count) -> kvs:entries(kvs:get(feed, {my_polls, User}), my_poll, Count).
 
 create(User) ->
 	Id = vote_core:uuid(),
-	kvs:put(#poll{id = Id, user=User, title = <<"poll">>}),
+	kvs:put(#poll{id = Id, user=User, title = ?T("poll")}),
 	add_my(User, Id),
 	Id.
 

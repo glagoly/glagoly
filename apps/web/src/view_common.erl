@@ -38,8 +38,8 @@ top_bar() ->
 			class=menu, body=[
 			#li{body=poll_button([button,main])},
 			#li{body=case usr:is_pers() of
-				true -> #link{body="logout", delegate=view_common, postback=logout};
-				_ -> #link{onclick="onLoginClick();", body="log in"}
+				true -> #link{body=?T("logout"), delegate=view_common, postback=logout};
+				_ -> #link{onclick="onLoginClick();", body=?T("log in")}
 			end}
 		]}}
 	]}}.

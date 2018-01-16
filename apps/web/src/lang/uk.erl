@@ -2,6 +2,8 @@
 -compile(export_all).
 
 trans("poll") -> <<"опитування"/utf8>>;
+trans("logout") -> <<"вийти"/utf8>>;
+trans("log in") -> <<"увійти"/utf8>>;
 
 trans("create poll") ->	<<"створити опитування"/utf8>>;
 
