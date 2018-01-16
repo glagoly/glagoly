@@ -3,6 +3,7 @@
 -include_lib("n2o/include/wf.hrl").
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("records.hrl").
+-include_lib("web.hrl").
 
 alt([]) -> <<"no vote">>;
 alt([{A, _} | _]) -> 
@@ -46,7 +47,10 @@ about() ->
 		{title, "schulze polls online"},
 		{description, "the fastest way to make micro-desicions, easy meeting schedule, fun rated lists"},
 		{body, #dtl{file="index", app=sample, bindings=[ 
-			{create_button, view_common:poll_button()},
+			{cta, [
+				#h2{body = ?T("the fastest way <br /> to make micro-desicions")},
+				view_common:poll_button()
+			]},
 			{create_button2, view_common:poll_button()}
 		] ++ sample_buttons()}}
 	]).

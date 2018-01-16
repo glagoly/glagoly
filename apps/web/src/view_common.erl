@@ -2,7 +2,7 @@
 -compile(export_all).
 -include_lib("n2o/include/wf.hrl").
 -include_lib("nitro/include/nitro.hrl").
-
+-include_lib("web.hrl").
 
 ga_event(Category, Action) ->
 	case wf:config(web, ga_id) of
@@ -23,7 +23,7 @@ wf_update(Target, Elements) ->
 
 poll_button() -> poll_button([]).
 poll_button(Class) -> 
-	#button{body="create poll",class=Class,postback=create_poll, delegate=view_common}.
+	#button{body=?T("create poll"),class=Class,postback=create_poll, delegate=view_common}.
 
 top_bar() ->
 	#panel{class='top-bar', id='top-bar', body=#panel{class=[row, columns], body=[
