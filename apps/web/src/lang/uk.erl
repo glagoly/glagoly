@@ -12,4 +12,4 @@ trans("add alternative") -> <<"додати альтернативу"/utf8>>;
 trans("the fastest way <br /> to make micro-desicions") ->
 	<<"найшвидший спосіб<br />прийняти мікро-рішення"/utf8>>;
 
-trans(S) -> S.
+trans(S) -> en:trans(S).

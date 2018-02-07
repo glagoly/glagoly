@@ -1,4 +1,6 @@
 -module(lang).
 -compile(export_all).
 
-trans(S) -> uk:trans(S).
+lang() -> en.
+
+trans(S) -> L = lang(), L:trans(S).
