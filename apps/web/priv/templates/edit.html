@@ -7,28 +7,7 @@
     <button class="close-button" onclick="closeHelp();">
       <span aria-hidden="true">&times;</span>
     </button>
-    <ol>
-      {% if is_new %}
-      <li>додайте найкращу альтернативу і поставте їй +7</li>
-      <li>додайте менш привабливі альтернативи і поставте їм +5, +3, +1</li>
-      <li>додайте інші альтернативи, та залишти їх без оцінки</li>
-
-      <!-- 
-      <li>add most preferable alternative and rate it with +7</li>
-      <li>add some less preferable alternatives and rate them with +5, +3, +1</li>
-      <li>add other alternatives and leave them without rating</li>
-      -->
-      {% else %}
-      <li>додайте або оберіть найкращу альтернативу і поставте їй +7</li>
-      <li>поставте менш привабливим альтернативам +5, +3, +1</li>
-      <li>поставте неприйнятній альтернативі оцінку -3</li>
-      <!-- 
-      <li>add or rate the most preferable alternative with +7</li>
-      <li>rate less preferable alternatives with +5, +3, +1</li>
-      <li>rate unacceptable alternative with -3</li>
-      -->
-      {% endif %}
-    </ol>
+    {{ manual }}
   </div>
 
   <ol class="alts" id="alts">

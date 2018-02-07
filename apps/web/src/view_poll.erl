@@ -103,6 +103,20 @@ alts(User, Poll, Alts, #vote{ballot = Ballot}) ->
 	Alts2 = polls:user_alts(Alts, Ballot, usr:seed()),
 	[alt(Alt, V, can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts2].
 
+manual(true) ->
+	#ol{body=[
+		#li{body=?T("add most preferable alternative and rate it with +7")},
+		#li{body=?T("add some less preferable alternatives and rate them with +5, +3, +1")},
+		#li{body=?T("add other alternatives and leave them without rating")}
+	]};
+
+manual(_) ->
+	#ol{body=[
+		#li{body=?T("add or rate the most preferable alternative with +7")},
+		#li{body=?T("rate less preferable alternatives with +5, +3, +1")},
+		#li{body=?T("rate unacceptable alternative with -3")}
+	]}.
+
 edit_panel(Poll, Vote, Alts, Js_escape) ->
 	wf:wire(#api{name=vote}),
 	User = usr:id(),
@@ -112,7 +126,7 @@ edit_panel(Poll, Vote, Alts, Js_escape) ->
 		{alt_form, alt_form()},
 		{name, Vote#vote.name},
 		{poll_button, case Alts of [] -> ?T("create poll"); _ -> ?T("vote") end},
-		{is_new, Alts == []}
+		{manual, manual(Alts == [])}
 	]}.
 
 name_list(L) ->
