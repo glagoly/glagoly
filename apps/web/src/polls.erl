@@ -36,10 +36,10 @@ result(Id) ->
 			vote_core:result(P)
 	end.
 	
-
+% rename it as it now shows not only supportes
 supporters(Id) ->
 	lists:foldl(fun (Vote, Sups) ->
-		Ballot = [{A, B} || {A, B} <- Vote#vote.ballot, B > 0, dict:is_key(A, Sups)],
+		Ballot = [{A, B} || {A, B} <- Vote#vote.ballot, dict:is_key(A, Sups)],
 		{U, _} = Vote#vote.user_poll,
 		lists:foldl(fun ({A, B}, S) -> dict:append(A, {U, Vote#vote.name, B}, S) end, Sups, Ballot)
 	end, dict:from_list([{A, []} || A <- alt_ids(Id)]), votes(Id)).
