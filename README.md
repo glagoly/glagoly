@@ -1,6 +1,6 @@
 # glagoly - online voting platform
 
-## To build localy
+## Requirments
 
 Install npm or update npm to latest version:
 
@@ -18,9 +18,11 @@ Install bower dependencies:
 
     bower install
 
-Run gulp:
+Run local
 
     npm run start
+    mad com pla rep
+
 
 ## Build front
 
