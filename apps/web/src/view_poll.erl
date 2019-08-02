@@ -75,7 +75,7 @@ alt(Alt, Vote, Edit) ->
 
 alt_form() ->
 	#li{body=[
-		#span{class=vote, id=alt_votetext, body=[]},
+		#span{class=vote, id=alt_votetext, body=["&empty;"]},
 		#panel{class=text, body=[
 			vote_input(wf:to_list(alt_vote), 0),
 			#textarea{id=alt_text, maxlength=128}
@@ -105,16 +105,16 @@ alts(User, Poll, Alts, #vote{ballot = Ballot}) ->
 
 manual(true) ->
 	#ol{body=[
-		#li{body=?T("add most preferable alternative and rate it with +7")},
-		#li{body=?T("add some less preferable alternatives and rate them with +5, +3, +1")},
+		#li{body=?T("add most preferable alternative and rate it with &#xFF0B;7")},
+		#li{body=?T("add some less preferable alternatives and rate them with &#xFF0B;5, &#xFF0B;3, &#xFF0B;1")},
 		#li{body=?T("add other alternatives and leave them without rating")}
 	]};
 
 manual(_) ->
 	#ol{body=[
-		#li{body=?T("add or rate the most preferable alternative with +7")},
-		#li{body=?T("rate less preferable alternatives with +5, +3, +1")},
-		#li{body=?T("rate unacceptable alternative with -3")}
+		#li{body=?T("add or rate the most preferable alternative with &#xFF0B;7")},
+		#li{body=?T("rate less preferable alternatives with &#xFF0B;5, &#xFF0B;3, &#xFF0B;1")},
+		#li{body=?T("rate unacceptable alternative with &#65293;3")}
 	]}.
 
 edit_panel(Poll, Vote, Alts, Js_escape) ->
@@ -138,7 +138,7 @@ name_list(L) ->
 	string:join(L2, ", ").
 
 pos_format(P) when P > 0 -> "&#65291;" ++ wf:to_list(P);
-pos_format(P) when P == 0 -> "";
+pos_format(P) when P == 0 -> "&empty;";
 pos_format(P) -> "&mdash;" ++ wf:to_list(-P).
 
 li_class(Pos) when Pos < 1 -> looser;

@@ -25,7 +25,7 @@ function onSliderChange(slider) {
     }
     
     if (slider.value == 0) {
-        text.innerHTML = "&nbsp;";
+        text.innerHTML = "&empty;";
     }
 }
 
