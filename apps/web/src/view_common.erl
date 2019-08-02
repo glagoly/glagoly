@@ -37,9 +37,9 @@ top_bar() ->
 		#panel{class='top-bar-right', body = #ul{
 			class=menu, body=[
 			#li{body=poll_button([button,main])},
-			#li{body=case usr:is_pers() of
+			#li{class='top-login', body=case usr:is_pers() of
 				true -> #link{body=?T("logout"), delegate=view_common, postback=logout};
-				_ -> #link{onclick="onLoginClick();", body=?T("log in")}
+				_ -> #link{onclick="onLoginClick();", body=?T("log in with facebook")}
 			end}
 		]}}
 	]}}.
