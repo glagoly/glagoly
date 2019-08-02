@@ -119,6 +119,7 @@ manual(_) ->
 
 edit_panel(Poll, Vote, Alts, Js_escape) ->
 	wf:wire(#api{name=vote}),
+	wf:wire(#api{name=view_results}),
 	User = usr:id(),
 	#dtl{file="edit", js_escape=Js_escape, bindings=[
 		{title_input, title(User, Poll)},
@@ -293,5 +294,8 @@ api_event(vote, Data, _) ->
 	Title = filter:string(proplists:get_value(<<"title">>, Props, []), 32, <<"poll">>),
 	update_title(poll(), Title),
 	polls:put_vote(User, poll_id(), Name, Prefs),
-	view_common:wf_update(edit_panel, results_panel(poll(), true)),
-	view_common:ga_event(poll, vote).
+	api_event(view_results, [], []),
+	view_common:ga_event(poll, vote);
+
+api_event(view_results, Data, _) ->
+	view_common:wf_update(edit_panel, results_panel(poll(), true)).

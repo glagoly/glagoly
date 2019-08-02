@@ -45,6 +45,10 @@ function voteSubmit() {
     return false;
 };
 
+function showResults() {
+    view_results();
+};
+
 // This is called with the results from from FB.getLoginStatus().
 function statusChangeCallback(response) {
     console.log('statusChangeCallback');
