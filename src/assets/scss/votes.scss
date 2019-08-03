@@ -28,9 +28,11 @@ input.title-input {
 	padding-left: 0.4em;
 }
 
-.supps:before {
-//    content: '\FF0B\00A0';
+.supps {
+    display: block;
+    padding-left: 0;
 }
+
 .author:before {
 	content: '\2014\00A0';
 }
@@ -49,13 +51,21 @@ $alt-text-size-big: $vote-font-size-big * 1.7;
 
 .alts {
 	.winner.upwoted {
-		font-size: rem-calc(25);
+		font-weight: bold;
+
+		.vote {
+			font-weight: normal;
+		}
 
 		.text {
 			@include breakpoint(medium) {
-				padding-top: 0.25rem; // magic number to align to vote baseline
+				padding-top: 0.35rem; // magic number to align to vote baseline
 			}
 		}
+	}
+
+	.upwote {
+		color: $accent-color;
 	}
 	.looser {
 		font-size: $small-font;

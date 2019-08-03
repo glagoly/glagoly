@@ -133,10 +133,14 @@ edit_panel(Poll, Vote, Alts, Js_escape) ->
 name_list(L) ->
 	I = usr:id(),
 	L2 = lists:map(fun
-		({U, _, P}) when U == I -> "<i>I</i>&nbsp;" ++ pos_format(P) ++ ""; 
-		({_, N, P}) -> wf:hte(wf:to_list(N)) ++ "&nbsp;" ++ pos_format(P)
+		({U, _, P}) when U == I -> {"<i>I</i>" ++ pos_format(P) ++ "", P};
+		({_, N, P}) -> {wf:hte(wf:to_list(N)) ++ "" ++ pos_format(P), P}
 	end, L),
-	string:join(L2, ", ").
+	L3 = lists:map(fun
+		({S, P}) when P > 0 -> "<span class='upwote'>" ++ S ++"</span>";
+		({S, _}) -> S
+	end, L2),
+	string:join(L3, ", ").
 
 pos_format(P) when P > 0 -> "&#65291;" ++ wf:to_list(P);
 pos_format(P) when P == 0 -> "&empty;";
