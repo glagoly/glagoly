@@ -213,17 +213,22 @@ alt_event(Fun) ->
 		end
 	end.
 
-event(add_alt) ->
-	Text = filter:string(wf:q(alt_text), 128, []),
-	case Text of
+add_alt(Text) ->
+	case filter:string(Text, 128, []) of
 	 	[] -> no; 
 	 	T -> 
 	 		Alt = #alt{id=kvs:next_id(alt, 1), user=usr:ensure(), feed_id={alts, poll_id()}, text=T},
 			kvs:add(Alt),
+			Alt
+	 end.
+
+event(add_alt) ->
+	case add_alt(wf:q(alt_text)) of
+		no -> no;
+		Alt ->
 			wf:insert_bottom(alts, alt(Alt, wf:to_integer(wf:q(alt_vote)), true)),
 			wf:wire("clearAltForm();")
-	 end;
-	
+	end;
 
 event(del_alt) -> 
 	alt_event(fun (Poll, Alt) ->
