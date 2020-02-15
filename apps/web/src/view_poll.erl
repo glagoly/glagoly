@@ -283,6 +283,7 @@ event(_) -> ok.
 
 prepare_prefs(Votes) -> 
 	% to pairs of ints
+	wf:warning(Votes),
 	P1 = [{ wf:to_integer(A), filter:int(V, -3, 7, 0)} || [A, V] <- Votes],
 	% remove not incorrect alt ids and zero prefs,
 	Alts = polls:alt_ids(poll_id()),
@@ -297,14 +298,23 @@ api_event(fb_login, Token, _) ->
 
 api_event(vote, Data, _) ->
 	Props = jsone:decode(list_to_binary(Data), [{object_format, proplist}]),
-	User = usr:ensure(),
-	Prefs = prepare_prefs(proplists:get_value(<<"votes">>, Props, [])),
-	Name = filter:string(proplists:get_value(<<"name">>, Props, []), 32, <<"anon">>),
-	Title = filter:string(proplists:get_value(<<"title">>, Props, []), 32, <<"poll">>),
+
+	Title = filter:string(get_value(<<"title">>, Props), 32, <<"poll">>),
 	update_title(poll(), Title),
+
+	NewVotes = case add_alt(get_value(<<"alt_text">>, Props)) of
+		no -> [];
+		Alt -> [[Alt#alt.id, get_value(<<"alt_vote">>, Props)]]
+	end,
+	Prefs = prepare_prefs(get_value(<<"votes">>, Props) ++ NewVotes),
+
+	User = usr:ensure(),
+	Name = filter:string(get_value(<<"name">>, Props), 32, <<"anon">>),
 	polls:put_vote(User, poll_id(), Name, Prefs),
 	api_event(view_results, [], []),
 	view_common:ga_event(poll, vote);
 
 api_event(view_results, Data, _) ->
 	view_common:wf_update(edit_panel, results_panel(poll(), true)).
+
+get_value(Key, Props) -> proplists:get_value(Key, Props, []).

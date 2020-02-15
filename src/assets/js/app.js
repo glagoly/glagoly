@@ -39,12 +39,16 @@ function voteSubmit() {
         votes.push([x[i].id.substring(4), x[i].value]);
     };
 
-    vote({
+    data = {
         title:  qi('title') ? qi('title').value : '',
         name: qi('name').value,
-        votes: votes
-    });
-    console.log(votes);
+        votes: votes,
+        // add alternative
+        alt_text: qi('alt_text').value,
+        alt_vote: qi('alt_vote').value,
+    };
+    vote(data);
+    
     return false;
 };
 
