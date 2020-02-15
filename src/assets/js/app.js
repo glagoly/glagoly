@@ -6,7 +6,10 @@ function closeHelp() {
 
 function clearAltForm() {
     qi('alt_text').value = '';
-    qi('alt_vote').value = 0;
+
+    slider = qi('alt_vote');
+    slider.value = 0;
+    onSliderChange(slider);
 };
 
 function onSliderChange(slider) {
