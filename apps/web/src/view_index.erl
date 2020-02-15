@@ -34,14 +34,6 @@ my(User) ->
 		{body, my_body(User, false)}
 	]).
 
-sample_buttons() -> [
-		{P,  #button{body=T, class=[button, primary], postback=P}} || {P, T} <- [
-			{sample_poll, "vote on sample decision"},
-			{sample_schedule, "vote on sample meeting schedule"},
-			{sample_list, "vote on sample cocktail list"}
-		]
-	].
-
 about() ->
 	view_common:page([
 		{title, "schulze polls online"},
@@ -52,7 +44,7 @@ about() ->
 				view_common:poll_button()
 			]},
 			{create_button2, view_common:poll_button()}
-		] ++ sample_buttons()}}
+		]}}
 	]).
 
 main() ->
@@ -60,14 +52,6 @@ main() ->
 		undefined -> about();
 		User -> my(User)
 	end.
-
-create_sample(Type) ->
-	Id = samples:create(Type),
-	wf:redirect("/p?ll=" ++ wf:to_list(Id)).
-
-event(sample_poll) -> create_sample(poll);
-event(sample_schedule) -> create_sample(schedule);
-event(sample_list) -> create_sample(list).
 
 api_event(fb_login, Token, _) ->
 	U = usr:fb_login(Token),
