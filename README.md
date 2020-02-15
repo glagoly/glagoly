@@ -26,7 +26,7 @@ Run local
 
 ## Build front
 
-    gulp build --production
+    npm run start build
 
 ## On prod
     
