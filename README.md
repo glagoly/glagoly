@@ -8,25 +8,19 @@ Install npm or update npm to latest version:
 
 After you get them insall npm dependencies:
     
-    npm install
+    npm i
 
-Insall bower globally:
+Start the app on localhost:7001:
 
-    npm install -g bower
+    npm run mad
      
-Install bower dependencies:
-
-    bower install
-
-Run local
+If you want to run the browser watch (localhost:300):
 
     npm run start
-    mad com pla rep
-
 
 ## Build front
 
-    npm run start build
+    npm run build
 
 ## On prod
     
