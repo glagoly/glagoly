@@ -14,7 +14,7 @@ Start the app on localhost:7001:
 
     npm run mad
      
-If you want to run the browser watch (localhost:300):
+If you want to run the browser watch (localhost:3000):
 
     npm run start
 

@@ -8,6 +8,8 @@ var gulp         = require('gulp');
 var named        = require('vinyl-named');
 var rimraf       = require('rimraf');
 var webpack      = require('webpack-stream');
+const path       = require('path');
+
 
 // Check for --production flag
 var PRODUCTION = !!(argv.production);
@@ -35,6 +37,7 @@ var PATHS = {
     'deps/n2o/priv/protocols/nitrogen.js',
     'deps/n2o/priv/bullet.js',
     'deps/n2o/priv/n2o.js',
+    'deps/n2o/priv/utf8.js',
     // 'deps/n2o/priv/utf8.js',
     'deps/n2o/priv/validation.js',
     // App
@@ -82,16 +85,27 @@ function sass() {
 
 var webpackConfig = {
   mode: (PRODUCTION ? 'production' : 'development'),
-  devtool: !PRODUCTION && 'source-map'
+  devtool: !PRODUCTION && 'source-map',
+  resolve: {
+    modules: [
+      "node_modules",
+      path.resolve(__dirname, "deps/n2o/priv/"),
+    ],
+  }
 }
 
 // Combine JavaScript into one file
 // In production, the file is minified
 function javascript() {
+  var uglify = $.if(PRODUCTION, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+  }));
+
   return gulp.src(PATHS.javascript)
-    .pipe(named())
     .pipe($.sourcemaps.init())
-    .pipe(webpack(webpackConfig))
+    .pipe($.concat('app.js'))
+    .pipe(uglify)
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/js')); 
 };
