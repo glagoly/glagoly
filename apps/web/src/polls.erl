@@ -75,6 +75,12 @@ get_alt(#poll{id = PollId}, Id) ->
 		_ -> undefined
 	end.
 
+% get_poll_seen(User, Poll) ->
+% 	case kvs:get(alt, {User, Poll}) of 
+% 		{ok, Seen} -> Seen
+% 		_ -> #poll_seen{}
+% 	end.
+
 merge_user(_, undefined) -> no;
 
 merge_user(Old, New) ->

@@ -11,7 +11,8 @@ metainfo() ->
       #table{name=poll,fields=record_info(fields, poll),keys=[user]},
       #table{name=alt,container=feed,fields=record_info(fields,alt),keys=[user]},
       #table{name=vote,container=feed,fields=record_info(fields,vote),keys=[user_poll]},
-      #table{name=my_poll,container=feed,fields=record_info(fields,my_poll),keys=[user_poll]}
+      #table{name=my_poll,container=feed,fields=record_info(fields,my_poll),keys=[user_poll]},
+      #table{name=poll_seen,fields=record_info(fields, poll_seen)}
     ]}.
 
 log_level() -> debug.
