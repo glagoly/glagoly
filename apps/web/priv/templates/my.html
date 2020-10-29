@@ -1,12 +1,20 @@
 <div class="panel">
-	<h1>my polls</h1>
-    {{ polls }}
+  <h1>my polls</h1>
+  {{ polls }}
 </div>
 
 {% if is_temp %}
 <div class="panel">
-	<h3>remember me</h3>
-	<p>login with facebook to change your vote later</p>
-	<a class="button main" onclick="onLoginClick();">login with facebook</a>
+  <h3>remember me</h3>
+  <p>login with facebook to change your vote later</p>
+  <div
+    class="fb-login-button"
+    data-size="large"
+    data-button-type="login_with"
+    data-layout="default"
+    data-auto-logout-link="false"
+    data-use-continue-as="false"
+    data-width=""
+    data-onlogin="checkLoginState"></div>
 </div>
 {% endif %}
