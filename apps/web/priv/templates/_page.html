@@ -19,17 +19,17 @@
    
     {{ body }}
     
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId            : '{{ fb_app_id }}',
-          autoLogAppEvents : true,
-          xfbml            : true,
-          version          : 'v6.0'
-        });
-      };
-    </script>
-    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '{{ fb_app_id }}',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v8.0'
+    });
+  };
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 <script>{{ script }}</script>
 <script src="static/js/app.js"></script>
