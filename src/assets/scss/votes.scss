@@ -88,13 +88,18 @@ $alt-text-size-big: $vote-font-size-big * 1.7;
 	}
 
 	.buttons {
-		padding-left: 0.4em;
+		display: block;
+		float: right;
 
 		a {
-			padding-left: 0.4em;
+			padding-left: 0.8em;
 			@include secondary-text;
 			@extend .ajax;
 		}	
+	}
+
+	.inner {
+		clear: both;
 	}
 
 	.edit_buttons {
@@ -113,6 +118,7 @@ $alt-text-size-big: $vote-font-size-big * 1.7;
 
 	.text {
 		@extend .alt-float;
+		padding-right: $default-margin;
 
 		@include breakpoint(medium) {
 			padding-top: 0.75rem; // magic number to align to vote baseline
@@ -125,6 +131,10 @@ $alt-text-size-big: $vote-font-size-big * 1.7;
 
 	.with_vote .vote{
 		padding-top: 2rem;
+	}
+
+	.with_vote {
+		@include panel();
 	}
 }
 

@@ -36,6 +36,17 @@ $default-margin: rem-calc(20);
 	box-shadow: $default-shadow;
 }
 
+.panel-clear {
+	@include grid-column-row();
+	margin-top: $default-margin;
+	max-width: 33em;
+}
+
+// weird foundation behaviour
+.panel-clear:last-child:not(:first-child) {
+	float: none;
+}
+
 .panel {
 	@include grid-column-row();
 	@include panel();

@@ -50,26 +50,28 @@ restore_alt(Alt) -> [#li{id = ?ALT_ID(Alt), class=deleted, body=[
 		alt_link(restore_alt, "Restore", Alt), " deleted alterntive"
 	]}].
 
-alt_text(Alt, Edit) ->
+alt_text(Alt, Edit) -> [
 	#panel{id=?ALT_ID(Alt) ++ "text", body = [
-		#span{body=wf:html_encode(Alt#alt.text)},
-		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
 			true -> #span{class=buttons, body = [
 				alt_link(del_alt, "delete", Alt),
 				alt_link(edit_alt, "edit", Alt)
 			]};
 			_ -> []
-		end
-	]}.
+		end,
+		#panel{class=inner, body = [
+			#span{body=wf:html_encode(Alt#alt.text)},
+			#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())}
+		]}
+	]}].
 
 alt(Alt, Vote, Edit) ->
 	Id = "vote" ++ wf:to_list(Alt#alt.id),
 	[#li{id = ?ALT_ID(Alt), class=with_vote, body=[
 		#span{class=vote, id=Id ++ "text", body=pos_format(Vote)},
 		#panel{class=text, body=[
-			vote_input(Id, Vote),		
-			alt_text(Alt, Edit)
+			alt_text(Alt, Edit),
+			vote_input(Id, Vote)
 		]}
 	]}].
 
