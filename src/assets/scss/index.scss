@@ -1,6 +1,5 @@
 .cta {
-	background: $primary-color url('/static/img/background.png');
-	background-size: cover;    
+	background: $primary-color;
 	padding-bottom: rem-calc(50);
 
 	box-shadow: $default-shadow;
@@ -16,7 +15,6 @@
 		line-height: 60%;
 	}
 
-
 	h2 {
 		color: $primary-color-text;
 		padding: 1em 0;
@@ -26,12 +24,11 @@
 		@extend .button, .large, .main;
 	}
 
-	.login-button {
-		@extend .small;
-		@include button(false, $background: $primary-color-text, $style: "hollow");
-
+	.fb-login-button {
+		float: right;
 		margin: 1em;
 	}
+
 	.top-link {
 		color: $primary-color-text;
 		font-weight: bold;
@@ -48,3 +45,6 @@
 	margin-top: rem-calc(30);
 }
 
+.fb-login-button {
+	min-height: 40px;
+}

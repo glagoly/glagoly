@@ -315,6 +315,7 @@ api_event(vote, Data, _) ->
 	view_common:ga_event(poll, vote);
 
 api_event(view_results, Data, _) ->
-	view_common:wf_update(edit_panel, results_panel(poll(), true)).
+	view_common:wf_update(edit_panel, results_panel(poll(), true)),
+	wf:wire("FB.XFBML.parse();").
 
 get_value(Key, Props) -> proplists:get_value(Key, Props, []).

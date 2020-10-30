@@ -69,8 +69,8 @@ function statusChangeCallback(response) {
     }
 }
 
-function onLoginClick() {
-    FB.login(function(response) {
-        statusChangeCallback(response);
-    }, {scope: 'public_profile'});
-};
+function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+}

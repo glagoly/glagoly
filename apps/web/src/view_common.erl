@@ -39,7 +39,7 @@ top_bar() ->
 			#li{body=poll_button([button,main])},
 			#li{class='top-login', body=case usr:is_pers() of
 				true -> #link{body=?T("logout"), delegate=view_common, postback=logout};
-				_ -> #link{onclick="onLoginClick();", body=?T("log in with facebook")}
+				_ -> ""
 			end}
 		]}}
 	]}}.
