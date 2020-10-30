@@ -11,3 +11,20 @@
 		background: $color;
 	}
 }
+
+/* Phones, tablets etc. */
+@media (hover: none) {
+	/* Disable range change on click */
+	input[type=range] {
+		pointer-events: none;
+	}
+	input[type=range]::-webkit-slider-thumb { /* Webkit Browsers like Chome and Safari */
+		pointer-events: auto;
+	}
+	input[type=range]::-moz-range-thumb { /* Firefox */
+		pointer-events: auto;
+	}
+	input[type=range]::-ms-thumb { /* Internet Explorer */
+		pointer-events: auto;
+	}
+}
