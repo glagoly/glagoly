@@ -1,6 +1,7 @@
 protos = [$client,$bert]; N2O_start();
 
-function closeHelp() {
+function closeHelp(e) {
+    e.preventDefault();
     qi('help-callout').style.display = 'none';
 };
 

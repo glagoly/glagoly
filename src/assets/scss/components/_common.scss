@@ -24,6 +24,10 @@ $default-margin: rem-calc(20);
 	.top-login {
 		font-size: $small-font;
 	}
+
+	.row {
+		max-width: 35em;
+	}
 }
 
 .main {
