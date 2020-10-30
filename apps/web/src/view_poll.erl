@@ -76,16 +76,16 @@ alt(Alt, Vote, Edit) ->
 	]}].
 
 alt_form() ->
-	#li{body=[
-		#span{class=vote, id=alt_votetext, body=["&empty;"]},
+	#li{class=alt_form, body=[
 		#panel{class=text, body=[
-			vote_input(wf:to_list(alt_vote), 0),
-			#textarea{id=alt_text, maxlength=128}
-		]},
-		#panel{class=edit_buttons, body = [
-			#link{id=send, class=[button], body=?T("add alternative"), 
-				postback=add_alt, source=[alt_vote, alt_text]}
-	]}]}.
+			#label{body=["My alternative"]},
+			#textarea{id=alt_text, maxlength=128},
+			#panel{class=edit_buttons, body = [
+				#link{id=send, class=[button], body=?T("add alternative"), 
+					postback=add_alt, source=[alt_text]}
+			]}
+		]}
+	]}.
 
 title(User, Poll)->
 	T = wf:html_encode(Poll#poll.title),
@@ -228,7 +228,7 @@ event(add_alt) ->
 	case add_alt(wf:q(alt_text)) of
 		no -> no;
 		Alt ->
-			wf:insert_bottom(alts, alt(Alt, wf:to_integer(wf:q(alt_vote)), true)),
+			wf:insert_bottom(alts, alt(Alt, 0, true)),
 			wf:wire("clearAltForm();")
 	end;
 
@@ -306,7 +306,7 @@ api_event(vote, Data, _) ->
 
 	NewVotes = case add_alt(get_value(<<"alt_text">>, Props)) of
 		no -> [];
-		Alt -> [[Alt#alt.id, get_value(<<"alt_vote">>, Props)]]
+		Alt -> [[Alt#alt.id, 0]]
 	end,
 	Prefs = prepare_prefs(get_value(<<"votes">>, Props) ++ NewVotes),
 
