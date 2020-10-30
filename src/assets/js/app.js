@@ -1,15 +1,12 @@
 protos = [$client,$bert]; N2O_start();
 
-function closeHelp() {
+function closeHelp(e) {
+    e.preventDefault();
     qi('help-callout').style.display = 'none';
 };
 
 function clearAltForm() {
     qi('alt_text').value = '';
-
-    slider = qi('alt_vote');
-    slider.value = 0;
-    onSliderChange(slider);
 };
 
 function onSliderChange(slider) {
@@ -44,8 +41,7 @@ function voteSubmit() {
         name: qi('name').value,
         votes: votes,
         // add alternative
-        alt_text: qi('alt_text').value,
-        alt_vote: qi('alt_vote').value,
+        alt_text: qi('alt_text').value
     };
     vote(data);
     

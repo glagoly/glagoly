@@ -24,6 +24,10 @@ $default-margin: rem-calc(20);
 	.top-login {
 		font-size: $small-font;
 	}
+
+	.row {
+		max-width: 35em;
+	}
 }
 
 .main {
@@ -34,6 +38,17 @@ $default-margin: rem-calc(20);
 	background-color: $panel-color;
 	border-radius: 2px;
 	box-shadow: $default-shadow;
+}
+
+.panel-clear {
+	@include grid-column-row();
+	margin-top: $default-margin;
+	max-width: 33em;
+}
+
+// weird foundation behaviour
+.panel-clear:last-child:not(:first-child) {
+	float: none;
 }
 
 .panel {

@@ -50,40 +50,42 @@ restore_alt(Alt) -> [#li{id = ?ALT_ID(Alt), class=deleted, body=[
 		alt_link(restore_alt, "Restore", Alt), " deleted alterntive"
 	]}].
 
-alt_text(Alt, Edit) ->
+alt_text(Alt, Edit) -> [
 	#panel{id=?ALT_ID(Alt) ++ "text", body = [
-		#span{body=wf:html_encode(Alt#alt.text)},
-		#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())},
 		case Edit of
 			true -> #span{class=buttons, body = [
 				alt_link(del_alt, "delete", Alt),
 				alt_link(edit_alt, "edit", Alt)
 			]};
 			_ -> []
-		end
-	]}.
+		end,
+		#panel{class=inner, body = [
+			#span{body=wf:html_encode(Alt#alt.text)},
+			#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())}
+		]}
+	]}].
 
 alt(Alt, Vote, Edit) ->
 	Id = "vote" ++ wf:to_list(Alt#alt.id),
 	[#li{id = ?ALT_ID(Alt), class=with_vote, body=[
 		#span{class=vote, id=Id ++ "text", body=pos_format(Vote)},
 		#panel{class=text, body=[
-			vote_input(Id, Vote),		
-			alt_text(Alt, Edit)
+			alt_text(Alt, Edit),
+			vote_input(Id, Vote)
 		]}
 	]}].
 
 alt_form() ->
-	#li{body=[
-		#span{class=vote, id=alt_votetext, body=["&empty;"]},
+	#li{class=alt_form, body=[
 		#panel{class=text, body=[
-			vote_input(wf:to_list(alt_vote), 0),
-			#textarea{id=alt_text, maxlength=128}
-		]},
-		#panel{class=edit_buttons, body = [
-			#link{id=send, class=[button], body=?T("add alternative"), 
-				postback=add_alt, source=[alt_vote, alt_text]}
-	]}]}.
+			#label{body=["My alternative"]},
+			#textarea{id=alt_text, maxlength=128},
+			#panel{class=edit_buttons, body = [
+				#link{id=send, class=[button], body=?T("add alternative"), 
+					postback=add_alt, source=[alt_text]}
+			]}
+		]}
+	]}.
 
 title(User, Poll)->
 	T = wf:html_encode(Poll#poll.title),
@@ -226,7 +228,7 @@ event(add_alt) ->
 	case add_alt(wf:q(alt_text)) of
 		no -> no;
 		Alt ->
-			wf:insert_bottom(alts, alt(Alt, wf:to_integer(wf:q(alt_vote)), true)),
+			wf:insert_bottom(alts, alt(Alt, 0, true)),
 			wf:wire("clearAltForm();")
 	end;
 
@@ -304,7 +306,7 @@ api_event(vote, Data, _) ->
 
 	NewVotes = case add_alt(get_value(<<"alt_text">>, Props)) of
 		no -> [];
-		Alt -> [[Alt#alt.id, get_value(<<"alt_vote">>, Props)]]
+		Alt -> [[Alt#alt.id, 0]]
 	end,
 	Prefs = prepare_prefs(get_value(<<"votes">>, Props) ++ NewVotes),
 

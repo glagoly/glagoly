@@ -31,7 +31,7 @@ top_bar() ->
 			class=menu, body=#li{class='menu-text', body=#link{
 				href="/", body=[#image{
 					class=logo,	src="/static/img/logo-light.svg"
-				}, "<sup class=show-for-large>beta</sup>"]
+				}]
 			}}}
 		},
 		#panel{class='top-bar-right', body = #ul{
