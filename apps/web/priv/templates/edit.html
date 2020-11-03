@@ -1,5 +1,5 @@
 <div class="panel-clear" id="edit_panel">
-  <form class="row collapse" id="vote-form" onsubmit="event.preventDefault(); voteSubmit();">
+  <form class="row collapse" id="vote-form" onsubmit="voteSubmit(event);">
 
   <h1>{{ title_input }}</h1>
   
@@ -21,12 +21,15 @@
 
   <div class="row collapse">
     <div class="large-6 columns">
-      <input type="text" id="name" required maxlength=32, placeholder="my name" value="{{ name }}">
-      <p class="help-text">name meainingful for other voters</p>
+      <label id="name-label">
+        Your name (required)
+        <input type="text" id="name" onchange="validateName()" maxlength=32, placeholder="my name" value="{{ name }}">
+      </label>
+      <p class="help-text error">name meainingful for other voters</p>
     </div>
-    <div class="large-5 columns">
+    <div class="large-5 columns with-label">
       <input 
-        type="submit" class="button main expanded" id="create" 
+        type="submit" class="button main expanded" id="create"
         value="{{ poll_button }}">
       <a
         class="clear button small secondary expanded"

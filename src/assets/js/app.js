@@ -29,7 +29,13 @@ function onSliderChange(slider) {
     }
 }
 
-function voteSubmit() {
+function voteSubmit(event) {
+    event.preventDefault();
+
+    if (!validateName()) {
+        return false;
+    }
+
     var x = document.querySelectorAll("#alts input[id^=\"vote\"]");
     var votes = [];
     for (var i = 0; i < x.length; i++) {
@@ -46,6 +52,17 @@ function voteSubmit() {
     vote(data);
     
     return false;
+};
+
+function validateName() {
+    var text = qi('name').value.trim();
+    if (text === '') {
+        qi('name-label').classList.add('invalid');
+        return false;
+    }
+
+    qi('name-label').classList.remove('invalid');
+    return true;
 };
 
 function showResults() {
