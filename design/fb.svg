@@ -7,14 +7,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1200"
    height="630"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    inkscape:export-filename="/home/denys/projects/glagoly/glagoly/src/assets/img/fb.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
@@ -28,17 +27,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24748738"
-     inkscape:cx="-245.43737"
-     inkscape:cy="410.18371"
+     inkscape:zoom="0.70000002"
+     inkscape:cx="417.31032"
+     inkscape:cy="376.3897"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-width="1853"
+     inkscape:window-height="1025"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:snap-bbox="true">
     <inkscape:grid
@@ -58,7 +57,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,15 +66,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-422.3622)">
-    <image
-       sodipodi:absref="/home/denys/projects/glagoly/glagoly/design/background.png"
-       xlink:href="background.png"
-       width="1200"
-       height="675"
-       preserveAspectRatio="none"
-       id="image4144"
-       x="0"
-       y="399.86221" />
     <g
        id="layer1-0"
        transform="matrix(19.912386,0,0,20.494156,-1110.0638,-6178.4673)">
