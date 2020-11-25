@@ -192,6 +192,9 @@ poll_body(Poll, Alts, Js_escape)->
 	]}.
 
 main() ->
+	% attemt to localise, return t it later
+	% {ok, L, _} = cowboy_req:parse_header(<<"accept-language">>, ?REQ, <<"en">>),
+	% io:fwrite("H~s", [wf:to_list(L)]),
 	case poll() of
 		undefined -> view_404:main();
 		Poll -> 
