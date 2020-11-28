@@ -7,6 +7,9 @@
 
 -define(ALT_ID(A), "alt" ++ wf:to_list(A#alt.id)).
 
+-define(TITLE_MAX_LENGTH, 64).
+
+
 poll_id() -> wf:to_list(wf:q(<<"ll">>)).
 
 poll() ->
@@ -90,7 +93,7 @@ alt_form() ->
 title(User, Poll)->
 	T = wf:html_encode(Poll#poll.title),
 	case can_edit(User, Poll) of
-		true -> #textbox{id=title, maxlength=32, class='title-input', placeholder=T, value=T};
+		true -> #textbox{id=title, maxlength=?TITLE_MAX_LENGTH, class='title-input', placeholder=T, value=T};
 		_ -> T
 	end.
 
@@ -304,7 +307,7 @@ api_event(fb_login, Token, _) ->
 api_event(vote, Data, _) ->
 	Props = jsone:decode(list_to_binary(Data), [{object_format, proplist}]),
 
-	Title = filter:string(get_value(<<"title">>, Props), 32, <<"poll">>),
+	Title = filter:string(get_value(<<"title">>, Props), ?TITLE_MAX_LENGTH, <<"poll">>),
 	update_title(poll(), Title),
 
 	NewVotes = case add_alt(get_value(<<"alt_text">>, Props)) of
