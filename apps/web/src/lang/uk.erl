@@ -20,11 +20,11 @@ trans("add other alternatives and leave them without rating") ->
 	<<"додайте інші варіанти"/utf8>>;
 
 trans("add or rate the most preferable alternative with +7") ->
-	<<"поставте +7(крайне праве положення повзунка)   варіанту який для вас найкращий, просто гарячий періжечок, краще не придумати"  /utf8>>;
+	<<"поставте +7(крайнє праве положення повзунка)   варіанту який для вас найкращий, просто гарячий пиріжечок, краще не придумати"  /utf8>>;
 trans("rate less preferable alternatives with +5, +3, +1") ->
 	<<"поставте від +1 до +6 іншим варіантам"/utf8>>;
 trans("rate unacceptable alternative with -3") ->
-	<<"поставте -1 варіантам які взагалі не годятся, поставте -3(крайне ліве положення) варіанту від якого у вас підгоріло"/utf8>>;
+	<<"поставте -1 варіантам які взагалі не годяться, поставте -3(крайнє ліве положення) варіанту від якого у вас підгоріло"/utf8>>;
 trans("add your own alternative") ->
   <<"додайте свій, найкращий в світі, варіанти"/utf8>>;
 
@@ -33,7 +33,7 @@ trans("change vote") ->
 trans("invite others") ->
   <<"запросити інших"/utf8>>;
 trans("anyone with this link can vote or add alternatives") ->
-  <<"будь хто за цим посиланням зможе голосувати і додавати своії варіанти"/utf8>>;
+  <<"будь-хто за цим посиланням зможе голосувати і додавати свої варіанти"/utf8>>;
 trans("My alternative") ->
   <<"Додайте свій варіант"/utf8>>;
 trans("Your name (required)") ->
@@ -59,7 +59,7 @@ trans("glagoly is free software. run for any purpose, study, change, and distrib
 trans("easy meeting schedule") ->
   <<"легко домовитись про час та формат зустрічі"/utf8>>;
 trans("choose meeting time, place and activity in one poll:") ->
-  <<"напирклад, якщо ви хочете домовитися про щоденний спортік на роботі"/utf8>>;
+  <<"наприклад, якщо ви хочете домовитися про щоденний спортік на роботі"/utf8>>;
 trans("play football on saturday morning;") ->
   <<"стоїмо в планці о 16:00"/utf8>>;
 trans("make a barbecue on saturday morning;") ->
