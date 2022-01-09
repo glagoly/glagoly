@@ -1,3 +1,7 @@
 .main {
     max-width: 540px;
 }
+
+.header-vote {
+    border: 2px solid #666;
+}
