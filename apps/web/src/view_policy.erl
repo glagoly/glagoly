@@ -6,7 +6,7 @@
 
 main() ->
 	view_common:page([
-		{title, "my polls"},
+		{title, "Privacy Policy"},
 		{body, #panel{id=body, body=[
 			view_common:top_bar(),
 			#dtl{file="policy"}
