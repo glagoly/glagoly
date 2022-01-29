@@ -26,22 +26,21 @@ poll_button(Class) ->
 	#button{body=?T("create poll"),class=Class,postback=create_poll, delegate=view_common}.
 
 top_bar() ->
-	#panel{class='top-bar', id='top-bar', body=#panel{class=[row, columns], body=[
-		#panel{class='top-bar-left', body = #ul{
-			class=menu, body=#li{class='menu-text', body=#link{
-				href="/", body=[#image{
-					class=logo,	src="/static/img/logo-light.svg"
-				}]
-			}}}
-		},
-		#panel{class='top-bar-right', body = #ul{
-			class=menu, body=[
-			#li{body=poll_button([button,main])},
-			#li{class='top-login', body=case usr:is_pers() of
-				true -> #link{body=?T("logout"), delegate=view_common, postback=logout};
+	#panel{class='navbar navbar-dark bg-primary', body=#panel{class=[container, main], body=[
+		#link{href="/", class='navbar-brand ms-2', body=#image{
+			src="/static/img/logo.svg", height=24, width=26, class="align-text-top ms-2"
+		}},
+		#panel{class='d-flex', body=[
+			#button{
+				body=?T("create"), class='btn btn-success',
+				postback=create_poll, delegate=view_common},
+			case usr:is_pers() of
+				true -> #button{
+					body=?T("logout"), class='btn btn-primary ms-2',
+					delegate=view_common, postback=logout};
 				_ -> ""
-			end}
-		]}}
+			end
+		]}
 	]}}.
 
 bindings() -> [
