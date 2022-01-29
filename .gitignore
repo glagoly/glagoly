@@ -16,3 +16,7 @@ sample
 
 # Mnesia
 Mnesia*
+
+# parcel
+.parcel-cache/
+dist/
