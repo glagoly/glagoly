@@ -79,22 +79,20 @@ alt(Alt, Vote, Edit) ->
 	]}].
 
 alt_form() ->
-	#li{class=alt_form, body=[
-		#panel{class=text, body=[
-			#label{body=["My alternative"]},
-			#textarea{id=alt_text, maxlength=128},
-			#panel{class=edit_buttons, body = [
-				#link{id=send, class=[button], body=?T("add alternative"), 
-					postback=add_alt, source=[alt_text]}
-			]}
-		]}
+	#panel{class='card mb-3', body=[
+		#panel{class='card-header', body=?T("Add my alternative")},
+		#panel{class='card-body', body=#textarea{
+			id=alt_text, maxlength=128, class='form-control', rows=3}},
+		#panel{class='card-footer text-end', body=#button{
+			id=send, class='btn btn-primary btn-sm', body=?T("Add"),
+			postback=add_alt, source=[alt_text]}}
 	]}.
 
 title(User, Poll)->
 	T = wf:html_encode(Poll#poll.title),
 	case can_edit(User, Poll) of
 		true -> #textbox{id=title, maxlength=?TITLE_MAX_LENGTH, class='title-input', placeholder=T, value=T};
-		_ -> T
+		_ -> #h1{body=T, class='display-5 mb-3 mt-3'}
 	end.
 
 update_title(Poll, Title) ->

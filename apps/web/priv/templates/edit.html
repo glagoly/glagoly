@@ -1,7 +1,7 @@
-<div class="panel-clear" id="edit_panel">
-  <form class="row collapse" id="vote-form" onsubmit="voteSubmit(event);">
+<div class="container main" id="edit_panel">
+  <form id="vote-form" onsubmit="voteSubmit(event);">
 
-  <h1>{{ title_input }}</h1>
+  {{ title_input }}
   
   <div class="callout secondary" id="help-callout">
     <button class="close-button" onclick="closeHelp(event)">
@@ -13,11 +13,8 @@
   <ol class="alts" id="alts">
     {{ alts }}
   </ol>
-  <ol class="alts">
-    <li id="alt-add">
-      {{ alt_form }}
-    </li>
-  </ol>
+
+  {{ alt_form }}
 
   <div class="row collapse">
     <div class="large-6 columns">
