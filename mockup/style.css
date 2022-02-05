@@ -2,6 +2,11 @@
     max-width: 540px;
 }
 
-.header-vote {
-    border: 2px solid #666;
+:root {
+  --bs-brand-rgb: #801f4f;
+  --bs-success-rgb: 19, 121, 91;
+}
+
+.bg-brand {
+  background-color: var(--bs-brand-rgb) !important;  
 }
