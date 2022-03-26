@@ -1,8 +1,16 @@
 -module(uk).
 -compile(export_all).
 
-trans("poll") -> <<"опитування"/utf8>>;
+% navbar
+trans("create") -> <<"створити"/utf8>>;
 trans("logout") -> <<"вийти"/utf8>>;
+
+% poll
+trans("Add my alternative") -> <<"Додати свій варіант"/utf8>>;
+trans("Add") -> <<"Додати"/utf8>>;
+
+trans("poll") -> <<"опитування"/utf8>>;
+
 trans("log in") -> <<"увійти"/utf8>>;
 
 trans("create poll") ->	<<"створити опитування"/utf8>>;

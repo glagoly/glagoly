@@ -29,15 +29,9 @@ author(User, Poll, _) ->
 	end.
 
 vote_input(Id, Value) ->
-	Class = case Value of
-		0 ->  "";
-		V when V > 0 -> "positive";
-		_ -> "negative"
-	end,
-	"<input class=\""++ Class ++"\" id=" ++ Id ++ " name=" ++ Id ++
+	"<input class=form-range id=" ++ Id ++ " name=" ++ Id ++
 	" value=" ++ wf:to_list(Value) ++
 	" type=range min=-3 max=7 oninput=\"onSliderChange(this)\">".
-
 
 alt_link(Postback, Body, Alt) -> alt_link(Postback, Body, Alt, []).
 alt_link(Postback, Body, Alt, Source) ->
@@ -63,20 +57,45 @@ alt_text(Alt, Edit) -> [
 			_ -> []
 		end,
 		#panel{class=inner, body = [
-			#span{body=wf:html_encode(Alt#alt.text)},
+			#span{body=[]},
 			#span{class=author, body=author(Alt#alt.user, poll_id(), usr:id())}
 		]}
 	]}].
 
+alt_header() -> [].
+
+alt_body(Alt) -> 
+	#panel{class='card-body', body=#p{class='card-text',body=[
+		wf:html_encode(Alt#alt.text)
+	]}}.
+
+alt_footer(Alt, Id, Vote) ->
+	#panel{class='card-footer', body=#panel{class='row align-items-center', body=[
+		#panel{class='col-2', body=[
+			#h4{class='text-center mb-0',
+				body=#span{class='badge bg-success', body='+7'}}
+		]},
+		#panel{class='col-10 small', body=vote_input(Id, Vote)}
+	]}}.
+
 alt(Alt, Vote, Edit) ->
 	Id = "vote" ++ wf:to_list(Alt#alt.id),
-	[#li{id = ?ALT_ID(Alt), class=with_vote, body=[
+	#panel{id = ?ALT_ID(Alt), class='card mb-3', body=[
+		alt_body(Alt),
+		alt_footer(Alt, Id, Vote),
 		#span{class=vote, id=Id ++ "text", body=pos_format(Vote)},
 		#panel{class=text, body=[
-			alt_text(Alt, Edit),
-			vote_input(Id, Vote)
+			alt_body(Alt)
 		]}
-	]}].
+	]}.
+	% [#li{id = ?ALT_ID(Alt), class=with_vote, body=[
+	% 	#span{class=vote, id=Id ++ "text", body=pos_format(Vote)},
+	% 	#panel{class=text, body=[
+	% 		alt_text(Alt, Edit),
+	% 		vote_input(Id, Vote)
+	% 	]}
+	% ]}].
+
 
 alt_form() ->
 	#panel{class='card mb-3', body=[
