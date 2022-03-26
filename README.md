@@ -14,6 +14,10 @@ Start the app on localhost:7001:
 
     npm run start
 
+Prerequirements:
+
+    sudo apt install inotify-tools
+
 ## Build front
 
     npm run build
