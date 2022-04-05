@@ -73,7 +73,8 @@ alt_footer(Alt, Id, Vote) ->
 	#panel{class='card-footer', body=#panel{class='row align-items-center', body=[
 		#panel{class='col-2', body=[
 			#h4{class='text-center mb-0',
-				body=#span{class='badge bg-success', body='+7'}}
+				body=#span{
+					id=Id ++ "text", class='badge bg-secondary', body=pos_format(Vote)}}
 		]},
 		#panel{class='col-10 small', body=vote_input(Id, Vote)}
 	]}}.
@@ -82,20 +83,8 @@ alt(Alt, Vote, Edit) ->
 	Id = "vote" ++ wf:to_list(Alt#alt.id),
 	#panel{id = ?ALT_ID(Alt), class='card mb-3', body=[
 		alt_body(Alt),
-		alt_footer(Alt, Id, Vote),
-		#span{class=vote, id=Id ++ "text", body=pos_format(Vote)},
-		#panel{class=text, body=[
-			alt_body(Alt)
-		]}
+		alt_footer(Alt, Id, Vote)
 	]}.
-	% [#li{id = ?ALT_ID(Alt), class=with_vote, body=[
-	% 	#span{class=vote, id=Id ++ "text", body=pos_format(Vote)},
-	% 	#panel{class=text, body=[
-	% 		alt_text(Alt, Edit),
-	% 		vote_input(Id, Vote)
-	% 	]}
-	% ]}].
-
 
 alt_form() ->
 	#panel{class='card mb-3', body=[

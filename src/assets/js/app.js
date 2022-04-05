@@ -10,18 +10,18 @@ function clearAltForm() {
 };
 
 function onSliderChange(slider) {
-    slider.classList.remove('positive');
-    slider.classList.remove('negative');
-    var text =  qi(slider.id + 'text');
+    var text = qi(slider.id + 'text');
+    text.classList.remove('bg-success');
+    text.classList.remove('bg-danger');
 
     if (slider.value > 0) {
-        slider.classList.add('positive');
-        text.innerHTML = "&#65291;" + slider.value;
+        text.classList.add('bg-success');
+        text.innerHTML = "+" + slider.value;
     }
     
     if (slider.value < 0) {
-        slider.classList.add('negative');
-        text.innerHTML = "&mdash;"  + (-slider.value);
+        text.classList.add('bg-danger');
+        text.innerHTML = "&minus;" + (-slider.value);
     }
     
     if (slider.value == 0) {
