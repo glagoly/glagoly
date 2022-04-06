@@ -1,5 +1,6 @@
 -module(view_poll).
--compile(export_all).
+-export([main/0, event/1, api_event/3]).
+
 -include_lib("n2o/include/wf.hrl").
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("records.hrl").
@@ -128,6 +129,15 @@ manual(_) ->
 		#li{body=?T("rate unacceptable alternative with &#65293;3")}
 	]}.
 
+vote_form(Name, Alts) ->
+	#panel{class='mt-4', body=[
+		#label{class='form-label', body=[
+			?T("Your name"), " ", #small{body=?T("(required)")}]},
+		#element{
+			html_tag=input, data_fields=[{id, wf:hte("so\"mething")}]
+		}
+	]}.
+
 edit_panel(Poll, Vote, Alts, Js_escape) ->
 	wf:wire(#api{name=vote}),
 	wf:wire(#api{name=view_results}),
@@ -136,7 +146,7 @@ edit_panel(Poll, Vote, Alts, Js_escape) ->
 		{title_input, title(User, Poll)},
 		{alts, alts(User, Poll, Alts, Vote)},
 		{alt_form, alt_form()},
-		{name, Vote#vote.name},
+		{vote_form, vote_form(Vote#vote.name, Alts)},
 		{poll_button, case Alts of [] -> ?T("create poll"); _ -> ?T("vote") end},
 		{manual, manual(Alts == [])}
 	]}.
