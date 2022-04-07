@@ -134,20 +134,27 @@ vote_form(Name, Alts) ->
 		#label{class='form-label', body=[
 			?T("Your name"), " ", #small{body=?T("(required)")}]},
 		#element{
-			html_tag=input, data_fields=[{id, wf:hte("so\"mething")}]
-		}
+			html_tag=input, id=name, class='form-control',
+			data_fields=[
+				{type, "text"}, {maxlength, 32},
+				{value, wf:html_encode(Name)}, {onchange, 'validateName()'}]},
+		#panel{class='d-grid gap-2 mt-4',body=case Alts of
+			[] -> #submit{class='btn btn-success', body=?T("Create poll")};
+			_ -> [
+				#submit{class='btn btn-success', body=?T("Vote")},
+				#button{class='btn btn-outline-secondary', 
+					body=?T("View results"), postback=view_results}
+			] end}
 	]}.
 
 edit_panel(Poll, Vote, Alts, Js_escape) ->
 	wf:wire(#api{name=vote}),
-	wf:wire(#api{name=view_results}),
 	User = usr:id(),
 	#dtl{file="edit", js_escape=Js_escape, bindings=[
 		{title_input, title(User, Poll)},
 		{alts, alts(User, Poll, Alts, Vote)},
 		{alt_form, alt_form()},
 		{vote_form, vote_form(Vote#vote.name, Alts)},
-		{poll_button, case Alts of [] -> ?T("create poll"); _ -> ?T("vote") end},
 		{manual, manual(Alts == [])}
 	]}.
 
@@ -303,6 +310,10 @@ event(show_edit) ->
 	Vote = polls:get_vote(usr:id(), poll_id()),
 	view_common:wf_update(results_panel, edit_panel(Poll, Vote, Alts, true));
 
+event(view_results) ->
+	view_common:wf_update(edit_panel, results_panel(poll(), true)),
+	wf:wire("FB.XFBML.parse();");
+
 event(_) -> ok.
 
 prepare_prefs(Votes) -> 
@@ -335,11 +346,7 @@ api_event(vote, Data, _) ->
 	User = usr:ensure(),
 	Name = filter:string(get_value(<<"name">>, Props), 32, <<"anon">>),
 	polls:put_vote(User, poll_id(), Name, Prefs),
-	api_event(view_results, [], []),
-	view_common:ga_event(poll, vote);
-
-api_event(view_results, Data, _) ->
-	view_common:wf_update(edit_panel, results_panel(poll(), true)),
-	wf:wire("FB.XFBML.parse();").
+	event(view_results),
+	view_common:ga_event(poll, vote).
 
 get_value(Key, Props) -> proplists:get_value(Key, Props, []).

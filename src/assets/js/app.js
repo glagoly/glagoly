@@ -57,16 +57,12 @@ function voteSubmit(event) {
 function validateName() {
     var text = qi('name').value.trim();
     if (text === '') {
-        qi('name-label').classList.add('invalid');
+        qi('name').classList.add('is-invalid');
         return false;
     }
 
-    qi('name-label').classList.remove('invalid');
+    qi('name').classList.remove('is-invalid"');
     return true;
-};
-
-function showResults() {
-    view_results();
 };
 
 // This is called with the results from from FB.getLoginStatus().

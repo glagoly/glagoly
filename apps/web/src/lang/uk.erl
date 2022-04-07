@@ -15,8 +15,10 @@ trans("poll") -> <<"опитування"/utf8>>;
 
 trans("log in") -> <<"увійти"/utf8>>;
 
-trans("create poll") ->	<<"створити опитування"/utf8>>;
-trans("vote") -> <<"голосувати"/utf8>>;
+trans("Create poll") ->	<<"Створити опитування"/utf8>>;
+trans("Vote") -> <<"Голосувати"/utf8>>;
+trans("View results") -> <<"Побачити результати"/utf8>>;
+
 trans("add alternative") -> <<"додати альтернативу"/utf8>>;
 
 trans("the fastest way <br /> to make micro-desicions") ->
