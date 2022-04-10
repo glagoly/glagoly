@@ -121,20 +121,6 @@ alts(User, Poll, Alts, #vote{ballot = Ballot}) ->
 	Alts2 = polls:user_alts(Alts, Ballot, usr:seed()),
 	[alt(Alt, V, can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts2].
 
-manual(true) ->
-	#ol{body=[
-		#li{body=?T("add most preferable alternative and rate it with &#xFF0B;7")},
-		#li{body=?T("add some less preferable alternatives and rate them with &#xFF0B;5, &#xFF0B;3, &#xFF0B;1")},
-		#li{body=?T("add other alternatives and leave them without rating")}
-	]};
-
-manual(_) ->
-	#ol{body=[
-		#li{body=?T("add or rate the most preferable alternative with &#xFF0B;7")},
-		#li{body=?T("rate less preferable alternatives with &#xFF0B;5, &#xFF0B;3, &#xFF0B;1")},
-		#li{body=?T("rate unacceptable alternative with &#65293;3")}
-	]}.
-
 vote_form(Name, Alts) ->
 	#panel{class='mt-4', body=[
 		#label{class='form-label', body=[
@@ -160,8 +146,7 @@ edit_panel(Poll, Vote, Alts, Js_escape) ->
 		{title_input, title(User, Poll)},
 		{alts, alts(User, Poll, Alts, Vote)},
 		{alt_form, alt_form()},
-		{vote_form, vote_form(Vote#vote.name, Alts)},
-		{manual, manual(Alts == [])}
+		{vote_form, vote_form(Vote#vote.name, Alts)}
 	]}.
 
 name_list(L) ->
