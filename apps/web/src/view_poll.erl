@@ -93,7 +93,7 @@ alt(Alt, Vote, Edit) ->
 		alt_footer(Alt, Id, Vote)
 	]}.
 
-alt_form() ->
+add_alt_form() ->
 	#panel{class='card mb-3', body=[
 		#panel{class='card-header', body=?T("Add my alternative")},
 		#panel{class='card-body', body=#textarea{
@@ -119,7 +119,9 @@ update_title(Poll, Title) ->
 
 alts(User, Poll, Alts, #vote{ballot = Ballot}) ->
 	Alts2 = polls:user_alts(Alts, Ballot, usr:seed()),
-	[alt(Alt, V, can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts2].
+	#panel{id=alts,body=[
+		alt(Alt, V, can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts2
+	]}.
 
 vote_form(Name, Alts) ->
 	#panel{class='mt-4', body=[
@@ -139,15 +141,18 @@ vote_form(Name, Alts) ->
 			] end}
 	]}.
 
-edit_panel(Poll, Vote, Alts, Js_escape) ->
+edit_panel(Poll, Vote, Alts) ->
 	wf:wire(#api{name=vote}),
 	User = usr:id(),
-	#dtl{file="edit", js_escape=Js_escape, bindings=[
-		{title_input, title(User, Poll)},
-		{alts, alts(User, Poll, Alts, Vote)},
-		{alt_form, alt_form()},
-		{vote_form, vote_form(Vote#vote.name, Alts)}
-	]}.
+	#panel{
+		class=[container, main], id=edit_panel,
+		body=#element{html_tag=form, data_fields=[{onsubmit, "voteSubmit(event);"}], body=[
+			title(User, Poll),
+			alts(User, Poll, Alts, Vote),
+			add_alt_form(),
+			vote_form(Vote#vote.name, Alts)
+	]}}.
+
 
 name_list(L) ->
 	I = usr:id(),
@@ -203,7 +208,7 @@ poll_body(Poll, Alts, Js_escape)->
 	#panel{id=body, body=[
 		view_common:top_bar(),
 		case Vote#vote.ballot of
-			[] -> edit_panel(Poll, Vote, Alts, Js_escape);
+			[] -> edit_panel(Poll, Vote, Alts);
 			_ -> results_panel(Poll, Js_escape)
 		end
 	]}.
@@ -298,7 +303,7 @@ event(show_edit) ->
 	Poll = poll(),
 	Alts = polls:alts(Poll#poll.id),
 	Vote = polls:get_vote(usr:id(), poll_id()),
-	view_common:wf_update(results_panel, edit_panel(Poll, Vote, Alts, true));
+	view_common:wf_update(results_panel, edit_panel(Poll, Vote, Alts));
 
 event(view_results) ->
 	view_common:wf_update(edit_panel, results_panel(poll(), true)),
