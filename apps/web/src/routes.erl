@@ -10,10 +10,16 @@ init(State, Ctx) ->
     {ok, State, Ctx#cx{path=Path,module=Module}}.
 
 prefix(<<"/ws/",P/binary>>) -> route(P);
-prefix(<<"/",P/binary>>)    -> route(P);
-prefix(P)                   -> route(P).
+prefix(<<"/",P/binary>>) -> route(P);
+prefix(P) -> route(P).
 
-route(<<>>)                 -> view_index;
-route(<<"policy">>)         -> view_policy;
-route(<<"p">>)              -> view_poll;
-route(_)                    -> view_404.
+route(<<>>) -> view_index;
+route(<<"policy">>) -> view_policy;
+
+route(<<"p">>) -> view_poll;
+% 7 char poll ID
+route(<<Id:(7*8)>>) -> view_poll;
+% 22 char poll ID (legacy)
+route(<<Id:(22*8)>>) -> view_poll;
+
+route(_) -> view_404.

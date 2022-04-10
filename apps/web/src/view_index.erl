@@ -16,7 +16,7 @@ poll({User, Poll}) ->
 	#li{body = [
 		#span{class=alt, body=alt(V#vote.ballot)},
 		" in ",
-		#link{href = "p?ll=" ++ Poll, body = #span{
+		#link{href = "/" ++ Poll, body = #span{
 			class=poll, body=wf:html_encode(P#poll.title)
 		}}
 	]}.

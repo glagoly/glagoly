@@ -58,6 +58,6 @@ event(logout) ->
 
 event(create_poll) ->
 	Id = polls:create(usr:ensure()),
-	wf:redirect("/p?ll=" ++ wf:to_list(Id));
+	wf:redirect("/" ++ wf:to_list(Id));
 
 event(_) -> ok.

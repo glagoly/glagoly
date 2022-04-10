@@ -11,7 +11,13 @@
 -define(TITLE_MAX_LENGTH, 64).
 
 
-poll_id() -> wf:to_list(wf:q(<<"ll">>)).
+path() -> path(?CTX#cx.path).
+path(<<"/ws/",P/binary>>) -> P;
+path(<<"/",P/binary>>) -> P.
+
+poll_id() -> wf:to_list(poll_id(path())).
+poll_id(<<"p">>) -> wf:q(<<"ll">>);
+poll_id(Id) -> Id.
 
 poll() ->
 	case kvs:get(poll, poll_id()) of
@@ -220,7 +226,6 @@ poll_body(Poll, Alts, Js_escape)->
 main() ->
 	% attemt to localise, return t it later
 	% {ok, L, _} = cowboy_req:parse_header(<<"accept-language">>, ?REQ, <<"en">>),
-	% io:fwrite("H~s", [wf:to_list(L)]),
 	case poll() of
 		undefined -> view_404:main();
 		Poll -> 

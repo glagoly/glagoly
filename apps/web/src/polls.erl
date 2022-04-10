@@ -3,6 +3,8 @@
 -include_lib("records.hrl").
 -include_lib("web.hrl").
 
+-define(ID_LENGTH, 7).
+
 add_my(User, Poll) ->
 	case kvs:index(my_poll, user_poll, {User, Poll}) of
 		[E] -> 
@@ -16,10 +18,15 @@ my(User) -> my(User, 10).
 my(User, Count) -> kvs:entries(kvs:get(feed, {my_polls, User}), my_poll, Count).
 
 create(User) ->
-	Id = vote_core:uuid(),
-	kvs:put(#poll{id = Id, user=User, title = ?T("poll")}),
-	add_my(User, Id),
-	Id.
+	Id = small_id(),
+	case kvs:get(poll, Id) of
+		% try again if poll id already exists
+		{ok, _} -> create(User);
+		_ ->
+			kvs:put(#poll{id = Id, user=User, title = ?T("poll")}),
+			add_my(User, Id),
+			Id
+	end.
 
 alts(Id) -> [A || A <- kvs:entries(kvs:get(feed, {alts, Id}), alt, undefined), A#alt.hidden /= true].
 alt_ids(Id) -> [Alt#alt.id || Alt <- alts(Id)].
@@ -86,3 +93,7 @@ merge_user(Old, New) ->
 		kvs:remove(vote, V#vote.id),
 		put_vote(Old, P, V#vote.name, V#vote.ballot)
 	end, my(New, undefined)).
+
+small_id() ->
+	Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+	[lists:nth(rand:uniform(length(Chars)), Chars) || _ <- lists:seq(1, ?ID_LENGTH)].
