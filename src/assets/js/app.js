@@ -10,6 +10,7 @@ function clearAltForm() {
 };
 
 function onSliderChange(slider) {
+    console.log(slider.value);
     var text = qi(slider.id + 'text');
     text.classList.remove('bg-success');
     text.classList.remove('bg-danger');
