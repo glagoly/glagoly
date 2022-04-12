@@ -1,0 +1,8 @@
+{application, web,
+  [
+    {description, "glagloy web app"},
+    {registered, []},
+    {applications, [public_key,kernel,stdlib,crypto,kvs,mnesia,n2o,nitro,syn,cowlib,ssl,ranch,cowboy]},
+    {mod, { web, []}},
+    {env, []},
+    {modules,[]}]}.

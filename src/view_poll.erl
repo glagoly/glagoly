@@ -125,33 +125,39 @@ alts(User, Poll, Alts, #vote{ballot = Ballot}) ->
 
 vote_form(Name, Alts) ->
 	#panel{class='mt-4', body=[
-		#label{class='form-label', body=[
-			?T("Your name"), " ", #small{body=?T("(required)")}]},
-		#element{
-			html_tag=input, id=name, class='form-control',
-			data_fields=[
-				{type, "text"}, {maxlength, 32},
-				{value, wf:html_encode(Name)}, {onchange, 'validateName()'}]},
-		#panel{class='d-grid gap-2 mt-4',body=case Alts of
-			[] -> #submit{class='btn btn-success', body=?T("Create poll")};
-			_ -> [
-				#submit{class='btn btn-success', body=?T("Vote")},
-				#button{class='btn btn-outline-secondary', 
-					body=?T("View results"), postback=view_results}
-			] end}
+		#label{class = <<"form-label">>, body=[
+			wf:html_encode(<<"Ваше ім'я"/utf8>>)
+		]}
 	]}.
+	% 	#element{
+	% 		html_tag = <<"input">>, id = <<"name">>, class = <<"form-control">>,
+	% 		data_fields=[
+	% 			{type, "text"}, {maxlength, 32},
+	% 			{value, wf:html_encode(Name)}, {onchange, "validateName()"}]},
+	% 	#panel{class='d-grid gap-2 mt-4',body=case Alts of
+	% 		[] -> #submit{class='btn btn-success', body=?T("Create poll")};
+	% 		_ -> [
+	% 			#submit{class='btn btn-success', body=?T("Vote")},
+	% 			#button{class='btn btn-outline-secondary', 
+	% 				body=?T("View results"), postback=view_results}
+	% 		] end}
+	% ]}.
 
 edit_panel(Poll, Vote, Alts) ->
 	wf:wire(#api{name=vote}),
 	User = usr:id(),
 	#panel{
 		class=[container, main], id=edit_panel,
-		body=#element{html_tag=form, data_fields=[{onsubmit, "voteSubmit(event);"}], body=[
+		body=#element{html_tag = <<"form">>, data_fields=[{onsubmit, "voteSubmit(event);"}], body=[
 			title(User, Poll),
 			alts(User, Poll, Alts, Vote),
 			add_alt_form(),
 			vote_form(Vote#vote.name, Alts)
-	]}}.
+		]}}.
+	%	body=#element{html_tag = }}.
+	% 	, body=[
+
+	% % ]}}.
 
 
 name_list(L) ->

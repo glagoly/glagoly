@@ -1,8 +1,8 @@
 -module(usr).
 % usr because user is taken by erlang
 -compile(export_all).
--include_lib("n2o/include/wf.hrl").
--include_lib("records.hrl").
+-include_lib("n2o/include/n2o.hrl").
+-include_lib("web/include/records.hrl").
 
 id() ->
 	case wf:user() of

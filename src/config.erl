@@ -3,7 +3,7 @@
 -include_lib("kvs/include/metainfo.hrl").
 -include_lib("kvs/include/kvs.hrl").
 -include_lib("kvs/include/feed.hrl").
--include_lib("records.hrl").
+-include_lib("web/include/records.hrl").
 
 metainfo() -> 
     #schema{name=glagoly,tables=[
