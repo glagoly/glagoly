@@ -10,9 +10,10 @@ After you get them insall npm dependencies:
     
     npm i
 
-Start the app on localhost:7001:
+Start the app (localhost:8001/app/index.html):
 
-    npm run start
+    ./rebar3 shell
+    c(view_index).
 
 Prerequirements:
 
