@@ -10,3 +10,7 @@
 .bg-brand {
   background-color: var(--bs-brand-rgb) !important;  
 }
+
+.dotted, .dotted:hover {
+  text-decoration-style: dotted
+}

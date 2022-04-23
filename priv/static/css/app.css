@@ -1,7 +1,28 @@
+:root {
+    --bs-brand: #801f4f;
+}
+
+.bg_brand {
+    background-color: var(--bs-brand) !important;  
+}
+
 .main {
     max-width: 540px;
 }
 
-.header-vote {
-    border: 2px solid #666;
+.dotted, .dotted:hover {
+  text-decoration-style: dotted
 }
+
+/**
+ * index.html
+ */
+
+.index_cta {
+    color: var(--bs-white);
+}
+
+.index_cta img {
+    height: 1em;
+}
+
