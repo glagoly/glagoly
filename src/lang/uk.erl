@@ -4,8 +4,18 @@
 % navbar
 trans("create") -> <<"створити"/utf8>>;
 trans("logout") -> <<"вийти"/utf8>>;
+trans("edit") -> <<"редагувати"/utf8>>;
 
 % poll
+
+trans("Poll title") -> <<"Заголовок опитування"/utf8>>;
+
+trans("Try:") -> <<"Спробуйте:"/utf8>>;
+trans("Where and when do we meet?") -> <<"Де і коли зустрічаємось?"/utf8>>;
+trans("What are we doing?") -> <<"Що робимо?"/utf8>>;
+trans("Where are we going?") -> <<"Куди їдемо?"/utf8>>;
+
+
 trans("Add my alternative") -> <<"Додати свій варіант"/utf8>>;
 trans("Add") -> <<"Додати"/utf8>>;
 trans("Your name") -> <<"Ваше ім'я"/utf8>>;

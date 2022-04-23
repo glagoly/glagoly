@@ -3,4 +3,6 @@
 
 lang() -> uk.
 
-trans(S) -> L = lang(), L:trans(S).
+trans(S) ->
+    L = lang(),
+    L:trans(S).

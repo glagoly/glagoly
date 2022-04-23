@@ -1,4 +1,4 @@
 -module(en).
--compile(export_all).
+-export([trans/1]).
 
 trans(S) -> S.
