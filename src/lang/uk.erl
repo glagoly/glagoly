@@ -6,6 +6,9 @@ trans("create") -> <<"створити"/utf8>>;
 trans("logout") -> <<"вийти"/utf8>>;
 trans("edit") -> <<"редагувати"/utf8>>;
 
+trans("Remove") -> <<"Видалити"/utf8>>;
+trans("Cancel") -> <<"Відмінити"/utf8>>;
+trans("Save") -> <<"Зберегти"/utf8>>;
 % poll
 
 trans("Poll title") -> <<"Заголовок опитування"/utf8>>;

@@ -1,5 +1,5 @@
 -record(login, {creds, user}).
--record(poll, {id, user, title}).
--record(alt, {id, next, prev, user, text, hidden}).
--record(vote, {id, next, prev, user_poll, name = [], ballot = []}).
--record(my_poll, {id, next, prev, user_poll}).
+-record(poll, {id, user, title, date}).
+-record(alt, {id, next, prev, poll, user, text, hidden}).
+-record(vote, {id, next, prev, name = [], ballot = [], date}).
+-record(my_poll, {id, next, prev}).

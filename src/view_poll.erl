@@ -39,17 +39,6 @@ alt_link(Postback, Body, Alt, Source) ->
         source = [{id, wf:to_list(["number(", Alt#alt.id, ")"])}] ++ Source
     }.
 
-restore_alt(Alt) ->
-    [
-        #li{
-            id = ?ALT_ID(Alt, ""),
-            class = deleted,
-            body = [
-                alt_link(restore_alt, "Restore", Alt), " deleted alterntive"
-            ]
-        }
-    ].
-
 alt_text(Alt, Edit) ->
     [
         #panel{
@@ -224,19 +213,6 @@ main() ->
             ])
     end.
 
-alt_event(Fun) ->
-    Poll = poll(),
-    AltId = wf:to_integer(wf:q(id)),
-    case polls:get_alt(Poll, AltId) of
-        undefined ->
-            no;
-        Alt ->
-            case polls:can_edit(usr:id(), Poll, Alt) of
-                true -> Fun(Poll, Alt);
-                _ -> no
-            end
-    end.
-
 event(init) ->
     Poll = poll(),
     Title = nitro:hte(Poll#poll.title),
@@ -247,57 +223,44 @@ event(add_alt) ->
     case filter:string(nitro:q(alt_text), 128, []) of
         [] ->
             no;
-        T ->
-            Alt = #alt{id = kvs:seq(alt, 1), user = usr:ensure(), text = T},
-            kvs:append(Alt, "/poll/alts"),
+        Text ->
+            Alt = polls:append_alt(poll_id(), Text, usr:ensure()),
             nitro:insert_bottom(alts, alt(Alt, 0, true)),
             nitro:wire("clearAltForm();")
     end;
-event(del_alt) ->
-    alt_event(fun(Poll, Alt) ->
-        kvs:put(Alt#alt{hidden = true}),
-        view_common:wf_update(?ALT_ID(Alt, panel), restore_alt(Alt))
-    end);
-event(edit_alt) ->
-    alt_event(fun(Poll, Alt) ->
-        Id = ?ALT_ID(Alt, text),
-        view_common:wf_update(Id, #panel{
-            id = Id,
-            body = [
-                #textarea{id = ?ALT_ID(Alt, new), maxlength = 128, body = wf:hte(Alt#alt.text)},
-                #panel{
-                    class = edit_buttons,
-                    body = [
-                        alt_link(cancel_edit_alt, "cancel", Alt),
-                        alt_link(update_alt, "save", Alt, [?ALT_ID(Alt, new)])
-                    ]
-                }
-            ]
-        })
-    end);
-event(cancel_edit_alt) ->
-    alt_event(fun(Poll, Alt) ->
-        view_common:wf_update(?ALT_ID(Alt, text), alt_text(Alt, true))
-    end);
-event(update_alt) ->
-    alt_event(fun(Poll, Alt) ->
-        Text = filter:string(wf:q(?ALT_ID(Alt, new)), 128, []),
-        case Text of
-            [] ->
-                no;
-            T ->
-                New = Alt#alt{user = usr:id(), text = T},
-                kvs:put(New),
-                view_common:wf_update(?ALT_ID(Alt, text), alt_text(New, true))
-        end
-    end);
-event(restore_alt) ->
-    alt_event(fun(Poll, Alt) ->
-        kvs:put(Alt#alt{hidden = false}),
-        V = polls:get_vote(usr:id(), poll_id()),
-        B = maps:from_list(V#vote.ballot),
-        view_common:wf_update(?ALT_ID(Alt, ""), alt(Alt, maps:get(Alt#alt.id, B, 0), true))
-    end);
+% event(del_alt) ->
+%     alt_event(fun(Poll, Alt) ->
+%         kvs:put(Alt#alt{hidden = true}),
+%         view_common:wf_update(?ALT_ID(Alt, panel), restore_alt(Alt))
+%     end);
+event({alt, Op, Id}) ->
+    Poll = poll(),
+    Alt = polls:get_alt(Poll, Id),
+    true = polls:can_edit(usr:id(), Poll, Alt),
+    nitro:update(?ALT_ID(Alt, panel), alt_event(Op, Alt));
+% event(cancel_edit_alt) ->
+%     alt_event(fun(Poll, Alt) ->
+%         view_common:wf_update(?ALT_ID(Alt, text), alt_text(Alt, true))
+%     end);
+% event(update_alt) ->
+%     alt_event(fun(Poll, Alt) ->
+%         Text = filter:string(wf:q(?ALT_ID(Alt, new)), 128, []),
+%         case Text of
+%             [] ->
+%                 no;
+%             T ->
+%                 New = Alt#alt{user = usr:id(), text = T},
+%                 kvs:put(New),
+%                 view_common:wf_update(?ALT_ID(Alt, text), alt_text(New, true))
+%         end
+%     end);
+% event(restore_alt) ->
+%     alt_event(fun(Poll, Alt) ->
+%         kvs:put(Alt#alt{hidden = false}),
+%         V = polls:get_vote(usr:id(), poll_id()),
+%         B = maps:from_list(V#vote.ballot),
+%         view_common:wf_update(?ALT_ID(Alt, ""), alt(Alt, maps:get(Alt#alt.id, B, 0), true))
+%     end);
 event(show_edit) ->
     Poll = poll(),
     Alts = polls:alts(Poll#poll.id),
@@ -308,6 +271,9 @@ event(view_results) ->
     wf:wire("FB.XFBML.parse();");
 event(Unk) ->
     io:format("Unknown event: ~p~n", [Unk]).
+
+alt_event(edit, Alt) -> edit_alt_form(Alt);
+alt_event(delete, Alt) -> restore_alt(Alt).
 
 prepare_prefs(Votes) ->
     % to pairs of ints
@@ -383,12 +349,7 @@ title_input(Title) ->
         ]
     }.
 
-badge_class(I) ->
-    if
-        I > 0 -> 'bg-success';
-        I < 0 -> 'bg-danger';
-        I == 0 -> ''
-    end.
+badge_class(I) -> if I > 0 -> 'bg-success'; I < 0 -> 'bg-danger'; I == 0 -> '' end.
 
 alt(Alt, Vote, CanEdit) ->
     #panel{
@@ -402,7 +363,7 @@ alt(Alt, Vote, CanEdit) ->
                         show_if = CanEdit,
                         class = 'btn btn-sm btn-secondary float-end',
                         body = ?T("edit"),
-                        postback = {edit_alt, 1}
+                        postback = {alt, edit, polls:id(Alt)}
                     },
                     #p{
                         class = 'card-text',
@@ -443,6 +404,51 @@ alt(Alt, Vote, CanEdit) ->
                         }
                     ]
                 }
+            }
+        ]
+    }.
+
+restore_alt(Alt) ->
+    #p{
+        id = ?ALT_ID(Alt, panel), class='text-muted', body = [
+            #link{class='link-secondary dotted', postback = {alt, restore, polls:id(Alt)}, body=?T("Save") },
+            " ",
+            ?T(" deleted alterntive.")
+        ]}.
+
+edit_alt_form(Alt) -> 
+    #panel{
+        id = ?ALT_ID(Alt, panel),
+        class = 'card mb-3',
+        body = [
+            #panel{
+                class = 'card-body',
+                body = #textarea{
+                    id = ?ALT_ID(Alt, new),
+                    body = nitro:hte(polls:text(Alt)),
+                    maxlength = ?ALT_MAX_LENGTH, class = 'form-control', rows = 3
+                }
+            },
+            #panel{
+                class = 'card-footer text-end',
+                body = [
+                    #button{
+                        class = 'btn btn-danger btn-sm float-start',
+                        body = ?T("Remove"),
+                        postback = {alt, delete, polls:id(Alt)}
+                    },
+                    #button{
+                        class = 'btn btn-secondary btn-sm',
+                        body = ?T("Cancel"),
+                        postback = {alt, cancel_edit, polls:id(Alt)}
+                    },
+                    #button{
+                        class = 'btn btn-primary btn-sm ms-3',
+                        body = ?T("Save"),
+                        postback = {alt, save, polls:id(Alt)},
+                        source=?ALT_ID(Alt, new)
+                    }
+                ]
             }
         ]
     }.

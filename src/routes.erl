@@ -17,12 +17,7 @@ route_prefix(P) -> route(P).
 % Routes
 
 route(<<"app/", R/binary>>) -> route(R);
+
 route(<<"index.html">>) -> view_index;
 route(<<"poll.html">>) -> view_poll;
-route(<<"policy">>) -> view_policy;
-route(<<"p">>) -> view_poll;
-% 7 char poll ID
-route(<<Id:(7 * 8)>>) -> view_poll;
-% 22 char poll ID (legacy)
-route(<<Id:(22 * 8)>>) -> view_poll;
-route(_) -> view_404.
+route(<<"feed.html">>) -> view_index.

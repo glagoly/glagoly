@@ -37,7 +37,7 @@ my_body(User, Js_escape) ->
                 js_escape = Js_escape,
                 bindings = [
                     {polls, #ol{
-                        class = alts, body = [poll(P#my_poll.user_poll) || P <- polls:my(User)]
+                        class = alts, body = [poll(P#my_poll.id) || P <- polls:my(User)]
                     }},
                     {is_temp, not usr:is_pers()}
                 ]
@@ -90,7 +90,7 @@ event(init) ->
         }
     );
 event(create) ->
-    Id = polls:create(usr:ensure()),
+    Id = polls:create(usr:ensure(), ?T("Where and when do we meet?")),
     nitro:redirect("poll.html?id=" ++ Id);
 event(_) ->
     ok.
