@@ -29,44 +29,6 @@ author(User, Poll, _) ->
         #vote{name = Name} -> wf:html_encode(Name)
     end.
 
-alt_link(Postback, Body, Alt) -> alt_link(Postback, Body, Alt, []).
-alt_link(Postback, Body, Alt, Source) ->
-    #link{
-        id = wf:to_list([Postback, Alt#alt.id]),
-        body = Body,
-        class = Postback,
-        postback = Postback,
-        source = [{id, wf:to_list(["number(", Alt#alt.id, ")"])}] ++ Source
-    }.
-
-alt_text(Alt, Edit) ->
-    [
-        #panel{
-            id = ?ALT_ID(Alt, text),
-            body = [
-                case Edit of
-                    true ->
-                        #span{
-                            class = buttons,
-                            body = [
-                                alt_link(del_alt, "delete", Alt),
-                                alt_link(edit_alt, "edit", Alt)
-                            ]
-                        };
-                    _ ->
-                        []
-                end,
-                #panel{
-                    class = inner,
-                    body = [
-                        #span{body = []},
-                        #span{class = author, body = author(Alt#alt.user, poll_id(), usr:id())}
-                    ]
-                }
-            ]
-        }
-    ].
-
 title(User, Poll) ->
     T = wf:html_encode(Poll#poll.title),
     case polls:can_edit(User, Poll) of
@@ -273,7 +235,11 @@ event(Unk) ->
     io:format("Unknown event: ~p~n", [Unk]).
 
 alt_event(edit, Alt) -> edit_alt_form(Alt);
-alt_event(delete, Alt) -> restore_alt(Alt).
+alt_event(cancel_edit, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true);
+alt_event(save, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true);
+alt_event(delete, Alt) -> restore_alt(Alt);
+alt_event(restore, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true).
+
 
 prepare_prefs(Votes) ->
     % to pairs of ints
@@ -349,7 +315,12 @@ title_input(Title) ->
         ]
     }.
 
-badge_class(I) -> if I > 0 -> 'bg-success'; I < 0 -> 'bg-danger'; I == 0 -> '' end.
+badge_class(I) ->
+    if
+        I > 0 -> 'bg-success';
+        I < 0 -> 'bg-danger';
+        I == 0 -> ''
+    end.
 
 alt(Alt, Vote, CanEdit) ->
     #panel{
@@ -410,13 +381,20 @@ alt(Alt, Vote, CanEdit) ->
 
 restore_alt(Alt) ->
     #p{
-        id = ?ALT_ID(Alt, panel), class='text-muted', body = [
-            #link{class='link-secondary dotted', postback = {alt, restore, polls:id(Alt)}, body=?T("Save") },
+        id = ?ALT_ID(Alt, panel),
+        class = 'text-muted',
+        body = [
+            #link{
+                class = 'link-secondary dotted',
+                postback = {alt, restore, polls:id(Alt)},
+                body = ?T("Restore")
+            },
             " ",
             ?T(" deleted alterntive.")
-        ]}.
+        ]
+    }.
 
-edit_alt_form(Alt) -> 
+edit_alt_form(Alt) ->
     #panel{
         id = ?ALT_ID(Alt, panel),
         class = 'card mb-3',
@@ -426,7 +404,9 @@ edit_alt_form(Alt) ->
                 body = #textarea{
                     id = ?ALT_ID(Alt, new),
                     body = nitro:hte(polls:text(Alt)),
-                    maxlength = ?ALT_MAX_LENGTH, class = 'form-control', rows = 3
+                    maxlength = ?ALT_MAX_LENGTH,
+                    class = 'form-control',
+                    rows = 3
                 }
             },
             #panel{
@@ -446,7 +426,7 @@ edit_alt_form(Alt) ->
                         class = 'btn btn-primary btn-sm ms-3',
                         body = ?T("Save"),
                         postback = {alt, save, polls:id(Alt)},
-                        source=?ALT_ID(Alt, new)
+                        source = [?ALT_ID(Alt, new)]
                     }
                 ]
             }

@@ -18,10 +18,4 @@ int(Int, _, _, _) ->
     Int.
 
 pretty_int(Int) ->
-    nitro:to_list(
-        if
-            Int == 0 -> "&empty;";
-            Int > 0 -> ["+", Int];
-            Int < 0 -> ["&minus;", -Int]
-        end
-    ).
+    nitro:to_list(if Int == 0 -> "&empty;"; Int > 0 -> ["+", Int]; Int < 0 -> ["&minus;", -Int] end).

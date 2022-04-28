@@ -11,6 +11,8 @@ text(#alt{text = Text}) -> Text.
 
 name(#alt{user = UserId}) -> "anonymous".
 
+vote(UserId, #alt{poll = PollId}) -> 1.
+
 can_edit(User, #poll{user = Author}) -> Author == User.
 can_edit(User, Poll, #alt{user = Author}) -> can_edit(User, Poll) or (Author == User).
 
@@ -32,12 +34,12 @@ today() -> erlang:system_time(second).
 
 create(User, Title) ->
     Id = new_id(),
-    kvs:put(#poll{id = Id, user = User, title = Title, date=today()}),
+    kvs:put(#poll{id = Id, user = User, title = Title, date = today()}),
     add_my(User, Id),
     Id.
 
 append_alt(PollId, Text, User) ->
-    Alt = #alt{id = kvs:seq(alt, 1), poll=PollId, user = User, text = Text},
+    Alt = #alt{id = kvs:seq(alt, 1), poll = PollId, user = User, text = Text},
     kvs:append(Alt, "/poll/" ++ PollId ++ "/alts"),
     Alt.
 
@@ -96,7 +98,6 @@ put_vote(User, Poll, Name, Ballot) ->
         Vote ->
             kvs:put(Vote#vote{name = Name, ballot = Ballot})
     end.
-
 
 merge_user(_, undefined) ->
     no;
