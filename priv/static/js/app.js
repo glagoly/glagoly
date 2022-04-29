@@ -1,10 +1,5 @@
-function clearAltForm() {
-    qi('alt_text').value = '';
-};
-
 function onSliderChange(slider) {
-    console.log(slider.value);
-    var text = qi(slider.id + 'text');
+    var text = qi(slider.id.replace('slider', 'badge'));
     text.classList.remove('bg-success');
     text.classList.remove('bg-danger');
 
@@ -26,41 +21,26 @@ function onSliderChange(slider) {
 function voteSubmit(event) {
     event.preventDefault();
 
-    if (!validateName()) {
+    if (!event.target.checkValidity()) {
+        event.target.classList.add('was-validated');
         return false;
     }
 
-    var x = document.querySelectorAll("#alts input[id^=\"vote\"]");
+    var sliders = qa("input[type=range]");
     var votes = [];
-    for (var i = 0; i < x.length; i++) {
-        votes.push([x[i].id.substring(4), x[i].value]);
+    for (var i = 0; i < sliders.length; i++) {
+        votes.push([sliders[i].id.replace(/\D/g, ''), sliders[i].value]);
     };
 
-    data = {
-        title:  qi('title') ? qi('title').value : '',
+    document.vote({
+        title: qi('title') ? qi('title').value : '',
         name: qi('name').value,
-        votes: votes,
-        // add alternative
-        alt_text: qi('alt_text').value
-    };
-    vote(data);
-    
-    return false;
+        votes: votes
+    });
 };
 
 function update_title_input(link) {
     qi('title').value = link.innerHTML;
-};
-
-function validateName() {
-    var text = qi('name').value.trim();
-    if (text === '') {
-        qi('name').classList.add('is-invalid');
-        return false;
-    }
-
-    qi('name').classList.remove('is-invalid"');
-    return true;
 };
 
 // This is called with the results from from FB.getLoginStatus().

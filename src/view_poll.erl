@@ -188,7 +188,7 @@ event(add_alt) ->
         Text ->
             Alt = polls:append_alt(poll_id(), Text, usr:ensure()),
             nitro:insert_bottom(alts, alt(Alt, 0, true)),
-            nitro:wire("clearAltForm();")
+            nitro:wire(#jq{target=alt_text,property=value,right=""})
     end;
 % event(del_alt) ->
 %     alt_event(fun(Poll, Alt) ->
@@ -256,7 +256,9 @@ api_event(fb_login, Token, _) ->
     Alts = polls:alts(Poll#poll.id),
     view_common:wf_update(body, poll_body(Poll, Alts, true));
 api_event(vote, Data, _) ->
-    Props = jsone:decode(list_to_binary(Data), [{object_format, proplist}]),
+    Props = jsone:decode(list_to_binary(Data)),
+    io:format("ID: ~p~n", [Data]),
+    io:format("ID: ~p~n", [Props]),
 
     Title = filter:string(get_value(<<"title">>, Props), ?TITLE_MAX_LENGTH, <<"poll">>),
     update_title(poll(), Title),
@@ -365,7 +367,7 @@ alt(Alt, Vote, CanEdit) ->
                         #panel{
                             class = 'col-10',
                             body = #range{
-                                id = ?ALT_ID(Alt, badge),
+                                id = ?ALT_ID(Alt, slider),
                                 value = Vote,
                                 min = -3,
                                 max = 7,
@@ -458,36 +460,39 @@ add_alt_form() ->
     }.
 
 vote_form(Name, IsNew) ->
-    #panel{
-        class = 'mt-4',
-        body = [
-            #label{
+    nitro:wire(#api{name = vote}),
+    [
+        % Not Great, Not Terrible
+        <<"<form class='mt-4' novalidate onsubmit='voteSubmit(event); return false;'>">>,
+         #label{
                 class = 'form-label',
                 body = [?T("Your name"), " <small>", ?T("(required)"), "</small>"]
-            },
-            #textbox{
-                id = name,
-                class = 'form-control',
-                maxlength = ?NAME_MAX_LENGTH,
-                value = nitro:hte(Name),
-                onchange = 'validateName()'
-            },
-            #panel{
-                class = 'd-grid gap-2 mt-4',
-                body =
-                    case IsNew of
-                        true ->
-                            #submit{class = 'btn btn-success', body = ?T("Create poll")};
-                        _ ->
-                            [
-                                #submit{class = 'btn btn-success', body = ?T("Vote")},
-                                #button{
-                                    class = 'btn btn-outline-secondary',
-                                    body = ?T("View results"),
-                                    postback = view_results
-                                }
-                            ]
-                    end
-            }
-        ]
-    }.
+        },
+        #textbox{
+            id = name,
+            disabled=[],
+            class = 'form-control',
+            maxlength = ?NAME_MAX_LENGTH,
+            value = nitro:hte(Name),
+            required=true
+        },
+        #panel{class='invalid-feedback', body = ?T("Please enter your name")},
+        #panel{
+            class = 'd-grid gap-2 mt-4',
+            body =
+                case IsNew of
+                    true ->
+                        #submit{class = [btn, 'btn-success'], body = ?T("Create poll"), click=[]};
+                    _ ->
+                        [
+                            #submit{class = 'btn btn-success', body = ?T("Vote")},
+                            #button{
+                                class = 'btn btn-outline-secondary',
+                                body = ?T("View results"),
+                                postback = view_results
+                            }
+                        ]
+                end
+        },
+        <<"</form>">>
+    ].
