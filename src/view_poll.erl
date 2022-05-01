@@ -240,15 +240,10 @@ alt_event(save, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true);
 alt_event(delete, Alt) -> restore_alt(Alt);
 alt_event(restore, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true).
 
-
-prepare_prefs(Votes) ->
+filter_votes(Votes) ->
     % to pairs of ints
-    wf:warning(Votes),
-    P1 = [{wf:to_integer(A), filter:int(V, -3, 7, 0)} || [A, V] <- Votes],
-    % remove not incorrect alt ids and zero prefs,
-    Alts = polls:alt_ids(poll_id()),
-    P2 = lists:filter(fun({A, V}) -> (V /= 0) and lists:member(A, Alts) end, P1),
-    lists:reverse(lists:keysort(2, P2)).
+    P1 = [{binary_to_integer(A), filter:in_range(binary_to_integer(V), -3, 7)} || [A, V] <- Votes],
+    lists:filter(fun({A, V}) -> (V /= 0) end, P1).
 
 api_event(fb_login, Token, _) ->
     U = usr:fb_login(Token),
@@ -257,21 +252,19 @@ api_event(fb_login, Token, _) ->
     view_common:wf_update(body, poll_body(Poll, Alts, true));
 api_event(vote, Data, _) ->
     Props = jsone:decode(list_to_binary(Data)),
-    io:format("ID: ~p~n", [Data]),
-    io:format("ID: ~p~n", [Props]),
+    % io:format("ID: ~p~n", [Props#{<<"votes">>}]),
 
-    Title = filter:string(get_value(<<"title">>, Props), ?TITLE_MAX_LENGTH, <<"poll">>),
-    update_title(poll(), Title),
+    % Title = filter:string(get_value(<<"title">>, Props), ?TITLE_MAX_LENGTH, <<"poll">>),
+    % update_title(poll(), Title),
 
-    Prefs = prepare_prefs(get_value(<<"votes">>, Props)),
+    Name = filter:string(maps:get( <<"name">>, Props), ?NAME_MAX_LENGTH, <<"anon">>),
+    Votes = filter_votes(maps:get( <<"votes">>, Props)),
+    io:format("ID: ~p~n", [Votes]),
 
     User = usr:ensure(),
-    Name = filter:string(get_value(<<"name">>, Props), 32, <<"anon">>),
-    polls:put_vote(User, poll_id(), Name, Prefs),
-    event(view_results),
-    view_common:ga_event(poll, vote).
-
-get_value(Key, Props) -> proplists:get_value(Key, Props, []).
+    
+    polls:put_vote(User, poll_id(), Name, Votes),
+    event(view_results).
 
 %%%=============================================================================
 %%% HTML Components

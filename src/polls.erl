@@ -90,14 +90,15 @@ first([First | _], _) -> First.
 get_vote(User, Poll) -> first(kvs:index(vote, user_poll, {User, Poll}), #vote{}).
 
 put_vote(User, Poll, Name, Ballot) ->
-    add_my(User, Poll),
-    case get_vote(User, Poll) of
-        #vote{id = []} ->
-            Id = kvs:next_id(vote, 1),
-            kvs:add(#vote{id = {User, Poll}, name = Name, ballot = Ballot});
-        Vote ->
-            kvs:put(Vote#vote{name = Name, ballot = Ballot})
-    end.
+    % add_my(User, Poll),
+    kvs:put(#vote{id = {User, Poll}, name = Name, ballot = Ballot, date=today()}).
+    % case get_vote(User, Poll) of
+    %     #vote{id = []} ->
+    %         Id = kvs:next_id(vote, 1),
+            
+    %     Vote ->
+    %         kvs:put(Vote#vote{name = Name, ballot = Ballot})
+    % end.
 
 merge_user(_, undefined) ->
     no;

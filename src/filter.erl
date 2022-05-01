@@ -1,6 +1,6 @@
 -module(filter).
 
--export([string/3, int/4, pretty_int/1]).
+-export([string/3, int/4, pretty_int/1, in_range/3]).
 
 string(Binary, Length, Default) ->
     S = string:strip(unicode:characters_to_list(Binary)),
@@ -17,5 +17,9 @@ int(Int, _, Max, _) when Int > Max -> Max;
 int(Int, _, _, _) ->
     Int.
 
-pretty_int(Int) ->
-    nitro:to_list(if Int == 0 -> "&empty;"; Int > 0 -> ["+", Int]; Int < 0 -> ["&minus;", -Int] end).
+in_range(Int, Min, Max) -> if Int > Max -> Max; Int < Min -> Min; true -> Int end.
+
+sign(I) -> if I > 0 -> 1; I < 0 -> -1; I == 0 -> 0 end.
+
+pretty_int(I) ->
+    nitro:to_list(case sign(I) of 0 -> "&empty;"; 1 -> ["+", I]; -1 -> ["&minus;", -I] end).
