@@ -30,19 +30,7 @@ author(User, Poll, _) ->
     end.
 
 title(User, Poll) ->
-    T = wf:html_encode(Poll#poll.title),
-    case polls:can_edit(User, Poll) of
-        true ->
-            #textbox{
-                id = title,
-                maxlength = ?TITLE_MAX_LENGTH,
-                class = 'title-input',
-                placeholder = T,
-                value = T
-            };
-        _ ->
-            #h1{body = T, class = 'display-5 mb-3 mt-3'}
-    end.
+    T = wf:html_encode(Poll#poll.title).
 
 update_title(Poll, Title) ->
     User = usr:id(),
@@ -181,6 +169,14 @@ event(init) ->
     nitro:update(top, title_input(Title)),
     nitro:insert_bottom(bottom, add_alt_form()),
     nitro:insert_bottom(bottom, vote_form("denys", true));
+event(view_vote) ->
+    Poll = poll(),
+    Alts = polls:alts(Poll#poll.id),
+    Vote = polls:get_vote(usr:id(), poll_id()),
+    view_common:wf_update(results_panel, edit_panel(Poll, Vote, Alts));
+event(view_results) ->
+    Poll = poll(),
+    nitro:update(top, title(polls:title(Poll)));
 event(add_alt) ->
     case filter:string(nitro:q(alt_text), 128, []) of
         [] ->
@@ -223,14 +219,7 @@ event({alt, Op, Id}) ->
 %         B = maps:from_list(V#vote.ballot),
 %         view_common:wf_update(?ALT_ID(Alt, ""), alt(Alt, maps:get(Alt#alt.id, B, 0), true))
 %     end);
-event(show_edit) ->
-    Poll = poll(),
-    Alts = polls:alts(Poll#poll.id),
-    Vote = polls:get_vote(usr:id(), poll_id()),
-    view_common:wf_update(results_panel, edit_panel(Poll, Vote, Alts));
-event(view_results) ->
-    view_common:wf_update(edit_panel, results_panel(poll(), true)),
-    wf:wire("FB.XFBML.parse();");
+
 event(Unk) ->
     io:format("Unknown event: ~p~n", [Unk]).
 
@@ -269,6 +258,9 @@ api_event(vote, Data, _) ->
 %%%=============================================================================
 %%% HTML Components
 %%%=============================================================================
+
+title(Title) -> 
+    #h1{id = top, body = nitro:hte(Title), class = 'display-5 mb-3 mt-3'}.
 
 title_input(Title) ->
     #panel{

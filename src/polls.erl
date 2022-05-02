@@ -13,6 +13,8 @@ name(#alt{user = UserId}) -> "anonymous".
 
 vote(UserId, #alt{poll = PollId}) -> 1.
 
+title(#poll{title = Title}) -> Title.
+
 can_edit(User, #poll{user = Author}) -> Author == User.
 can_edit(User, Poll, #alt{user = Author}) -> can_edit(User, Poll) or (Author == User).
 
