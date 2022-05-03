@@ -40,19 +40,21 @@ create(User, Title) ->
     add_my(User, Id),
     Id.
 
-append_alt(PollId, Text, User) ->
-    Alt = #alt{id = kvs:seq(alt, 1), poll = PollId, user = User, text = Text},
-    kvs:append(Alt, "/poll/" ++ PollId ++ "/alts"),
-    Alt.
-
 get_alt(#poll{id = PollId}, Id) ->
     {ok, Alt} = kvs:get(alt, Id),
     PollId = Alt#alt.poll,
     Alt.
 
-alts(Id) ->
-    [A || A <- kvs:entries(kvs:get(feed, {alts, Id}), alt, undefined), A#alt.hidden /= true].
+alts_feed(Poll) -> "/poll/" ++ Poll ++ "/alts".
+
+alts(PollId) -> [A || A <- kvs:feed(alts_feed(PollId)), A#alt.status == ok].
+
 alt_ids(Id) -> [Alt#alt.id || Alt <- alts(Id)].
+
+append_alt(PollId, Text, User) ->
+    Alt = #alt{id = kvs:seq(alt, 1), poll = PollId, user = User, text = Text},
+    kvs:append(Alt, alts_feed(PollId)),
+    Alt.
 
 votes(Id) -> kvs:entries(kvs:get(feed, {votes, Id}), vote, undefined).
 
@@ -81,15 +83,17 @@ supporters(Id) ->
         votes(Id)
     ).
 
-user_alts(Alts, Ballot, Seed) ->
-    B = maps:from_list(Ballot),
-    A = lists:zip(vote_core:rand_seq(length(Alts), Seed), Alts),
-    lists:reverse(lists:sort([{maps:get(Alt#alt.id, B, 0), Pos, Alt} || {Pos, Alt} <- A])).
+user_alts(User, Poll, Seed) ->
+    Alts = alts(Poll),
+    Vote = get_vote(User, Poll),
+    Ballot = maps:from_list(Vote#vote.ballot),
+    List = lists:sort(lists:zip3(
+        [maps:get(Alt#alt.id, Ballot, 0) || Alt <- Alts],
+        vote_core:rand_seq(length(Alts), Seed),
+        Alts)),
+    lists:reverse([{Ballot, Alt} || {Ballot, _, Alt} <- List]).
 
-first([], Default) -> Default;
-first([First | _], _) -> First.
-
-get_vote(User, Poll) -> first(kvs:index(vote, user_poll, {User, Poll}), #vote{}).
+get_vote(User, Poll) -> case kvs:get(vote, {User, Poll}) of {ok, Vote} -> Vote; _ -> #vote{} end.
 
 put_vote(User, Poll, Name, Ballot) ->
     % add_my(User, Poll),

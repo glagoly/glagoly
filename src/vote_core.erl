@@ -88,42 +88,5 @@ number_result(Order) ->
     lists:zip(Order2, lists:seq(P, P - L + 1, -1)).
 
 rand_seq(Length, Seed) ->
-    _ = rand:seed(exsp, {Seed, Seed, Seed}),
-    lists:foldl(
-        fun(E, L) ->
-            {H, T} = lists:split(rand:uniform(E) - 1, L),
-            H ++ [E] ++ T
-        end,
-        [],
-        lists:seq(1, Length)
-    ).
-
-random_init(Size, Voters) ->
-    V = lists:foldl(fun add_alt/2, new(), lists:seq(1, Size)),
-    P = lists:foldl(
-        fun(_, P) ->
-            vote_core:add_ballot([{A, rand:uniform(11) - 4} || A <- lists:seq(1, Size)], P)
-        end,
-        V,
-        lists:seq(1, Voters)
-    ).
-
-benchmark(Count, Size, Voters) ->
-    lists:map(
-        fun(_) ->
-            {Init_time, P} = timer:tc(fun random_init/2, [Size, Voters]),
-            {Result_time, R} = timer:tc(fun result/1, [P]),
-            io:fwrite("Init;~w;Result;~w~n", [Init_time, Result_time])
-        end,
-        lists:seq(1, Count)
-    ).
-
-%% Create a UUID v4 (random) as a base64 string
-%% "+" are replaced with "-"
-%% "/" are replaced with "~"
-%% source avtobiff/erlang-uuid
-uuid() ->
-    <<U0:32, U1:16, _:4, U2:12, _:2, U3:30, U4:32>> = crypto:strong_rand_bytes(16),
-    U = base64:encode_to_string(<<U0:32, U1:16, 4:4, U2:12, 2#10:2, U3:30, U4:32>>),
-    P = [global, {return, list}],
-    lists:sublist(re:replace(re:replace(U, "\\/", "\\~", P), "\\+", "-", P), 22).
+    rand:seed(exsss, {Seed, Seed, Seed}),
+    [rand:uniform() || _ <- lists:seq(1, Length)].
