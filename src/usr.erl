@@ -28,7 +28,7 @@ ensure() ->
             U
     end.
 
-seed() -> erlang:binary_to_integer(nitro:session_id(), 16).
+seed() -> erlang:binary_to_integer(n2o:sid(), 16).
 
 logout() -> nitro:user(undefined).
 

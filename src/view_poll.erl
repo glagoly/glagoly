@@ -39,12 +39,6 @@ update_title(Poll, Title) ->
         _ -> ok
     end.
 
-alts(User, Poll, Alts, #vote{ballot = Ballot}) ->
-    Alts2 = polls:user_alts(Alts, Ballot, usr:seed()),
-    #panel{
-        id = alts, body = [alt(Alt, V, polls:can_edit(User, Poll, Alt)) || {V, P, Alt} <- Alts2]
-    }.
-
 edit_panel(Poll, Vote, Alts) ->
     wf:wire(#api{name = vote}),
     User = usr:id(),
@@ -56,7 +50,7 @@ edit_panel(Poll, Vote, Alts) ->
             data_fields = [{onsubmit, "voteSubmit(event);"}],
             body = [
                 title(User, Poll),
-                alts(User, Poll, Alts, Vote),
+                % alts(User, Poll, Alts, Vote),
                 add_alt_form(),
                 vote_form(Vote#vote.name, Alts)
             ]
@@ -167,6 +161,7 @@ event(init) ->
     Poll = poll(),
     Title = nitro:hte(Poll#poll.title),
     nitro:update(top, title_input(Title)),
+    nitro:update(alts, alts()),
     nitro:insert_bottom(bottom, add_alt_form()),
     nitro:insert_bottom(bottom, vote_form("denys", true));
 event(view_vote) ->
@@ -300,6 +295,13 @@ title_input(Title) ->
                 ]
             }
         ]
+    }.
+
+alts() ->
+    Poll = poll(),
+    Alts = polls:user_alts(usr:id(), poll_id(), usr:seed()),
+    #panel{
+        id = alts, body = [alt(Alt, V, polls:can_edit(usr:id(), Poll, Alt)) || {V, Alt} <- Alts]
     }.
 
 badge_class(I) ->
