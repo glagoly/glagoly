@@ -1,11 +1,10 @@
 -module(vote_core).
--compile(export_all).
+
+-export([new/0, add_alt/2, add_ballot/2, result/1, rand_seq/2]).
 
 -record(poll, {alts, prefs}).
 
 new() -> #poll{alts = [sq], prefs = #{{sq, sq} => 0}}.
-
-prefs(Poll) -> maps:to_list(Poll#poll.prefs).
 
 alts(Poll) -> Poll#poll.alts.
 
@@ -34,25 +33,6 @@ normalize_ballot(Ballot, Alts) ->
     B = maps:from_list(Ballot),
     [{Alt, maps:get(Alt, B, 0)} || Alt <- Alts].
 
-key_group([{Alt, Vote} | L]) ->
-    {I, Current, Acc} = lists:foldl(
-        fun({Alt, Vote}, {I, Current, Acc}) ->
-            case Vote of
-                I -> {I, Current ++ [Alt], Acc};
-                _ -> {Vote, [Alt], Acc ++ [{Current, I}]}
-            end
-        end,
-        {Vote, [Alt], []},
-        L
-    ),
-    Acc ++ [{Current, I}].
-
-single_result(Poll, Ballot) ->
-    Alts = lists:delete(sq, alts(Poll)),
-    B = normalize_ballot(Ballot, Alts),
-    B2 = lists:reverse(lists:keysort(2, B)),
-    key_group(B2).
-
 add_vote({A, Va}, {B, Vb}, Prefs, Weight) when Va > Vb ->
     maps:put({A, B}, maps:get({A, B}, Prefs) + Weight, Prefs);
 add_vote({_, V}, {_, V}, Prefs, _) ->
@@ -60,8 +40,7 @@ add_vote({_, V}, {_, V}, Prefs, _) ->
 add_vote(A, B, Prefs, Weight) ->
     add_vote(B, A, Prefs, Weight).
 
-add_votes([], Prefs, _) ->
-    Prefs;
+add_votes([], Prefs, _) -> Prefs;
 add_votes([A | Rest], Prefs, Weight) ->
     Prefs2 = lists:foldl(fun(B, P) -> add_vote(A, B, P, Weight) end, Prefs, Rest),
     add_votes(Rest, Prefs2, Weight).
@@ -84,8 +63,11 @@ pop_sq(Order) ->
     ).
 
 number_result(Order) ->
-    {P, L, Order2} = pop_sq(Order),
-    lists:zip(Order2, lists:seq(P, P - L + 1, -1)).
+    {P, Length, Order2} = pop_sq(Order),
+    lists:foldl(
+        fun ({Alts, B}, L) -> L ++ lists:zip(Alts, lists:duplicate(length(Alts), B)) end,
+        [],
+        lists:zip(Order2, lists:seq(P, P - Length + 1, -1))).
 
 rand_seq(Length, Seed) ->
     rand:seed(exsss, {Seed, Seed, Seed}),
