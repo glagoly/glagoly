@@ -1,4 +1,8 @@
 function onSliderChange(slider) {
+    // fix scroll bug
+    // see: https://stackoverflow.com/questions/70914750/prevent-scroll-jump-on-range-input-on-android
+    slider.focus(true);
+
     var text = qi(slider.id.replace('slider', 'badge'));
     text.classList.remove('bg-success');
     text.classList.remove('bg-danger');
