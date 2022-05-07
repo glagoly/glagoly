@@ -1,6 +1,6 @@
 -module(vote_core).
 
--export([new/0, add_alt/2, add_ballot/2, result/1, rand_seq/2]).
+-export([new/0, add_alt/2, add_ballot/2, result/1, rand_seq/2, number_result/1]).
 
 -record(poll, {alts, prefs}).
 
@@ -40,7 +40,8 @@ add_vote({_, V}, {_, V}, Prefs, _) ->
 add_vote(A, B, Prefs, Weight) ->
     add_vote(B, A, Prefs, Weight).
 
-add_votes([], Prefs, _) -> Prefs;
+add_votes([], Prefs, _) ->
+    Prefs;
 add_votes([A | Rest], Prefs, Weight) ->
     Prefs2 = lists:foldl(fun(B, P) -> add_vote(A, B, P, Weight) end, Prefs, Rest),
     add_votes(Rest, Prefs2, Weight).
@@ -65,9 +66,10 @@ pop_sq(Order) ->
 number_result(Order) ->
     {P, Length, Order2} = pop_sq(Order),
     lists:foldl(
-        fun ({Alts, B}, L) -> L ++ lists:zip(Alts, lists:duplicate(length(Alts), B)) end,
+        fun({Alts, B}, L) -> L ++ lists:zip(lists:duplicate(length(Alts), B), Alts) end,
         [],
-        lists:zip(Order2, lists:seq(P, P - Length + 1, -1))).
+        lists:zip(Order2, lists:seq(P, P - Length + 1, -1))
+    ).
 
 rand_seq(Length, Seed) ->
     rand:seed(exsss, {Seed, Seed, Seed}),

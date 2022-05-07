@@ -26,17 +26,15 @@ my(User, Count) -> kvs:feed(user_feed(User)).
 
 new_id() ->
     Id = small_id(),
+    % try again if poll id already exists
     case kvs:get(poll, Id) of
-        % try again if poll id already exists
         {ok, _} -> new_id();
         _ -> Id
     end.
 
-today() -> erlang:system_time(second).
-
 create(User, Title) ->
     Id = new_id(),
-    kvs:put(#poll{id = Id, user = User, title = Title, date = today()}),
+    kvs:put(#poll{id = Id, user = User, title = Title}),
     add_my(User, Id),
     Id.
 
@@ -49,25 +47,17 @@ alts_feed(Poll) -> "/poll/" ++ Poll ++ "/alts".
 
 alts(PollId) -> [A || A <- kvs:feed(alts_feed(PollId)), A#alt.status == ok].
 
-alt_ids(Id) -> [Alt#alt.id || Alt <- alts(Id)].
-
 append_alt(PollId, Text, User) ->
     Alt = #alt{id = kvs:seq(alt, 1), poll = PollId, user = User, text = Text},
     kvs:append(Alt, alts_feed(PollId)),
     Alt.
 
-votes(Id) -> kvs:entries(kvs:get(feed, {votes, Id}), vote, undefined).
-
-result(Id) ->
-    V = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), alt_ids(Id)),
-    Ballots = [V#vote.ballot || V <- votes(Id)],
-    case Ballots of
-        [B] ->
-            vote_core:single_result(V, B);
-        _ ->
-            P = lists:foldl(fun vote_core:add_ballot/2, V, Ballots),
-            vote_core:result(P)
-    end.
+result(PollId) ->
+    AltIds = [Alt#alt.id || Alt <- alts(PollId)],
+    Core = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), AltIds),
+    Ballots = [V#vote.ballot || V <- votes(PollId)],
+    Core2 = lists:foldl(fun vote_core:add_ballot/2, Core, Ballots),
+    vote_core:result(Core2).
 
 % rename it as it now shows not only supportes
 supporters(Id) ->
@@ -79,7 +69,7 @@ supporters(Id) ->
                 fun({A, B}, S) -> dict:append(A, {U, Vote#vote.name, B}, S) end, Sups, Ballot
             )
         end,
-        dict:from_list([{A, []} || A <- alt_ids(Id)]),
+        dict:from_list([{1, []}]),
         votes(Id)
     ).
 
@@ -87,24 +77,33 @@ user_alts(User, Poll, Seed) ->
     Alts = alts(Poll),
     Vote = get_vote(User, Poll),
     Ballot = maps:from_list(Vote#vote.ballot),
-    List = lists:sort(lists:zip3(
-        [maps:get(Alt#alt.id, Ballot, 0) || Alt <- Alts],
-        vote_core:rand_seq(length(Alts), Seed),
-        Alts)),
+    List = lists:sort(
+        lists:zip3(
+            [maps:get(Alt#alt.id, Ballot, 0) || Alt <- Alts],
+            vote_core:rand_seq(length(Alts), Seed),
+            Alts
+        )
+    ),
     lists:reverse([{Ballot, Alt} || {Ballot, _, Alt} <- List]).
 
-get_vote(User, Poll) -> case kvs:get(vote, {User, Poll}) of {ok, Vote} -> Vote; _ -> #vote{} end.
+votes_feed(PollId) -> "/poll/" ++ PollId ++ "/votes".
 
-put_vote(User, Poll, Name, Ballot) ->
-    % add_my(User, Poll),
-    kvs:put(#vote{id = {User, Poll}, name = Name, ballot = Ballot, date=today()}).
-    % case get_vote(User, Poll) of
-    %     #vote{id = []} ->
-    %         Id = kvs:next_id(vote, 1),
-            
-    %     Vote ->
-    %         kvs:put(Vote#vote{name = Name, ballot = Ballot})
-    % end.
+votes(PollId) -> kvs:feed(votes_feed(PollId)).
+
+get_vote(User, Poll) ->
+    case kvs:get(vote, {User, Poll}) of
+        {ok, Vote} -> Vote;
+        _ -> #vote{}
+    end.
+
+put_vote(User, PollId, Name, Ballot) ->
+    case get_vote(User, PollId) of
+        #vote{id = undefined} ->
+            Vote = #vote{id = {User, PollId}, name = Name, ballot = Ballot},
+            kvs:append(Vote, votes_feed(PollId));
+        Vote ->
+            kvs:put(Vote#vote{name = Name, ballot = Ballot})
+    end.
 
 merge_user(_, undefined) ->
     no;

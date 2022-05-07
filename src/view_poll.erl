@@ -161,7 +161,7 @@ event(init) ->
     Poll = poll(),
     Title = nitro:hte(Poll#poll.title),
     nitro:update(top, title_input(Title)),
-    nitro:update(alts, alts()),
+    nitro:update(alts, alts_panel()),
     nitro:insert_bottom(bottom, add_alt_form()),
     nitro:insert_bottom(bottom, vote_form("denys", true));
 event(view_vote) ->
@@ -171,7 +171,9 @@ event(view_vote) ->
     view_common:wf_update(results_panel, edit_panel(Poll, Vote, Alts));
 event(view_results) ->
     Poll = poll(),
-    nitro:update(top, title(polls:title(Poll)));
+    nitro:update(top, title(polls:title(Poll))),
+    Result = polls:result(poll_id()),
+    nitro:update(alts, results_panel(Result));
 event(add_alt) ->
     case filter:string(nitro:q(alt_text), 128, []) of
         [] ->
@@ -179,7 +181,7 @@ event(add_alt) ->
         Text ->
             Alt = polls:append_alt(poll_id(), Text, usr:ensure()),
             nitro:insert_bottom(alts, alt(Alt, 0, true)),
-            nitro:wire(#jq{target=alt_text,property=value,right=""})
+            nitro:wire(#jq{target = alt_text, property = value, right = ""})
     end;
 % event(del_alt) ->
 %     alt_event(fun(Poll, Alt) ->
@@ -226,7 +228,7 @@ alt_event(restore, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true).
 
 filter_votes(Votes) ->
     % to pairs of ints
-    P1 = [{binary_to_integer(A), filter:in_range(binary_to_integer(V), -3, 7)} || [A, V] <- Votes],
+    P1 = [{nitro:to_list(A), filter:in_range(binary_to_integer(V), -3, 7)} || [A, V] <- Votes],
     lists:filter(fun({A, V}) -> (V /= 0) end, P1).
 
 api_event(fb_login, Token, _) ->
@@ -241,12 +243,12 @@ api_event(vote, Data, _) ->
     % Title = filter:string(get_value(<<"title">>, Props), ?TITLE_MAX_LENGTH, <<"poll">>),
     % update_title(poll(), Title),
 
-    Name = filter:string(maps:get( <<"name">>, Props), ?NAME_MAX_LENGTH, <<"anon">>),
-    Votes = filter_votes(maps:get( <<"votes">>, Props)),
+    Name = filter:string(maps:get(<<"name">>, Props), ?NAME_MAX_LENGTH, <<"anon">>),
+    Votes = filter_votes(maps:get(<<"votes">>, Props)),
     io:format("ID: ~p~n", [Votes]),
 
     User = usr:ensure(),
-    
+
     polls:put_vote(User, poll_id(), Name, Votes),
     event(view_results).
 
@@ -254,7 +256,7 @@ api_event(vote, Data, _) ->
 %%% HTML Components
 %%%=============================================================================
 
-title(Title) -> 
+title(Title) ->
     #h1{id = top, body = nitro:hte(Title), class = 'display-5 mb-3 mt-3'}.
 
 title_input(Title) ->
@@ -297,19 +299,67 @@ title_input(Title) ->
         ]
     }.
 
-alts() ->
-    Poll = poll(),
-    Alts = polls:user_alts(usr:id(), poll_id(), usr:seed()),
-    #panel{
-        id = alts, body = [alt(Alt, V, polls:can_edit(usr:id(), Poll, Alt)) || {V, Alt} <- Alts]
-    }.
-
 badge_class(I) ->
     if
         I > 0 -> 'bg-success';
         I < 0 -> 'bg-danger';
         I == 0 -> ''
     end.
+
+results_panel(Result) ->
+    Poll = poll(),
+    #panel{
+        id = alts, body = [result(polls:get_alt(Poll, AltId), V, []) || {V, AltId} <- Result]
+    }.
+
+result(Alt, Vote, Supporters) ->
+    #panel{
+        id = ?ALT_ID(Alt, panel),
+        class = 'card mb-3',
+        body = [
+            #panel{
+                class = 'card-body',
+                body = #p{
+                    class = 'card-text',
+                    body = [
+                        polls:text(Alt),
+                        #br{},
+                        #span{class = 'small text-muted', body = nitro:hte(polls:name(Alt))}
+                    ]
+                }
+            },
+            #panel{
+                class = 'card-footer',
+                body = #panel{
+                    class = 'row align-items-center',
+                    body = [
+                        #panel{
+                            class = 'col-2',
+                            body = #h4{
+                                class = 'text-center mb-0',
+                                body = #span{
+                                    id = ?ALT_ID(Alt, badge),
+                                    body = filter:pretty_int(Vote),
+                                    class = ['badge', 'bg-secondary', badge_class(Vote)]
+                                }
+                            }
+                        },
+                        #panel{
+                            class = 'col-10',
+                            body = []
+                        }
+                    ]
+                }
+            }
+        ]
+    }.
+
+alts_panel() ->
+    Poll = poll(),
+    Alts = polls:user_alts(usr:id(), poll_id(), usr:seed()),
+    #panel{
+        id = alts, body = [alt(Alt, V, polls:can_edit(usr:id(), Poll, Alt)) || {V, Alt} <- Alts]
+    }.
 
 alt(Alt, Vote, CanEdit) ->
     #panel{
@@ -451,25 +501,25 @@ vote_form(Name, IsNew) ->
     [
         % Not Great, Not Terrible
         <<"<form class='mt-4' novalidate onsubmit='voteSubmit(event); return false;'>">>,
-         #label{
-                class = 'form-label',
-                body = [?T("Your name"), " <small>", ?T("(required)"), "</small>"]
+        #label{
+            class = 'form-label',
+            body = [?T("Your name"), " <small>", ?T("(required)"), "</small>"]
         },
         #textbox{
             id = name,
-            disabled=[],
+            disabled = [],
             class = 'form-control',
             maxlength = ?NAME_MAX_LENGTH,
             value = nitro:hte(Name),
-            required=true
+            required = true
         },
-        #panel{class='invalid-feedback', body = ?T("Please enter your name")},
+        #panel{class = 'invalid-feedback', body = ?T("Please enter your name")},
         #panel{
             class = 'd-grid gap-2 mt-4',
             body =
                 case IsNew of
                     true ->
-                        #submit{class = [btn, 'btn-success'], body = ?T("Create poll"), click=[]};
+                        #submit{class = [btn, 'btn-success'], body = ?T("Create poll"), click = []};
                     _ ->
                         [
                             #submit{class = 'btn btn-success', body = ?T("Vote")},

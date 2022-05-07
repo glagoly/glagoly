@@ -9,9 +9,25 @@ string(Binary, Length, Default) ->
         L -> unicode:characters_to_binary(L)
     end.
 
-in_range(Int, Min, Max) -> if Int > Max -> Max; Int < Min -> Min; true -> Int end.
+in_range(Int, Min, Max) ->
+    if
+        Int > Max -> Max;
+        Int < Min -> Min;
+        true -> Int
+    end.
 
-sign(I) -> if I > 0 -> 1; I < 0 -> -1; I == 0 -> 0 end.
+sign(I) ->
+    if
+        I > 0 -> 1;
+        I < 0 -> -1;
+        I == 0 -> 0
+    end.
 
 pretty_int(I) ->
-    nitro:to_list(case sign(I) of 0 -> "&empty;"; 1 -> ["+", I]; -1 -> ["&minus;", -I] end).
+    nitro:to_list(
+        case sign(I) of
+            0 -> "&empty;";
+            1 -> ["+", I];
+            -1 -> ["&minus;", -I]
+        end
+    ).
