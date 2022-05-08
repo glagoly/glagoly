@@ -308,11 +308,18 @@ badge_class(I) ->
 
 results_panel(Result) ->
     Poll = poll(),
+    Voters = polls:voters(poll_id()),
     #panel{
-        id = alts, body = [result(polls:get_alt(Poll, AltId), V, []) || {V, AltId} <- Result]
+        id = alts,
+        body = [
+            result(polls:get_alt(Poll, AltId), V, maps:get(AltId, Voters, []))
+         || {V, AltId} <- Result
+        ]
     }.
 
-result(Alt, Vote, Supporters) ->
+voter({Name, Vote}) -> #span{body = [nitro:hte(Name), " ", filter:pretty_int(Vote)]}.
+
+result(Alt, Vote, Voters) ->
     #panel{
         id = ?ALT_ID(Alt, panel),
         class = 'card mb-3',
@@ -346,7 +353,7 @@ result(Alt, Vote, Supporters) ->
                         },
                         #panel{
                             class = 'col-10',
-                            body = []
+                            body = lists:join(", ", [voter(V) || V <- Voters])
                         }
                     ]
                 }
