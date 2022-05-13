@@ -1,9 +1,8 @@
 -module(usr).
 % usr because user is taken by erlang
--compile(export_all).
+-export([id/0, is_pers/0, ensure/0, seed/0, fb_login/1, logout/0]).
 
 -include_lib("n2o/include/n2o.hrl").
-
 -include_lib("records.hrl").
 
 id() ->
@@ -35,7 +34,7 @@ logout() -> nitro:user(undefined).
 login({_, undefined}) ->
     no;
 login(Creds) ->
-    nitro:user(
+    n2o:user(
         {pers,
             case kvs:get(login, Creds) of
                 {ok, #login{user = U}} ->
@@ -49,14 +48,17 @@ login(Creds) ->
     ).
 
 fb_login(Token) ->
+    io:format("Token: ~p~n", [Token]),
     Token2 = jsone:decode(list_to_binary(Token)),
+    io:format("Token: ~p~n", [Token2]),
+    ?LOG_INFO({Token2}),
     Url = nitro:to_list([
         "https://graph.facebook.com/v2.11/me",
         "?access_token=",
         Token2
     ]),
     {ok, {{_, 200, _}, _, Body}} = httpc:request(Url),
-    Props = jsone:decode(list_to_binary(Body), [{object_format, proplist}]),
-    Id = proplists:get_value(<<"id">>, Props),
-    {_, U} = login({facebook, Id}),
+    Props = jsone:decode(list_to_binary(Body)),
+    io:format("Props: ~p~n", [Props]),
+    {_, U} = login({facebook, maps:get(<<"id">>, Props)}),
     U.

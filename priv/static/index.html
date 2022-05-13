@@ -10,11 +10,22 @@
     <link rel="stylesheet" href="css/app.css">
     <link rel="icon" href="favicon.png">
 
-    <title>глаголі</title>
+    <title>глаголі Ⰳ швидкі колективні рішення</title>
+    <meta name="description" content="">
   </head>
   <body>
     <div class="index_cta bg_brand">
       <div class="container text-center">
+            <div
+      class="fb-login-button"
+      data-size="large"
+      data-button-type="login_with"
+      data-layout="default"
+      data-auto-logout-link="false"
+      data-use-continue-as="false"
+      data-width=""
+      data-onlogin="checkLoginState">Увійти через Facebook</div>
+
         <h1 class="display-1 pt-3">
           <img class="logo" src="img/logo.svg"><br/><b>глаголі</b></h1>
         <h2 class="display-6 pb-3">
@@ -24,8 +35,50 @@
       </div>
     </div>
     <div class="container main">
-      <h1 class="display-6 mb-3 mt-3">Просте палнування зустрічей</h1>
+      <h2 class="display-6 mb-3 mt-3">Просте планування зустрічей</h2>
+      <ul class="lead">
+        <li>Обирайте найкращі час, місце та активність в одному опитуванні</li>
+        <li>Кожен може додати свій варіант</li>
+      </ul>
+
+      <h2 class="display-6 mb-3 mt-5">Створити своє опитування</h2>
+      <input class="form-control form-control-lg mb-2" id="title" placeholder="Де і коли зустрічаємось?" multiple="false" value="Де і коли зустрічаємось?" maxlength="64">
+
+      <p class="lead">Спробуйте:
+        «<a class="dotted" href="javascript:void(0);" onclick="update_title_input(this)">Де і коли зустрічаємось?</a>»,
+        «<a class="dotted" href="javascript:void(0);" onclick="update_title_input(this)">Що робимо?</a>»,
+        «<a class="dotted" href="javascript:void(0);" onclick="update_title_input(this)">Куди їдемо?</a>»
+      </p>
+      <input type="submit" class="btn btn-success btn-lg w-100" value="Створити опитування">
+    
+      <h2 class="display-6 mb-3 mt-5">Швидкі колективні рішення</h2>
+      <ul class="lead">
+        <li>Оцінюйте кожну альтернативу від &minus;3 до +7</li>
+        <li>Зрозуміліше ніж «так» чи «ні»</li>
+        <li>Можна ігнорувати альтернативи</li>
+      </ul>
+      <h2 class="display-6 mb-3 mt-3">Метод Шульце онлайн</h2>
+      <p class="lead">
+        Визначення результатів опитування <a href="https://uk.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%A8%D1%83%D0%BB%D1%8C%D1%86%D0%B5">методом Шульце</a> дозволяє обрати найкращу альтернативу за будь-яких умов.
+      </p>
+      <h2 class="display-6 mb-3 mt-3">Відкритий код</h2>
+      <p class="lead">
+      Глаголі — вільне програмне забезпечення. Вільно вивчайте, змінюйте та роповсюджуйте вихідний код.</p>
     </div>
+
+    
+
+
+
+
+
+Увійти через Facebook
+
+
+
+
+
+    <div class="container main">
 
     <script src="js/lib.js"></script>
     <script src="js/app.js"></script>
@@ -35,6 +88,24 @@
       debug = true;
       protos = [$bert];
       N2O_start();
+
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1159337948166597',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v13.0'
+        });
+      };
+
+      // (function(d, s, id){
+      //    var js, fjs = d.getElementsByTagName(s)[0];
+      //    if (d.getElementById(id)) {return;}
+      //    js = d.createElement(s); js.id = id;
+      //    js.src = "https://connect.facebook.net/en_US/sdk.js";
+      //    fjs.parentNode.insertBefore(js, fjs);
+      //  }(document, 'script', 'facebook-jssdk'));
+
     </script>
 
   </body>

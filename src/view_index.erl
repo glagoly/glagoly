@@ -1,5 +1,6 @@
 -module(view_index).
--compile(export_all).
+-export([event/1, api_event/3]).
+
 -include_lib("n2o/include/n2o.hrl").
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("records.hrl").
@@ -75,11 +76,12 @@ main() ->
         User -> my(User)
     end.
 
-api_event(fb_login, Token, _) ->
+api_event(fb_login, Token, State) ->
     U = usr:fb_login(Token),
     view_common:wf_update(body, my_body(U, true)).
 
 event(init) ->
+    nitro:wire(#api{name = fb_login}),
     nitro:update(
         cta_create,
         #button{
