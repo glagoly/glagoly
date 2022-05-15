@@ -1,3 +1,13 @@
+host = location.hostname;
+port = location.port;
+debug = (location.hostname == 'localhost');
+protos = [$bert];
+N2O_start();
+
+/**
+* Event helpers
+*/
+
 function onSliderChange(slider) {
     // fix scroll bug
     // see: https://stackoverflow.com/questions/70914750/prevent-scroll-jump-on-range-input-on-android
@@ -47,12 +57,23 @@ function update_title_input(link) {
     qi('title').value = link.innerHTML;
 };
 
-// This is called with the results from from FB.getLoginStatus().
+/**
+* Facebook sdk
+*/
+
+window.fbAsyncInit = function() {
+    FB.init({
+        appId: (debug ? '1159337948166597' : '543950855954497'),
+        cookie: false,
+        xfbml: true,
+        version: 'v13.0'
+    });
+};
+
 function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
     if (response.status === 'connected') {
         // Logged into your app and Facebook.
-        fb_login(response.authResponse.accessToken);
+        document.fb_login(response.authResponse.accessToken);
     } else if (response.status === 'not_authorized') {
         alert('Please log into this app.');
     } else {
