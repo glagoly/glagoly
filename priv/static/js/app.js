@@ -1,9 +1,3 @@
-host = location.hostname;
-port = location.port;
-debug = (location.hostname == 'localhost');
-protos = [$bert];
-N2O_start();
-
 /**
 * Event helpers
 */

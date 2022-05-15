@@ -14,6 +14,10 @@
   text-decoration-style: dotted
 }
 
+footer a {
+    text-decoration: none;
+}
+
 /**
  * index.html
  */
@@ -24,4 +28,19 @@
 
 .index_cta img {
     height: 1em;
+}
+
+.fb-wrapper {
+    min-height: 50px;
+}
+.fb-login-button {
+    min-height: 40px;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Helvetica, Arial, sans-serif;
+    letter-spacing: .25px;
+    background-color: #1877f2;
+    min-width: 260px;
+    text-align: center;
+    vertical-align: middle;
 }

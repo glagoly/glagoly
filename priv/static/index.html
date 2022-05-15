@@ -11,21 +11,26 @@
     <link rel="icon" href="favicon.png">
 
     <title>глаголі Ⰳ швидкі колективні рішення</title>
-    <meta name="description" content="">
+    <meta name="description" content="Просте планування зустрічей. Найшвидший спосіб прийняти колективне рішення. Метод Шульце онлайн.">
+
+    <meta property="og:image" content="https://glagoly.com/img/social.glagoly.png" />
+    <meta property="fb:app_id" content="543950855954497" />
   </head>
   <body>
     <div class="index_cta bg_brand">
-      <div class="container text-center">
-        <div
-          class="fb-login-button"
-          data-size="large"
-          data-button-type="login_with"
-          data-layout="default"
-          data-auto-logout-link="false"
-          data-use-continue-as="false"
-          data-width=""
-          data-onlogin="checkLoginState">
-            Увійти через Facebook</div>
+      <div class="container main text-center pt-3">
+        <div class="fb-wrapper mb-1 text-end">
+          <div
+            class="fb-login-button d-inline-block"
+            data-size="large"
+            data-button-type="login_with"
+            data-layout="default"
+            data-auto-logout-link="false"
+            data-use-continue-as="false"
+            data-width="260px"
+            data-onlogin="checkLoginState">
+              Увійти через Facebook</div>
+        </div>
 
         <h1 class="display-1 pt-3">
           <img class="logo" src="img/logo.svg" alt="Ⰳ"><br/><b>глаголі</b></h1>
@@ -49,7 +54,7 @@
         <li>Можна ігнорувати альтернативи</li>
       </ul>
 
-      <h2 class="display-6 mb-3 mt-4">Створити своє опитування</h2>
+      <h2 class="display-6 mb-3 mt-5">Створити своє опитування</h2>
       <input class="form-control form-control-lg mb-2" id="title" placeholder="Де і коли зустрічаємось?" multiple="false" value="Де і коли зустрічаємось?" maxlength="64">
 
       <p class="lead">Спробуйте:
@@ -81,13 +86,20 @@
     <script src="js/lib.js"></script>
     <script src="js/app.js"></script>
     <script>
-      // (function(d, s, id){
-      //    var js, fjs = d.getElementsByTagName(s)[0];
-      //    if (d.getElementById(id)) {return;}
-      //    js = d.createElement(s); js.id = id;
-      //    js.src = "https://connect.facebook.net/en_US/sdk.js";
-      //    fjs.parentNode.insertBefore(js, fjs);
-      //  }(document, 'script', 'facebook-jssdk'));
+      host = location.hostname;
+      port = 8001;
+      debug = false;
+      persistent = true;
+      protos = [$bert];
+      N2O_start();
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
     </script>
   </body>
 </html>
