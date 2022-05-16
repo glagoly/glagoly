@@ -1,38 +1,10 @@
--module(view_common).
--compile(export_all).
+-module(view).
+
+-export([event/1]).
+
 -include_lib("n2o/include/n2o.hrl").
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
-
-ga_event(Category, Action) ->
-    case wf:config(web, ga_id) of
-        undefined ->
-            no;
-        _ ->
-            wf:wire(
-                "ga('send', 'event', '" ++ wf:to_list(Category) ++
-                    "', '" ++ wf:to_list(Action) ++ "');"
-            )
-    end.
-
-wf_update(Target, Elements) ->
-    Pid = self(),
-    Ref = make_ref(),
-    spawn(fun() ->
-        R = wf:render(Elements),
-        Pid ! {R, Ref, wf:actions()}
-    end),
-    {Render, Ref, Actions} =
-        receive
-            {_, Ref, _} = A -> A
-        end,
-    wf:wire(
-        wf:f(
-            "(function(){ qi('~s').outerHTML = '~s'; })();",
-            [Target, Render]
-        )
-    ),
-    wf:wire(wf:render(Actions)).
 
 poll_button() -> poll_button([]).
 poll_button(Class) ->
@@ -95,8 +67,11 @@ page(Bindings) ->
 event(logout) ->
     usr:logout(),
     wf:redirect("/");
+% event(create_poll) ->
+%     Id = polls:create(usr:ensure()),
+%     wf:redirect("/" ++ wf:to_list(Id));
 event(create_poll) ->
-    Id = polls:create(usr:ensure()),
-    wf:redirect("/" ++ wf:to_list(Id));
+    Id = polls:create(usr:ensure(), ?T("Where and when do we meet?")),
+    nitro:redirect("poll.html?id=" ++ Id);
 event(_) ->
     ok.

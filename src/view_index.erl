@@ -86,13 +86,11 @@ event(init) ->
         cta_create,
         #button{
             id = cta_create,
-            class = 'btn btn-lg btn-success mb-5',
-            body = ?T("create poll"),
-            postback = create
+            class = 'btn btn-lg btn-success w-100 mb-5',
+            body = ?T("Create poll"),
+            postback = create_poll,
+            delegate = view
         }
     );
-event(create) ->
-    Id = polls:create(usr:ensure(), ?T("Where and when do we meet?")),
-    nitro:redirect("poll.html?id=" ++ Id);
 event(_) ->
     ok.
