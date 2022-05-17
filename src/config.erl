@@ -10,7 +10,7 @@ metainfo() -> #schema{name = glagoly, tables = tables()}.
 tables() ->
     [
         #table{name = login, fields = record_info(fields, login)},
-        #table{name = poll, fields = record_info(fields, poll)},
+        #table{name = poll, fields = record_info(fields, poll), keys = [user]},
         #table{name = alt, fields = record_info(fields, alt), keys = [user]},
         #table{name = vote, fields = record_info(fields, vote)},
         #table{name = my_poll, fields = record_info(fields, my_poll)}

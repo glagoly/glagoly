@@ -52,12 +52,8 @@ fb_login(Token) ->
     Token2 = jsone:decode(list_to_binary(Token)),
     io:format("Token: ~p~n", [Token2]),
     ?LOG_INFO({Token2}),
-    Url = nitro:to_list([
-        "https://graph.facebook.com/v2.11/me",
-        "?access_token=",
-        Token2
-    ]),
-    {ok, {{_, 200, _}, _, Body}} = httpc:request(Url),
+    Url = ["https://graph.facebook.com/v13.0/me?access_token=", Token2],
+    {ok, {{_, 200, _}, _, Body}} = httpc:request(nitro:to_list(Url)),
     Props = jsone:decode(list_to_binary(Body)),
     io:format("Props: ~p~n", [Props]),
     {_, U} = login({facebook, maps:get(<<"id">>, Props)}),

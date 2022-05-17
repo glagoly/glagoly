@@ -6,10 +6,6 @@
 -include_lib("records.hrl").
 -include_lib("web.hrl").
 
--define(TITLE_MAX_LENGTH, 64).
--define(ALT_MAX_LENGTH, 128).
--define(NAME_MAX_LENGTH, 32).
-
 -define(ALT_ID(Alt, Sub), nitro:to_list([alt, polls:id(Alt), Sub])).
 
 poll_id() -> nitro:to_list(nitro:qc(id)).
@@ -160,7 +156,7 @@ main() ->
 event(init) ->
     Poll = poll(),
     Title = nitro:hte(Poll#poll.title),
-    nitro:update(top, title_input(Title)),
+    nitro:update(top, view:title_input(Title)),
     nitro:update(alts, alts_panel()),
     nitro:insert_bottom(bottom, add_alt_form()),
     nitro:insert_bottom(bottom, vote_form("denys", true));
@@ -258,46 +254,6 @@ api_event(vote, Data, _) ->
 
 title(Title) ->
     #h1{id = top, body = nitro:hte(Title), class = 'display-5 mb-3 mt-3'}.
-
-title_input(Title) ->
-    #panel{
-        id = top,
-        body = [
-            #label{class = <<"form-label mt-4">>, body = ?T("Poll title")},
-            #input{
-                id = title,
-                data_fields = [{maxlength, ?TITLE_MAX_LENGTH}],
-                class = <<"form-control form-control-lg mb-2">>,
-                placeholder = Title,
-                value = Title
-            },
-            #p{
-                class = <<"lead mb-4">>,
-                body = [
-                    ?T("Try:"),
-                    " &laquo;",
-                    #link{
-                        class = dotted,
-                        onclick = 'update_title_input(this)',
-                        body = ?T("Where and when do we meet?")
-                    },
-                    "&raquo;, &laquo;",
-                    #link{
-                        class = dotted,
-                        onclick = 'update_title_input(this)',
-                        body = ?T("What are we doing?")
-                    },
-                    "&raquo;, &laquo;",
-                    #link{
-                        class = dotted,
-                        onclick = 'update_title_input(this)',
-                        body = ?T("Where are we going?")
-                    },
-                    "&raquo;"
-                ]
-            }
-        ]
-    }.
 
 badge_class(I) ->
     if

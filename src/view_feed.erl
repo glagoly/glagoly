@@ -8,7 +8,8 @@
 event(init) ->
     Polls = polls:my(usr:ensure()),
     [nitro:insert_bottom(alts, poll(P#my_poll.id)) || P <- Polls];
-event(_) -> ok.
+event(_) ->
+    ok.
 
 poll({_, PollId}) ->
     {ok, Poll} = kvs:get(poll, PollId),
@@ -31,10 +32,10 @@ poll({_, PollId}) ->
             #panel{
                 class = 'card-footer text-end',
                 body = #link{
-                        class = 'btn btn-primary btn-sm',
-                        body = ?T("Results"),
-                        href = "poll.html?id=" ++ polls:id(Poll)
-                    }
+                    class = 'btn btn-primary btn-sm',
+                    body = ?T("Results"),
+                    href = "poll.html?id=" ++ polls:id(Poll)
+                }
             }
         ]
     }.

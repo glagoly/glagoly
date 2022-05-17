@@ -3,8 +3,6 @@
 -include_lib("records.hrl").
 -include_lib("web.hrl").
 
--define(ID_LENGTH, 7).
-
 id(#alt{id = Id}) -> Id;
 id(#poll{id = Id}) -> Id.
 
