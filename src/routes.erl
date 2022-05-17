@@ -17,6 +17,7 @@ route_prefix(P) -> route(P).
 % Routes
 
 route(<<"app/", R/binary>>) -> route(R);
-route(<<"index.html">>) -> view_index;
 route(<<"poll.html">>) -> view_poll;
-route(<<"feed.html">>) -> view_feed.
+route(<<"feed.html">>) -> view_feed;
+route(<<"index.html">>) -> view_index;
+route(<<"">>) -> view_index.

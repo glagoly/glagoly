@@ -11,13 +11,11 @@ trans("Cancel") -> <<"Відмінити"/utf8>>;
 trans("Save") -> <<"Зберегти"/utf8>>;
 % poll
 
-trans("Poll title") -> <<"Заголовок опитування"/utf8>>;
+trans(title_samples) -> title_samples();
+trans(title_sample) -> <<"Де і коли зустрічаємось?"/utf8>>;
 
+trans("Create your poll") -> <<"Створити своє опитування"/utf8>>;
 trans("Try:") -> <<"Спробуйте:"/utf8>>;
-trans("Where and when do we meet?") -> <<"Де і коли зустрічаємось?"/utf8>>;
-trans("What are we doing?") -> <<"Що робимо?"/utf8>>;
-trans("Where are we going?") -> <<"Куди їдемо?"/utf8>>;
-
 
 trans("Add my alternative") -> <<"Додати свій варіант"/utf8>>;
 trans("Add") -> <<"Додати"/utf8>>;
@@ -34,7 +32,10 @@ trans("View results") -> <<"Побачити результати"/utf8>>;
 
 trans("add alternative") -> <<"додати альтернативу"/utf8>>;
 
-trans("the fastest way <br /> to make micro-desicions") ->
-	<<"найшвидший спосіб<br />прийняти мікро-рішення"/utf8>>;
-
 trans(S) -> en:trans(S).
+
+title_samples() -> [
+	<<"Де і коли зустрічаємось?"/utf8>>,
+	<<"Що робимо?"/utf8>>,
+	<<"Куди їдемо?"/utf8>>
+].
