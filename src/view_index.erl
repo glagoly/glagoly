@@ -91,6 +91,7 @@ event(init) ->
             postback = create_poll,
             delegate = view
         }
-    );
+    ),
+    nitro:update(create_panel, view:create_panel());
 event(_) ->
     ok.
