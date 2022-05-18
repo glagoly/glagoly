@@ -24,10 +24,8 @@ sign(I) ->
     end.
 
 pretty_int(I) ->
-    nitro:to_list(
-        case sign(I) of
-            0 -> "&empty;";
-            1 -> ["+", I];
-            -1 -> ["&minus;", -I]
-        end
-    ).
+    case sign(I) of
+        0 -> "&empty;";
+        1 -> ["+", nitro:to_list(I)];
+        -1 -> ["&minus;", nitro:to_list(-I)]
+    end.

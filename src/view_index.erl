@@ -5,7 +5,7 @@
 -include_lib("web.hrl").
 
 event(init) ->
-    nitro:wire(#api{name = fb_login}),
+    nitro:wire(#api{name = fb_login, delegate = view}),
     nitro:update(
         cta_create,
         #button{

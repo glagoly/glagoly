@@ -2,7 +2,6 @@
 % usr because user is taken by erlang
 -export([id/0, is_pers/0, ensure/0, seed/0, fb_login/1, logout/0]).
 
--include_lib("n2o/include/n2o.hrl").
 -include_lib("records.hrl").
 
 id() ->
@@ -31,30 +30,22 @@ seed() -> erlang:binary_to_integer(n2o:sid(), 16).
 
 logout() -> nitro:user(undefined).
 
-login({_, undefined}) ->
-    no;
-login(Creds) ->
-    n2o:user(
-        {pers,
-            case kvs:get(login, Creds) of
-                {ok, #login{user = U}} ->
-                    polls:merge_user(U, id()),
-                    U;
-                _ ->
-                    U = ensure(),
-                    kvs:put(#login{creds = Creds, user = U}),
-                    U
-            end}
-    ).
+login(Creds, Data) ->
+    NewId =
+        case kvs:get(login, Creds) of
+            {ok, #login{user = UserId}} ->
+                % merge user here
+                UserId;
+            _ ->
+                UserId = ensure(),
+                kvs:put(#login{creds = Creds, user = UserId, data = Data}),
+                UserId
+        end,
+    n2o:user({pers, NewId}).
 
 fb_login(Token) ->
-    io:format("Token: ~p~n", [Token]),
     Token2 = jsone:decode(list_to_binary(Token)),
-    io:format("Token: ~p~n", [Token2]),
-    ?LOG_INFO({Token2}),
     Url = ["https://graph.facebook.com/v13.0/me?access_token=", Token2],
     {ok, {{_, 200, _}, _, Body}} = httpc:request(nitro:to_list(Url)),
     Props = jsone:decode(list_to_binary(Body)),
-    io:format("Props: ~p~n", [Props]),
-    {_, U} = login({facebook, maps:get(<<"id">>, Props)}),
-    U.
+    login({facebook, maps:get(<<"id">>, Props)}, Props).

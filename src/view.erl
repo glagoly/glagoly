@@ -1,10 +1,14 @@
 -module(view).
 
--export([event/1, create_panel/0, title_input/1]).
+-export([event/1, api_event/3, create_panel/0, title_input/1]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
 -include_lib("records.hrl").
+
+api_event(fb_login, Token, _) ->
+    usr:fb_login(Token),
+    nitro:redirect("feed.html").
 
 event(logout) ->
     usr:logout(),
