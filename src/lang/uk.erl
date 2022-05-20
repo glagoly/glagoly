@@ -3,7 +3,7 @@
 
 % navbar
 trans("create") -> <<"створити"/utf8>>;
-trans("logout") -> <<"вийти"/utf8>>;
+trans("Log out") -> <<"Вийти"/utf8>>;
 trans("edit") -> <<"редагувати"/utf8>>;
 
 trans("Remove") -> <<"Видалити"/utf8>>;

@@ -6,6 +6,7 @@
 -include_lib("nitro/include/nitro.hrl").
 
 event(init) ->
+    view:init(navbar),
     Polls = polls:my(usr:ensure()),
     [nitro:insert_bottom(alts, poll(P#my_poll.id)) || P <- Polls];
 event(_) ->

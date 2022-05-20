@@ -1,10 +1,19 @@
 -module(view).
 
--export([event/1, api_event/3, create_panel/0, title_input/1]).
+-export([init/1, event/1, api_event/3, create_panel/0, title_input/1]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
 -include_lib("records.hrl").
+
+init(navbar) ->
+    nitro:clear(nav_links),
+    nitro:insert_bottom(nav_links, #li{
+        class = 'nav-item',
+        body = #link{
+            class = 'nav-link', body = ?T("Log out"), postback = logout, delegate = view
+        }
+    }).
 
 api_event(fb_login, Token, _) ->
     usr:fb_login(Token),
@@ -12,7 +21,7 @@ api_event(fb_login, Token, _) ->
 
 event(logout) ->
     usr:logout(),
-    wf:redirect("/");
+    nitro:redirect("./");
 event(create_poll) ->
     Title = filter:string(nitro:q(title), 128, ?T(title_sample)),
     Id = polls:create(usr:ensure(), Title),

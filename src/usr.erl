@@ -28,7 +28,7 @@ ensure() ->
 
 seed() -> erlang:binary_to_integer(n2o:sid(), 16).
 
-logout() -> nitro:user(undefined).
+logout() -> n2o:user(undefined).
 
 login(Creds, Data) ->
     NewId =
