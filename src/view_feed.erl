@@ -6,11 +6,20 @@
 -include_lib("nitro/include/nitro.hrl").
 
 event(init) ->
-    view:init(navbar),
-    Polls = polls:my(usr:ensure()),
-    [nitro:insert_bottom(alts, poll(P#my_poll.id)) || P <- Polls];
+    case usr:id() of
+        guest ->
+            nitro:redirect("./");
+        User ->
+            view:init(navbar),
+            Polls = polls:my(User),
+            [nitro:insert_bottom(alts, poll(P#my_poll.id)) || P <- Polls]
+    end;
 event(_) ->
     ok.
+
+%%%=============================================================================
+%%% HTML Components
+%%%=============================================================================
 
 poll({_, PollId}) ->
     {ok, Poll} = kvs:get(poll, PollId),

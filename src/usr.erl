@@ -1,29 +1,28 @@
 -module(usr).
 % usr because user is taken by erlang
--export([id/0, is_pers/0, ensure/0, seed/0, fb_login/1, logout/0]).
+-export([id/0, state/0, ensure/0, seed/0, fb_login/1, logout/0]).
 
 -include_lib("records.hrl").
 
 id() ->
     case n2o:user() of
         {_, U} -> U;
-        _ -> undefined
+        _ -> guest
     end.
 
-is_pers() ->
+state() ->
     case n2o:user() of
-        {pers, _} -> true;
-        _ -> false
+        {State, _} -> State;
+        _ -> guest
     end.
 
 ensure() ->
-    case n2o:user() of
-        {_, U} ->
-            U;
-        _ ->
-            U = kvs:seq(user, 1),
-            n2o:user({temp, U}),
-            U
+    case id() of
+        guest ->
+            {_, Id} = n2o:user({temp, kvs:seq(user, 1)}),
+            Id;
+        Id ->
+            Id
     end.
 
 seed() -> erlang:binary_to_integer(n2o:sid(), 16).
