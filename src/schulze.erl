@@ -1,5 +1,6 @@
 -module(schulze).
--compile(export_all).
+
+-export([init/1, strongest_path/2, order/2]).
 
 %% A New Monotonic, Clone-Independent,
 %% Reversal Symmetric, and Condorcet-Consistent
