@@ -38,12 +38,12 @@
     <script src="js/app.js"></script>
     <script>
       host = location.hostname;
-      port = 8001;
-      debug = false;
+      port = location.port;
+      debug = (host == 'localhost');
       persistent = true;
+      tokenStorage = window.localStorage;
       protos = [$bert];
       N2O_start();
     </script>
-
   </body>
 </html>

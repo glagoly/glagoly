@@ -2,17 +2,22 @@
 -export([event/1]).
 
 -include_lib("web.hrl").
--include_lib("records.hrl").
 -include_lib("nitro/include/nitro.hrl").
 
 event(init) ->
+    io:format("ID: ~p~n", [usr:id()]),
     case usr:id() of
         guest ->
             nitro:redirect("./");
         User ->
             view:init(navbar),
-            Polls = polls:my(User),
-            [nitro:insert_bottom(alts, poll(P#my_poll.id)) || P <- Polls]
+            case polls:my(User) of
+                [] -> empty;
+                Polls -> 
+                    nitro:clear(polls),
+                    nitro:insert_bottom(polls, header()),
+                    [nitro:insert_bottom(polls, poll(polls:get(P))) || P <- Polls]
+            end
     end;
 event(_) ->
     ok.
@@ -21,8 +26,9 @@ event(_) ->
 %%% HTML Components
 %%%=============================================================================
 
-poll({_, PollId}) ->
-    {ok, Poll} = kvs:get(poll, PollId),
+header() -> #h1{class = 'display-6 mb-3 mt-5', body = ?T("My polls")}.
+
+poll(Poll) ->
     #panel{
         class = 'card mb-3',
         body = [

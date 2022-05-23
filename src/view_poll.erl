@@ -155,6 +155,7 @@ main() ->
 
 event(init) ->
     Poll = poll(),
+    io:format("ID: ~p~n", [usr:id()]),
     Title = nitro:hte(Poll#poll.title),
     nitro:update(top, view:title_input(Title)),
     nitro:update(alts, alts_panel()),

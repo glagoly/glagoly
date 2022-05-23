@@ -9,7 +9,9 @@ trans("edit") -> <<"редагувати"/utf8>>;
 trans("Remove") -> <<"Видалити"/utf8>>;
 trans("Cancel") -> <<"Відмінити"/utf8>>;
 trans("Save") -> <<"Зберегти"/utf8>>;
-% poll
+
+trans("My polls") -> <<"Мої опитування"/utf8>>;
+trans("Results") -> <<"Результати"/utf8>>;
 
 trans(title_samples) -> title_samples();
 trans(title_sample) -> <<"Де і коли зустрічаємось?"/utf8>>;
