@@ -10,6 +10,12 @@ event(init) ->
         guest ->
             nitro:redirect("./");
         User ->
+            nitro:clear(top),
+            case usr:state() of
+                temp -> nitro:insert_bottom(top, view:login_panel());
+                _ -> already
+            end,
+            nitro:insert_bottom(top, view:create_panel()),
             view:init(navbar),
             case polls:my(User) of
                 [] -> empty;

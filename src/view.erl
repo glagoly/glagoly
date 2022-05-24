@@ -1,6 +1,6 @@
 -module(view).
 
--export([init/1, event/1, api_event/3, create_panel/0, title_input/1]).
+-export([init/1, event/1, api_event/3, create_panel/0, login_panel/0, title_input/1]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
@@ -52,6 +52,27 @@ title_input(Title) ->
                 class = 'lead mb-4',
                 body = [?T("Try:"), " &laquo;", lists:join("&raquo;, &laquo;", Samples), "&raquo;"]
             }
+        ]
+    }.
+
+login_panel() ->
+    #panel{
+        id = create_panel,
+        body = [
+            #h2{class = 'display-6 mb-3 mt-5', body = ?T("Remember me")},
+            #p{body= ?T(remember_me_info)},
+            #panel{class=fb_wrapper, body=#panel{
+            class="fb-login-button d-inline-block"
+            data-size="large"
+            data-button-type="login_with"
+            data-layout="default"
+            data-auto-logout-link="false"
+            data-use-continue-as="false"
+            data-width="260px"
+            data-onlogin="checkLoginState">
+              Увійти через Facebook</div>
+        </div>
+            body=
         ]
     }.
 
