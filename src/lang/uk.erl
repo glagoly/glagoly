@@ -18,6 +18,7 @@ trans(title_sample) -> <<"Де і коли зустрічаємось?"/utf8>>;
 
 trans("Remember me") -> <<"Запам'ятати мене"/utf8>>;
 trans(remember_me_info) -> <<"Увійдіть через фейсбук, аби змінювати свій голос пізніше."/utf8>>;
+trans("Login with facebook") -> <<"Увійти через Facebook"/utf8>>;
 
 trans("Create your poll") -> <<"Створити своє опитування"/utf8>>;
 trans("Try:") -> <<"Спробуйте:"/utf8>>;

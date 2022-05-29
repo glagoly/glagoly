@@ -18,8 +18,9 @@ event(init) ->
             nitro:insert_bottom(top, view:create_panel()),
             view:init(navbar),
             case polls:my(User) of
-                [] -> empty;
-                Polls -> 
+                [] ->
+                    empty;
+                Polls ->
                     nitro:clear(polls),
                     nitro:insert_bottom(polls, header()),
                     [nitro:insert_bottom(polls, poll(polls:get(P))) || P <- Polls]
@@ -32,7 +33,7 @@ event(_) ->
 %%% HTML Components
 %%%=============================================================================
 
-header() -> #h1{class = 'display-6 mb-3 mt-5', body = ?T("My polls")}.
+header() -> #h1{class = 'display-6 mb-3', body = ?T("My polls")}.
 
 poll(Poll) ->
     #panel{

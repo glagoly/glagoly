@@ -1,7 +1,21 @@
 -module(polls).
 
--export([id/1, my/1, get/1, create/2, title/1, name/1, text/1, get_alt/2, user_alts/3, append_alt/3,
-    put_vote/4, result/1, voters/1, can_edit/2, can_edit/3]).
+-export([
+    id/1,
+    my/1,
+    get/1,
+    create/2,
+    title/1,
+    name/1,
+    text/1,
+    get_alt/2,
+    user_alts/3,
+    append_alt/3,
+    put_vote/4,
+    result/1,
+    voters/1,
+    can_edit/2, can_edit/3
+]).
 
 -include_lib("records.hrl").
 
@@ -10,14 +24,19 @@ id(#poll{id = Id}) -> Id.
 
 text(#alt{text = Text}) -> Text.
 
-name(#alt{user = UserId}) -> "anonymous";
-name(#poll{id = Id, user = UserId}) -> Vote = get_vote(UserId, Id), Vote#vote.name.
+name(#alt{user = UserId}) ->
+    "anonymous";
+name(#poll{id = Id, user = UserId}) ->
+    Vote = get_vote(UserId, Id),
+    Vote#vote.name.
 
 vote(UserId, #alt{poll = PollId}) -> 1.
 
 title(#poll{title = Title}) -> Title.
 
-get(#my_poll{id = {_, PollId}}) -> {ok, Poll} = kvs:get(poll, PollId), Poll.
+get(#my_poll{id = {_, PollId}}) ->
+    {ok, Poll} = kvs:get(poll, PollId),
+    Poll.
 
 can_edit(User, #poll{user = Author}) -> Author == User.
 can_edit(User, Poll, #alt{user = Author}) -> can_edit(User, Poll) or (Author == User).

@@ -9,7 +9,6 @@ event(init) ->
         pers ->
             nitro:redirect("feed.html");
         _ ->
-            nitro:wire(#api{name = fb_login, delegate = view}),
             nitro:update(
                 cta_create,
                 #button{
@@ -21,7 +20,8 @@ event(init) ->
                     source = [title]
                 }
             ),
-            nitro:update(create_panel, view:create_panel())
+            nitro:update(create_panel, view:create_panel()),
+            view:init(fb)
     end;
 event(_) ->
     ok.

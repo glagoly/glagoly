@@ -55,6 +55,19 @@ function update_title_input(link) {
 * Facebook sdk
 */
 
+function fb_init() {
+    if (window.FB) {
+        return FB.XFBML.parse();
+    }
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+}
+
 window.fbAsyncInit = function() {
     FB.init({
         appId: (debug ? '1159337948166597' : '543950855954497'),
@@ -85,12 +98,12 @@ function checkLoginState() {
 * Google Analytics
 */
 
-(function(e,t,n,i,s,a,c){e[n]=e[n]||function(){(e[n].q=e[n].q||[]).push(arguments)}
-;a=t.createElement(i);c=t.getElementsByTagName(i)[0];a.async=true;a.src=s
-;c.parentNode.insertBefore(a,c)
-})(window,document,"galite","script","https://cdn.jsdelivr.net/npm/ga-lite@2/dist/ga-lite.min.js");
-
 if (document.location.hostname !== 'localhost') {
+    (function(e,t,n,i,s,a,c){e[n]=e[n]||function(){(e[n].q=e[n].q||[]).push(arguments)}
+    ;a=t.createElement(i);c=t.getElementsByTagName(i)[0];a.async=true;a.src=s
+    ;c.parentNode.insertBefore(a,c)
+    })(window,document,"galite","script","https://cdn.jsdelivr.net/npm/ga-lite@2/dist/ga-lite.min.js");
+
     galite('create', 'UA-111273395-1', 'auto');
     galite('send', 'pageview');
 }

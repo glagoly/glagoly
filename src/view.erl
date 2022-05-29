@@ -6,6 +6,9 @@
 -include_lib("web.hrl").
 -include_lib("records.hrl").
 
+init(fb) ->
+    nitro:wire(#api{name = fb_login, delegate = view}),
+    nitro:wire("fb_init();");
 init(navbar) ->
     nitro:clear(nav_links),
     nitro:insert_bottom(nav_links, #li{
@@ -57,30 +60,36 @@ title_input(Title) ->
 
 login_panel() ->
     #panel{
-        id = create_panel,
+        id = login_panel,
+        class = 'mb-3',
         body = [
-            #h2{class = 'display-6 mb-3 mt-5', body = ?T("Remember me")},
-            #p{body= ?T(remember_me_info)},
-            #panel{class=fb_wrapper, body=#panel{
-            class="fb-login-button d-inline-block"
-            data-size="large"
-            data-button-type="login_with"
-            data-layout="default"
-            data-auto-logout-link="false"
-            data-use-continue-as="false"
-            data-width="260px"
-            data-onlogin="checkLoginState">
-              Увійти через Facebook</div>
-        </div>
-            body=
+            #h2{class = 'display-6', body = ?T("Remember me")},
+            #p{body = ?T(remember_me_info)},
+            #panel{
+                class = fb_wrapper,
+                body = #panel{
+                    class = 'fb-login-button d-inline-block',
+                    body = ?T("Login with facebook"),
+                    data_fields = [
+                        {"data-size", large},
+                        {"data-button-type", login_with},
+                        {"data-layout", default},
+                        {"data-auto-logout-link", false},
+                        {"data-use-continue-as", false},
+                        {"data-width", "260px"},
+                        {"data-onlogin", checkLoginState}
+                    ]
+                }
+            }
         ]
     }.
 
 create_panel() ->
     #panel{
         id = create_panel,
+        class = 'mb-3',
         body = [
-            #h2{class = 'display-6 mb-3 mt-5', body = ?T("Create your poll")},
+            #h2{class = 'display-6', body = ?T("Create your poll")},
             title_input(?T(title_sample)),
             #button{
                 class = 'btn btn-lg btn-success w-100',
