@@ -5,15 +5,17 @@
 -include_lib("nitro/include/nitro.hrl").
 
 event(init) ->
-    io:format("ID: ~p~n", [usr:id()]),
     case usr:id() of
         guest ->
             nitro:redirect("./");
         User ->
             nitro:clear(top),
             case usr:state() of
-                temp -> nitro:insert_bottom(top, view:login_panel());
-                _ -> already
+                temp ->
+                    nitro:insert_bottom(top, view:login_panel()),
+                    view:init(fb);
+                _ ->
+                    already
             end,
             nitro:insert_bottom(top, view:create_panel()),
             view:init(navbar),
