@@ -1,23 +1,24 @@
 -module(polls).
 
+-include_lib("records.hrl").
+
 -export([
+    append_alt/3,
+    can_edit/2, can_edit/3,
+    create/2,
+    get/1,
+    get_alt/2,
+    get_ballot/2,
     id/1,
     my/1,
-    get/1,
-    create/2,
-    title/1,
     name/1,
-    text/1,
-    get_alt/2,
-    user_alts/3,
-    append_alt/3,
     put_vote/4,
     result/1,
-    voters/1,
-    can_edit/2, can_edit/3
+    text/1,
+    title/1,
+    user_alts/3,
+    voters/1
 ]).
-
--include_lib("records.hrl").
 
 id(#alt{id = Id}) -> Id;
 id(#poll{id = Id}) -> Id.
@@ -104,8 +105,7 @@ voters(Id) ->
 
 user_alts(User, Poll, Seed) ->
     Alts = alts(Poll),
-    Vote = get_vote(User, Poll),
-    Ballot = maps:from_list(Vote#vote.ballot),
+    Ballot = get_ballot(User, Poll),
     List = lists:sort(
         lists:zip3(
             [maps:get(Alt#alt.id, Ballot, 0) || Alt <- Alts],
@@ -124,6 +124,8 @@ get_vote(User, Poll) ->
         {ok, Vote} -> Vote;
         _ -> #vote{}
     end.
+
+get_ballot(User, Poll) -> Vote = get_vote(User, Poll), maps:from_list(Vote#vote.ballot).
 
 put_vote(User, PollId, Name, Ballot) ->
     case get_vote(User, PollId) of

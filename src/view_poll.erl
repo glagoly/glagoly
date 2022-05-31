@@ -11,7 +11,6 @@
 poll_id() -> nitro:to_list(nitro:qc(id)).
 
 poll() ->
-    io:format("ID: ~p~n", [poll_id()]),
     case kvs:get(poll, poll_id()) of
         {ok, Poll} -> Poll;
         _ -> undefined
@@ -154,6 +153,14 @@ main() ->
     end.
 
 event(init) ->
+    case poll() of
+        undefined -> nitro:redirect("404.html");
+        _ -> case polls:get_ballot(usr:id(), poll_id()) of
+            #{} -> event(view_vote);
+            _ -> event(view_results)
+        end
+    end;
+event(view_vote) ->
     Poll = poll(),
     io:format("ID: ~p~n", [usr:id()]),
     Title = nitro:hte(Poll#poll.title),
@@ -161,11 +168,6 @@ event(init) ->
     nitro:update(alts, alts_panel()),
     nitro:insert_bottom(bottom, add_alt_form()),
     nitro:insert_bottom(bottom, vote_form("denys", true));
-event(view_vote) ->
-    Poll = poll(),
-    Alts = polls:alts(Poll#poll.id),
-    Vote = polls:get_vote(usr:id(), poll_id()),
-    view_common:wf_update(results_panel, edit_panel(Poll, Vote, Alts));
 event(view_results) ->
     Poll = poll(),
     nitro:update(top, title(polls:title(Poll))),
@@ -214,8 +216,8 @@ event({alt, Op, Id}) ->
 %         view_common:wf_update(?ALT_ID(Alt, ""), alt(Alt, maps:get(Alt#alt.id, B, 0), true))
 %     end);
 
-event(Unk) ->
-    io:format("Unknown event: ~p~n", [Unk]).
+event(_) ->
+    ok.
 
 alt_event(edit, Alt) -> edit_alt_form(Alt);
 alt_event(cancel_edit, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true);
@@ -224,7 +226,7 @@ alt_event(delete, Alt) -> restore_alt(Alt);
 alt_event(restore, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true).
 
 filter_votes(Votes) ->
-    % to pairs of ints
+    % to pairs {list(), int()}
     P1 = [{nitro:to_list(A), filter:in_range(binary_to_integer(V), -3, 7)} || [A, V] <- Votes],
     lists:filter(fun({A, V}) -> (V /= 0) end, P1).
 
