@@ -1,9 +1,23 @@
 :root {
     --bs-brand: #801f4f;
+    --bs-brand-shade: #731C47;
 }
 
 .bg_brand {
     background-color: var(--bs-brand) !important;  
+}
+
+.btn_brand {
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: var(--bs-brand);
+    --bs-btn-border-color: var(--bs-brand);
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg: var(--bs-brand-shade);
+    --bs-btn-hover-border-color: var(--bs-brand-shade);
+    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: var(--bs-brand-shade);
+    --bs-btn-active-border-color: var(--bs-brand-shade);
 }
 
 .main {

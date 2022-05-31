@@ -49,18 +49,15 @@ poll(Poll) ->
                         body = [
                             nitro:hte(polls:title(Poll)),
                             #br{},
+                            #link{
+                                class = 'btn btn_brand btn-sm float-end',
+                                body = ?T("Results"),
+                                href = "poll.html?id=" ++ polls:id(Poll)
+                            },
                             #span{class = 'small text-muted', body = nitro:hte(polls:name(Poll))}
                         ]
                     }
                 ]
-            },
-            #panel{
-                class = 'card-footer text-end',
-                body = #link{
-                    class = 'btn btn-primary btn-sm',
-                    body = ?T("Results"),
-                    href = "poll.html?id=" ++ polls:id(Poll)
-                }
             }
         ]
     }.
