@@ -10,6 +10,10 @@
     max-width: 540px;
 }
 
+.main_body {
+    min-height: 80vh;
+}
+
 .dotted, .dotted:hover {
   text-decoration-style: dotted
 }

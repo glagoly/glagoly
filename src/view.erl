@@ -47,12 +47,12 @@ title_input(Title) ->
             #input{
                 id = title,
                 data_fields = [{maxlength, ?TITLE_MAX_LENGTH}],
-                class = 'form-control form-control-lg mb-2',
+                class = 'form-control form-control-lg mb-2 mt-3',
                 placeholder = nitro:hte(Title),
                 value = nitro:hte(Title)
             },
             #p{
-                class = 'lead mb-4',
+                class = 'lead mb-3',
                 body = [?T("Try:"), " &laquo;", lists:join("&raquo;, &laquo;", Samples), "&raquo;"]
             }
         ]
@@ -61,7 +61,7 @@ title_input(Title) ->
 login_panel() ->
     #panel{
         id = login_panel,
-        class = 'mb-3',
+        class = 'mb-2',
         body = [
             #h2{class = 'display-6', body = ?T("Remember me")},
             #p{body = ?T(remember_me_info)},
