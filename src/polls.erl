@@ -125,7 +125,9 @@ get_vote(User, Poll) ->
         _ -> #vote{}
     end.
 
-get_ballot(User, Poll) -> Vote = get_vote(User, Poll), maps:from_list(Vote#vote.ballot).
+get_ballot(User, Poll) ->
+    Vote = get_vote(User, Poll),
+    maps:from_list(Vote#vote.ballot).
 
 put_vote(User, PollId, Name, Ballot) ->
     case get_vote(User, PollId) of

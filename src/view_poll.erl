@@ -11,10 +11,8 @@
 poll_id() -> nitro:to_list(nitro:qc(id)).
 
 poll() ->
-    case kvs:get(poll, poll_id()) of
-        {ok, Poll} -> Poll;
-        _ -> undefined
-    end.
+    {ok, Poll} = kvs:get(poll, poll_id()),
+    Poll.
 
 author(I, _, I) ->
     <<"<i>I</i>">>;
@@ -23,9 +21,6 @@ author(User, Poll, _) ->
         #vote{name = []} -> <<"anonymous">>;
         #vote{name = Name} -> wf:html_encode(Name)
     end.
-
-title(User, Poll) ->
-    T = wf:html_encode(Poll#poll.title).
 
 update_title(Poll, Title) ->
     User = usr:id(),
@@ -44,7 +39,6 @@ edit_panel(Poll, Vote, Alts) ->
             html_tag = <<"form">>,
             data_fields = [{onsubmit, "voteSubmit(event);"}],
             body = [
-                title(User, Poll),
                 % alts(User, Poll, Alts, Vote),
                 add_alt_form(),
                 vote_form(Vote#vote.name, Alts)
@@ -153,18 +147,22 @@ main() ->
     end.
 
 event(init) ->
-    case poll() of
-        undefined -> nitro:redirect("404.html");
-        _ -> case polls:get_ballot(usr:id(), poll_id()) of
-            #{} -> event(view_vote);
-            _ -> event(view_results)
-        end
+    case kvs:get(poll, poll_id()) of
+        {ok, _} ->
+            view:init(navbar),
+            case polls:get_ballot(usr:id(), poll_id()) of
+                #{} -> event(view_vote);
+                _ -> event(view_results)
+            end;
+        _ ->
+            nitro:redirect("404.html")
     end;
 event(view_vote) ->
     Poll = poll(),
-    io:format("ID: ~p~n", [usr:id()]),
-    Title = nitro:hte(Poll#poll.title),
-    nitro:update(top, view:title_input(Title)),
+    case polls:can_edit(usr:id(), Poll) of
+        true -> nitro:update(top, title_input(Poll));
+        _ -> nitro:update(top, title(Poll))
+    end,
     nitro:update(alts, alts_panel()),
     nitro:insert_bottom(bottom, add_alt_form()),
     nitro:insert_bottom(bottom, vote_form("denys", true));
@@ -255,8 +253,17 @@ api_event(vote, Data, _) ->
 %%% HTML Components
 %%%=============================================================================
 
-title(Title) ->
-    #h1{id = top, body = nitro:hte(Title), class = 'display-5 mb-3 mt-3'}.
+title_input(Poll) ->
+    #panel{id = top, body = view:title_input(polls:title(Poll))}.
+
+title(Poll) ->
+    #panel{
+        id = top,
+        body = [
+            #h1{class = 'display-5 mt-3', body = nitro:hte(polls:title(Poll))},
+            #p{class = 'lead text-muted mb-3', body = nitro:hte(polls:name(Poll))}
+        ]
+    }.
 
 badge_class(I) ->
     if

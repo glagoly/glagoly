@@ -1,4 +1,4 @@
--define(ID_LENGTH, 7).
+-define(ID_LENGTH, 8).
 -define(TITLE_MAX_LENGTH, 64).
 -define(ALT_MAX_LENGTH, 128).
 -define(NAME_MAX_LENGTH, 32).
