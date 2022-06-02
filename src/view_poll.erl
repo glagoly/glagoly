@@ -159,11 +159,15 @@ event(init) ->
     end;
 event(view_vote) ->
     Poll = poll(),
+    User = usr:id(),
     case polls:can_edit(usr:id(), Poll) of
         true -> nitro:update(top, title_input(Poll));
         _ -> nitro:update(top, title(Poll))
     end,
-    nitro:update(alts, alts_panel()),
+    nitro:clear(alts),
+    Alts = polls:user_alts(User, poll_id(), usr:seed()),
+    [nitro:insert_bottom(alts, alt(Alt, V, polls:can_edit(User, Poll, Alt))) || {V, Alt} <- Alts],
+    nitro:clear(bottom),
     nitro:insert_bottom(bottom, add_alt_form()),
     nitro:insert_bottom(bottom, vote_form("denys", true));
 event(view_results) ->
@@ -327,11 +331,14 @@ result(Alt, Vote, Voters) ->
         ]
     }.
 
-alts_panel() ->
-    Poll = poll(),
-    Alts = polls:user_alts(usr:id(), poll_id(), usr:seed()),
-    #panel{
-        id = alts, body = [alt(Alt, V, polls:can_edit(usr:id(), Poll, Alt)) || {V, Alt} <- Alts]
+alt_p(Alt) ->
+    #p{
+        class = 'card-text',
+        body = [
+            nitro:hte(polls:text(Alt)),
+            #br{},
+            #span{class = 'small text-muted', body = nitro:hte(polls:name(Alt))}
+        ]
     }.
 
 alt(Alt, Vote, CanEdit) ->
@@ -348,14 +355,7 @@ alt(Alt, Vote, CanEdit) ->
                         body = ?T("edit"),
                         postback = {alt, edit, polls:id(Alt)}
                     },
-                    #p{
-                        class = 'card-text',
-                        body = [
-                            polls:text(Alt),
-                            #br{},
-                            #span{class = 'small text-muted', body = nitro:hte(polls:name(Alt))}
-                        ]
-                    }
+                    alt_p(Alt)
                 ]
             },
             #panel{
@@ -435,7 +435,7 @@ edit_alt_form(Alt) ->
                         postback = {alt, cancel_edit, polls:id(Alt)}
                     },
                     #button{
-                        class = 'btn btn-primary btn-sm ms-3',
+                        class = 'btn btn_brand btn-sm ms-3',
                         body = ?T("Save"),
                         postback = {alt, save, polls:id(Alt)},
                         source = [?ALT_ID(Alt, new)]
@@ -460,7 +460,7 @@ add_alt_form() ->
                 class = 'card-footer text-end',
                 body = #button{
                     id = send,
-                    class = 'btn btn-primary btn-sm',
+                    class = 'btn btn_brand btn-sm',
                     body = ?T("Add"),
                     postback = add_alt,
                     source = [alt_text]

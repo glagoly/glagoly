@@ -17,6 +17,7 @@
     text/1,
     title/1,
     user_alts/3,
+    vote/2,
     voters/1
 ]).
 
@@ -25,13 +26,14 @@ id(#poll{id = Id}) -> Id.
 
 text(#alt{text = Text}) -> Text.
 
-name(#alt{user = UserId}) ->
-    "anonymous";
+name(#alt{poll = Id, user = UserId}) ->
+    Vote = get_vote(UserId, Id),
+    Vote#vote.name;
 name(#poll{id = Id, user = UserId}) ->
     Vote = get_vote(UserId, Id),
     Vote#vote.name.
 
-vote(UserId, #alt{poll = PollId}) -> 1.
+vote(UserId, #alt{id = Id, poll = PollId}) -> maps:get(Id, get_ballot(UserId, PollId), 0).
 
 title(#poll{title = Title}) -> Title.
 
