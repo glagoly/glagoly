@@ -172,11 +172,11 @@ event(view_vote) ->
     nitro:insert_bottom(bottom, vote_form("denys", true));
 event(view_results) ->
     Poll = poll(),
-    nitro:update(top, title(polls:title(Poll))),
+    nitro:update(top, title(Poll)),
     Result = polls:result(poll_id()),
     nitro:update(alts, results_panel(Result));
 event(add_alt) ->
-    case filter:string(nitro:q(alt_text), 128, []) of
+    case filter:string(nitro:q(alt_text), ?ALT_MAX_LENGTH, []) of
         [] ->
             no;
         Text ->
@@ -184,48 +184,31 @@ event(add_alt) ->
             nitro:insert_bottom(alts, alt(Alt, 0, true)),
             nitro:wire(#jq{target = alt_text, property = value, right = ""})
     end;
-% event(del_alt) ->
-%     alt_event(fun(Poll, Alt) ->
-%         kvs:put(Alt#alt{hidden = true}),
-%         view_common:wf_update(?ALT_ID(Alt, panel), restore_alt(Alt))
-%     end);
 event({alt, Op, Id}) ->
     Poll = poll(),
     Alt = polls:get_alt(Poll, Id),
     true = polls:can_edit(usr:id(), Poll, Alt),
     nitro:update(?ALT_ID(Alt, panel), alt_event(Op, Alt));
-% event(cancel_edit_alt) ->
-%     alt_event(fun(Poll, Alt) ->
-%         view_common:wf_update(?ALT_ID(Alt, text), alt_text(Alt, true))
-%     end);
-% event(update_alt) ->
-%     alt_event(fun(Poll, Alt) ->
-%         Text = filter:string(wf:q(?ALT_ID(Alt, new)), 128, []),
-%         case Text of
-%             [] ->
-%                 no;
-%             T ->
-%                 New = Alt#alt{user = usr:id(), text = T},
-%                 kvs:put(New),
-%                 view_common:wf_update(?ALT_ID(Alt, text), alt_text(New, true))
-%         end
-%     end);
-% event(restore_alt) ->
-%     alt_event(fun(Poll, Alt) ->
-%         kvs:put(Alt#alt{hidden = false}),
-%         V = polls:get_vote(usr:id(), poll_id()),
-%         B = maps:from_list(V#vote.ballot),
-%         view_common:wf_update(?ALT_ID(Alt, ""), alt(Alt, maps:get(Alt#alt.id, B, 0), true))
-%     end);
-
 event(_) ->
     ok.
 
-alt_event(edit, Alt) -> edit_alt_form(Alt);
-alt_event(cancel_edit, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true);
-alt_event(save, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true);
-alt_event(delete, Alt) -> restore_alt(Alt);
-alt_event(restore, Alt) -> alt(Alt, polls:vote(usr:id(), Alt), true).
+alt_event(edit, Alt) ->
+    edit_alt_form(Alt);
+alt_event(cancel_edit, Alt) ->
+    alt(Alt, polls:vote(usr:id(), Alt), true);
+alt_event(save, Alt) ->
+    New =
+        case filter:string(nitro:q(?ALT_ID(Alt, new)), ?ALT_MAX_LENGTH, []) of
+            [] -> Alt;
+            T -> polls:update(Alt, usr:id(), T)
+        end,
+    alt(New, polls:vote(usr:id(), New), true);
+alt_event(delete, Alt) ->
+    polls:delete(Alt),
+    restore_alt(Alt);
+alt_event(restore, Alt) ->
+    polls:restore(Alt),
+    alt(Alt, polls:vote(usr:id(), Alt), true).
 
 filter_votes(Votes) ->
     % to pairs {list(), int()}

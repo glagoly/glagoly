@@ -6,6 +6,7 @@
     append_alt/3,
     can_edit/2, can_edit/3,
     create/2,
+    delete/1,
     get/1,
     get_alt/2,
     get_ballot/2,
@@ -14,8 +15,10 @@
     name/1,
     put_vote/4,
     result/1,
+    restore/1,
     text/1,
     title/1,
+    update/3,
     user_alts/3,
     vote/2,
     voters/1
@@ -40,6 +43,14 @@ title(#poll{title = Title}) -> Title.
 get(#my_poll{id = {_, PollId}}) ->
     {ok, Poll} = kvs:get(poll, PollId),
     Poll.
+
+delete(Alt) when is_record(Alt, alt) -> kvs:put(Alt#alt{status = deleted}).
+restore(Alt) when is_record(Alt, alt) -> kvs:put(Alt#alt{status = ok}).
+
+update(Alt, User, Text) ->
+    New = Alt#alt{user = User, text = Text},
+    kvs:put(New),
+    New.
 
 can_edit(User, #poll{user = Author}) -> Author == User.
 can_edit(User, Poll, #alt{user = Author}) -> can_edit(User, Poll) or (Author == User).
@@ -115,7 +126,7 @@ user_alts(User, Poll, Seed) ->
             Alts
         )
     ),
-    lists:reverse([{Ballot, Alt} || {Ballot, _, Alt} <- List]).
+    lists:reverse([{B, Alt} || {B, _, Alt} <- List]).
 
 votes_feed(PollId) -> "/poll/" ++ PollId ++ "/votes".
 
