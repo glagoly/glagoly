@@ -18,6 +18,7 @@
     restore/1,
     text/1,
     title/1,
+    update/2,
     update/3,
     user_alts/3,
     vote/2,
@@ -73,6 +74,8 @@ create(User, Title) ->
     Id = new_id(),
     kvs:put(#poll{id = Id, user = User, title = Title}),
     Id.
+
+update(Poll, Title) when is_record(Poll, poll) -> kvs:put(Poll#poll{title = Title}).
 
 get_alt(#poll{id = PollId}, Id) ->
     {ok, Alt} = kvs:get(alt, Id),

@@ -13,6 +13,12 @@ trans("Save") -> <<"Зберегти"/utf8>>;
 trans("My polls") -> <<"Мої опитування"/utf8>>;
 trans("Results") -> <<"Результати"/utf8>>;
 
+trans("Change vote") -> <<"Змінити голос"/utf8>>;
+trans("Restore") -> <<"Відновити"/utf8>>;
+trans("deleted alterntive.") -> <<"видалений варіант."/utf8>>;
+
+trans("Please enter your name") -> <<"Будь-ласка вкажіть ваше ім'я."/utf8>>;
+
 trans(title_samples) -> title_samples();
 trans(title_sample) -> <<"Де і коли зустрічаємось?"/utf8>>;
 
@@ -26,7 +32,6 @@ trans("Try:") -> <<"Спробуйте:"/utf8>>;
 trans("Add my alternative") -> <<"Додати свій варіант"/utf8>>;
 trans("Add") -> <<"Додати"/utf8>>;
 trans("Your name") -> <<"Ваше ім'я"/utf8>>;
-trans("(required)") -> <<"(обов'язково)"/utf8>>;
 
 trans("poll") -> <<"опитування"/utf8>>;
 

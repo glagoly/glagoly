@@ -28,7 +28,7 @@ event(logout) ->
 event(create_poll) ->
     Title = filter:string(nitro:q(title), 128, ?T(title_sample)),
     Id = polls:create(usr:ensure(), Title),
-    nitro:redirect("poll.html?id=" ++ Id);
+    nitro:redirect("poll.html?new=1&id=" ++ Id);
 event(_) ->
     ok.
 
