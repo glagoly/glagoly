@@ -45,7 +45,11 @@ event(view_results) ->
     nitro:update(alts, results_panel(Result)),
     nitro:clear(bottom),
     nitro:insert_bottom(bottom, change_button()),
-    view:insert_bottom(bottom, login_panel);
+    view:insert_bottom(bottom, login_panel),
+    case polls:can_edit(usr:id(), Poll) of
+        true -> nitro:insert_bottom(bottom, share_panel(Poll));
+        _ -> view:insert_bottom(bottom, create_panel)
+    end;
 event(add_alt) ->
     case filter:string(nitro:q(alt_text), ?ALT_MAX_LENGTH, []) of
         [] ->
@@ -354,3 +358,24 @@ vote_form(Name, IsNew) ->
 
 change_button() ->
     #button{class = 'btn btn_brand w-100 mb-4', body = ?T("Change vote"), postback = view_vote}.
+
+share_panel(Poll) ->
+    #panel{
+        id = share_panel,
+        class = 'mb-3',
+        body = [
+            #h2{class = 'display-6', body = ?T("Invite others")},
+            #p{body = ?T(share_info)},
+            #textbox{
+                id = share_url,
+                class = 'form-control form-control-lg mb-3 text-center',
+                disabled = [],
+                readonly = true,
+                data_fields = [{'data-text', ?T("Copied...")}],
+                value = nitro:to_list(["https://glagoly.com/", polls:id(Poll)])
+            },
+            #button{
+                class = 'btn btn-success w-100', body = ?T("Copy"), onclick = 'copy_share();'
+            }
+        ]
+    }.

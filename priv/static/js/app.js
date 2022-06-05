@@ -1,11 +1,12 @@
 /**
-* Event helpers
-*/
-
+ * Event helpers
+ */
 function onSliderChange(slider) {
     // fix scroll bug
     // see: https://stackoverflow.com/questions/70914750/prevent-scroll-jump-on-range-input-on-android
-    slider.focus({preventScroll: true});
+    slider.focus({
+        preventScroll: true
+    });
 
     var text = qi(slider.id.replace('slider', 'badge'));
     text.classList.remove('bg-success');
@@ -15,12 +16,12 @@ function onSliderChange(slider) {
         text.classList.add('bg-success');
         text.innerHTML = "+" + slider.value;
     }
-    
+
     if (slider.value < 0) {
         text.classList.add('bg-danger');
         text.innerHTML = "&minus;" + (-slider.value);
     }
-    
+
     if (slider.value == 0) {
         text.innerHTML = "&empty;";
     }
@@ -47,22 +48,45 @@ function voteSubmit(event) {
     });
 };
 
+function text_alert(input, value) {
+    var text = input.value;
+    input.value = value;
+    setTimeout(function() {
+        input.value = text;
+
+        input.focus();
+        input.select();
+    }, 1000);
+}
+
+function copy_share() {
+    var share_url = qi('share_url');
+    navigator.clipboard.writeText(share_url.value).then(function() {
+        text_alert(share_url, share_url.dataset.text);
+    }, function(err) {
+        text_alert(share_url, "ERROR");
+    });
+};
+
 function update_title_input(link) {
     qi('title').value = link.innerHTML;
 };
 
 /**
-* Facebook sdk
-*/
+ * Facebook sdk
+ */
 
 function fb_init() {
     if (window.FB) {
         return FB.XFBML.parse();
     }
-    (function(d, s, id){
+    (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
         js.src = "https://connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
@@ -90,19 +114,25 @@ function statusChangeCallback(response) {
 
 function checkLoginState() {
     FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
+        statusChangeCallback(response);
     });
 }
 
 /**
-* Google Analytics
-*/
+ * Google Analytics
+ */
 
 if (document.location.hostname !== 'localhost') {
-    (function(e,t,n,i,s,a,c){e[n]=e[n]||function(){(e[n].q=e[n].q||[]).push(arguments)}
-    ;a=t.createElement(i);c=t.getElementsByTagName(i)[0];a.async=true;a.src=s
-    ;c.parentNode.insertBefore(a,c)
-    })(window,document,"galite","script","https://cdn.jsdelivr.net/npm/ga-lite@2/dist/ga-lite.min.js");
+    (function(e, t, n, i, s, a, c) {
+        e[n] = e[n] || function() {
+            (e[n].q = e[n].q || []).push(arguments)
+        };
+        a = t.createElement(i);
+        c = t.getElementsByTagName(i)[0];
+        a.async = true;
+        a.src = s;
+        c.parentNode.insertBefore(a, c)
+    })(window, document, "galite", "script", "https://cdn.jsdelivr.net/npm/ga-lite@2/dist/ga-lite.min.js");
 
     galite('create', 'UA-111273395-1', 'auto');
     galite('send', 'pageview');
