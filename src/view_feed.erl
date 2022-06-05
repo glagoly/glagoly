@@ -10,15 +10,8 @@ event(init) ->
             nitro:redirect("./");
         User ->
             nitro:clear(top),
-            case usr:state() of
-                temp ->
-                    nitro:insert_bottom(top, view:login_panel()),
-                    view:init(fb);
-                _ ->
-                    already
-            end,
-            nitro:insert_bottom(top, view:create_panel()),
-            view:init(navbar),
+            view:insert_bottom(top, login_panel),
+            view:insert_bottom(top, create_panel),
             case polls:my(User) of
                 [] ->
                     empty;

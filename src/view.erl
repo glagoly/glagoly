@@ -1,6 +1,6 @@
 -module(view).
 
--export([init/1, event/1, api_event/3, create_panel/0, login_panel/0, title_input/1]).
+-export([init/1, event/1, api_event/3, create_panel/0, insert_bottom/2, title_input/1]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
@@ -11,12 +11,28 @@ init(fb) ->
     nitro:wire("fb_init();");
 init(navbar) ->
     nitro:clear(nav_links),
-    nitro:insert_bottom(nav_links, #li{
-        class = 'nav-item',
-        body = #link{
-            class = 'nav-link', body = ?T("Log out"), postback = logout, delegate = view
-        }
-    }).
+    case usr:state() of
+        guest ->
+            no;
+        _ ->
+            nitro:insert_bottom(nav_links, #li{
+                class = 'nav-item',
+                body = #link{
+                    class = 'nav-link', body = ?T("Log out"), postback = logout, delegate = view
+                }
+            })
+    end.
+
+insert_bottom(Id, create_panel) ->
+    nitro:insert_bottom(Id, view:create_panel());
+insert_bottom(Id, login_panel) ->
+    case usr:state() of
+        pers ->
+            already;
+        _ ->
+            nitro:insert_bottom(Id, login_panel()),
+            view:init(fb)
+    end.
 
 api_event(fb_login, Token, _) ->
     usr:fb_login(Token),

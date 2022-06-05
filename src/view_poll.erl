@@ -44,7 +44,8 @@ event(view_results) ->
     Result = polls:result(poll_id()),
     nitro:update(alts, results_panel(Result)),
     nitro:clear(bottom),
-    nitro:insert_bottom(bottom, change_button());
+    nitro:insert_bottom(bottom, change_button()),
+    view:insert_bottom(bottom, login_panel);
 event(add_alt) ->
     case filter:string(nitro:q(alt_text), ?ALT_MAX_LENGTH, []) of
         [] ->
@@ -352,4 +353,4 @@ vote_form(Name, IsNew) ->
     ].
 
 change_button() ->
-    #button{class = 'btn btn_brand w-100', body = ?T("Change vote"), postback = view_vote}.
+    #button{class = 'btn btn_brand w-100 mb-4', body = ?T("Change vote"), postback = view_vote}.

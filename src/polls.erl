@@ -12,7 +12,7 @@
     get_ballot/2,
     id/1,
     my/1,
-    name/1,
+    name/1, name/2,
     put_vote/4,
     result/1,
     restore/1,
@@ -30,12 +30,10 @@ id(#poll{id = Id}) -> Id.
 
 text(#alt{text = Text}) -> Text.
 
-name(#alt{poll = Id, user = UserId}) ->
-    Vote = get_vote(UserId, Id),
-    Vote#vote.name;
-name(#poll{id = Id, user = UserId}) ->
-    Vote = get_vote(UserId, Id),
-    Vote#vote.name.
+name(UserId, PollId) -> (get_vote(UserId, PollId))#vote.name.
+
+name(#alt{poll = Id, user = UserId}) -> name(UserId, Id);
+name(#poll{id = Id, user = UserId}) -> name(UserId, Id).
 
 vote(UserId, #alt{id = Id, poll = PollId}) -> maps:get(Id, get_ballot(UserId, PollId), 0).
 

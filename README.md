@@ -20,3 +20,5 @@ Start the app (localhost:8001/app/index.html):
     _build/default/rel/prod/bin/prod daemon
 
     CTRL-D 
+    _build/default/rel/prod/bin/prod restart
+
