@@ -1,0 +1,69 @@
+:root {
+    --bs-brand: #801f4f;
+    --bs-brand-shade: #731C47;
+}
+
+.bg_brand {
+    background-color: var(--bs-brand) !important;  
+}
+
+.btn_brand {
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: var(--bs-brand);
+    --bs-btn-border-color: var(--bs-brand);
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg: var(--bs-brand-shade);
+    --bs-btn-hover-border-color: var(--bs-brand-shade);
+    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: var(--bs-brand-shade);
+    --bs-btn-active-border-color: var(--bs-brand-shade);
+}
+
+.main {
+    max-width: 540px;
+}
+
+.main_body {
+    min-height: 80vh;
+}
+
+.dotted, .dotted:hover {
+  text-decoration-style: dotted
+}
+
+.navbar {
+    margin-bottom: 1rem;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+/**
+ * index.html
+ */
+
+.index_cta {
+    color: var(--bs-white);
+}
+
+.index_cta img {
+    height: 1em;
+}
+
+.fb_wrapper {
+    min-height: 50px;
+}
+.fb-login-button {
+    color: var(--bs-white);
+    min-height: 40px;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Helvetica, Arial, sans-serif;
+    letter-spacing: .25px;
+    background-color: #1877f2;
+    min-width: 260px;
+    text-align: center;
+    vertical-align: middle;
+}

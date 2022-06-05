@@ -1,42 +1,21 @@
 {
   "name": "glagoly",
-  "version": "1.0.0",
-  "description": "Glagoly online decision making platform",
-  "main": "gulpfile.js",
+  "version": "0.9.0",
+  "description": "Online decision making platform",
   "scripts": {
-    "start": "gulp",
-    "mad": "./mad com pla rep",
-    "build": "gulp build --production"
-  },
-  "author": "Denys Potapov <denys.potapov@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "autoprefixer": "^9.1.5",
-    "browser-sync": "^2.26.13",
-    "foundation-sites": "^6.6.0",
-    "gulp": "^4.0.0",
-    "gulp-clean-css": "^3.3.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-if": "^2.0.0",
-    "gulp-imagemin": "^4.1.0",
-    "gulp-load-plugins": "^1.1.0",
-    "gulp-postcss": "^8.0.0",
-    "gulp-sass": "^4.0.1",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.2",
-    "motion-ui": "^2.0.3",
-    "raw-loader": "^4.0.2",
-    "rimraf": "^2.4.3",
-    "vinyl-named": "^1.1.0",
-    "webpack": "^4.20.2",
-    "webpack-stream": "^5.1.1",
-    "yargs": "^12.0.2"
+    "js": "uglifyjs _build/default/lib/n2o/priv/utf8.js _build/default/lib/n2o/priv/bert.js _build/default/lib/n2o/priv/heart.js _build/default/lib/n2o/priv/ieee754.js _build/default/lib/n2o/priv/n2o.js _build/default/lib/n2o/priv/ftp.js _build/default/lib/nitro/priv/js/nitro.js -o priv/static/js/lib.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/glagoly/glagoly.git"
+    "url": "git+https://github.com/glagoly/glagoly.git"
   },
+  "author": "Denys Potapov <denys.potapov@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/glagoly/glagoly/issues"
+  },
+  "homepage": "https://github.com/glagoly/glagoly",
+  "devDependencies": {
+    "uglify-js": "^3.15.0"
   }
 }

@@ -14,5 +14,13 @@ sample
 .rebar
 .eunit
 
+_build/
+*.beam
+rebar3
+
 # Mnesia
 Mnesia*
+
+# parcel
+.parcel-cache/
+dist/
