@@ -1,39 +1,22 @@
 # glagoly - online voting platform
 
-## Requirments
-
-Install npm or update npm to latest version:
-
-    sudo npm install npm -g
-
-After you get them insall npm dependencies:
-    
-    npm i
+## Local run
 
 Start the app (localhost:8001/app/index.html):
 
     ./rebar3 shell
     c(view_index).
 
-Prerequirements:
-
-    sudo apt install inotify-tools
-
-## Build front
-
-    npm run build
-
-## On prod
+### Build front js
     
-    cd /var/www/html/glagoly/
-    make console
-    make start
+    npm i
+    npm run js
 
-## requirments
+## Update on prod
+    
+    cd /var/www/glagoly/
 
-    wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+    rebar3 release
+    _build/default/rel/prod/bin/prod daemon
 
-    sudo apt-get update
-
-    sudo apt-get install make inotify-tools esl-erlang
-
+    CTRL-D 
