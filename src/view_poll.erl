@@ -37,7 +37,7 @@ event(view_vote) ->
     [nitro:insert_bottom(alts, alt(Alt, V, polls:can_edit(User, Poll, Alt))) || {V, Alt} <- Alts],
     nitro:clear(bottom),
     nitro:insert_bottom(bottom, add_alt_form()),
-    nitro:insert_bottom(bottom, vote_form(polls:name(Poll), nitro:qc(new) /= undefined));
+    nitro:insert_bottom(bottom, vote_form(polls:name(User, poll_id()), nitro:qc(new) /= undefined));
 event(view_results) ->
     Poll = poll(),
     nitro:update(top, title(Poll)),

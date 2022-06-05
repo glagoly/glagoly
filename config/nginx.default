@@ -1,5 +1,6 @@
 # /etc/nginx/sites-available/default
 
+# websocket upgrade
 map $http_upgrade $connection_upgrade {
     default upgrade;
     '' close;
