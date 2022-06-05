@@ -41,8 +41,15 @@ event(view_vote) ->
 event(view_results) ->
     Poll = poll(),
     nitro:update(top, title(Poll)),
+    nitro:clear(alts),
     Result = polls:result(poll_id()),
-    nitro:update(alts, results_panel(Result)),
+    Voters = polls:voters(poll_id()),
+    [
+        nitro:insert_bottom(
+            alts, result(polls:get_alt(Poll, AltId), V, maps:get(AltId, Voters, []))
+        )
+     || {V, AltId} <- Result
+    ],
     nitro:clear(bottom),
     nitro:insert_bottom(bottom, change_button()),
     view:insert_bottom(bottom, login_panel),
@@ -134,18 +141,10 @@ badge_class(I) ->
         I == 0 -> ''
     end.
 
-results_panel(Result) ->
-    Poll = poll(),
-    Voters = polls:voters(poll_id()),
-    #panel{
-        id = alts,
-        body = [
-            result(polls:get_alt(Poll, AltId), V, maps:get(AltId, Voters, []))
-         || {V, AltId} <- Result
-        ]
-    }.
-
-voter({Name, Vote}) -> #span{body = [nitro:hte(Name), " ", filter:pretty_int(Vote)]}.
+voter({Name, Vote}) when Vote < 0 ->
+    #span{class = 'text-muted', body = [nitro:hte(Name), " ", filter:pretty_int(Vote)]};
+voter({Name, Vote}) ->
+    #span{body = [nitro:hte(Name), " ", filter:pretty_int(Vote)]}.
 
 result(Alt, Vote, Voters) ->
     #panel{
@@ -170,7 +169,7 @@ result(Alt, Vote, Voters) ->
                             }
                         },
                         #panel{
-                            class = 'col-10',
+                            class = 'col-10 small',
                             body = lists:join(", ", [voter(V) || V <- Voters])
                         }
                     ]

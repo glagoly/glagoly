@@ -30,17 +30,20 @@ seed() -> erlang:binary_to_integer(n2o:sid(), 16).
 logout() -> n2o:user(undefined).
 
 login(Creds, Data) ->
-    NewId =
+    PersId =
         case kvs:get(login, Creds) of
             {ok, #login{user = UserId}} ->
-                % merge user here
+                case id() of
+                    guest -> ok;
+                    TempId -> polls:merge_user(UserId, TempId)
+                end,
                 UserId;
             _ ->
                 UserId = ensure(),
                 kvs:put(#login{creds = Creds, user = UserId, data = Data}),
                 UserId
         end,
-    n2o:user({pers, NewId}).
+    n2o:user({pers, PersId}).
 
 fb_login(Token) ->
     Token2 = jsone:decode(list_to_binary(Token)),

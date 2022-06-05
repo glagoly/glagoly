@@ -11,6 +11,7 @@
     get_alt/2,
     get_ballot/2,
     id/1,
+    merge_user/2,
     my/1,
     name/1, name/2,
     put_vote/4,
@@ -92,9 +93,16 @@ append_alt(PollId, Text, User) ->
 result(PollId) ->
     AltIds = [Alt#alt.id || Alt <- alts(PollId)],
     Ballots = [V#vote.ballot || V <- votes(PollId)],
-    Core = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), AltIds),
-    Core2 = lists:foldl(fun vote_core:add_ballot/2, Core, Ballots),
-    vote_core:result(Core2).
+    case Ballots of
+        [Single] ->
+            Ballot = maps:from_list(Single),
+            Result = [{maps:get(AltId, Ballot, 0), AltId} || AltId <- AltIds],
+            lists:reverse(lists:sort(Result));
+        _ ->
+            Core = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), AltIds),
+            Core2 = lists:foldl(fun vote_core:add_ballot/2, Core, Ballots),
+            vote_core:result(Core2)
+    end.
 
 voters(Id) ->
     Votes = votes(Id),
@@ -131,7 +139,7 @@ user_alts(User, Poll, Seed) ->
 
 votes_feed(PollId) -> "/poll/" ++ PollId ++ "/votes".
 
-votes(PollId) -> kvs:feed(votes_feed(PollId)).
+votes(PollId) -> [V || V <- kvs:feed(votes_feed(PollId)), V#vote.status == ok].
 
 get_vote(User, Poll) ->
     case kvs:get(vote, {User, Poll}) of
@@ -153,18 +161,16 @@ put_vote(User, PollId, Name, Ballot) ->
             kvs:put(Vote#vote{name = Name, ballot = Ballot})
     end.
 
-merge_user(_, undefined) ->
-    no;
-merge_user(Old, New) ->
-    [kvs:put(P#poll{user = Old}) || P <- kvs:index(poll, user, New)],
-    [kvs:put(A#alt{user = Old}) || A <- kvs:index(alt, user, New)],
+merge_user(Pers, Temp) ->
+    [kvs:put(P#poll{user = Pers}) || P <- kvs:index(poll, user, Temp)],
+    [kvs:put(A#alt{user = Pers}) || A <- kvs:index(alt, user, Temp)],
     lists:map(
-        fun(#my_poll{id = {_, P}}) ->
-            V = get_vote(New, P),
-            kvs:remove(vote, V#vote.id),
-            put_vote(Old, P, V#vote.name, V#vote.ballot)
+        fun(#my_poll{id = {_, PollId}}) ->
+            Vote = get_vote(Temp, PollId),
+            kvs:put(Vote#vote{status = changed}),
+            put_vote(Pers, PollId, Vote#vote.name, Vote#vote.ballot)
         end,
-        my(New)
+        my(Temp)
     ).
 
 small_id() ->
