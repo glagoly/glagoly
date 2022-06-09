@@ -33,9 +33,9 @@ login(Creds, Data) ->
     PersId =
         case kvs:get(login, Creds) of
             {ok, #login{user = UserId}} ->
-                case id() of
-                    guest -> ok;
-                    TempId -> polls:merge_user(UserId, TempId)
+                case n2o:user() of
+                    {temp, TempId} -> polls:merge_user(UserId, TempId);
+                    guest -> ok
                 end,
                 UserId;
             _ ->

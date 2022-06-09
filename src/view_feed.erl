@@ -9,6 +9,7 @@ event(init) ->
         guest ->
             nitro:redirect("./");
         User ->
+            view:init(navbar),
             nitro:clear(top),
             view:insert_bottom(top, login_panel),
             view:insert_bottom(top, create_panel),

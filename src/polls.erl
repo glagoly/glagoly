@@ -158,7 +158,8 @@ put_vote(User, PollId, Name, Ballot) ->
             kvs:append(Vote, votes_feed(PollId)),
             add_my(User, PollId);
         Vote ->
-            kvs:put(Vote#vote{name = Name, ballot = Ballot})
+            % restore vote (status = ok) in case it was removed
+            kvs:put(Vote#vote{name = Name, ballot = Ballot, status = ok})
     end.
 
 merge_user(Pers, Temp) ->
