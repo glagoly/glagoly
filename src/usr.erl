@@ -35,7 +35,7 @@ login(Creds, Data) ->
             {ok, #login{user = UserId}} ->
                 case n2o:user() of
                     {temp, TempId} -> polls:merge_user(UserId, TempId);
-                    guest -> ok
+                    _ -> ok
                 end,
                 UserId;
             _ ->
