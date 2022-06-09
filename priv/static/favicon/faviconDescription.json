@@ -1,0 +1,63 @@
+
+
+{
+	"masterPicture": "TODO: Path to your master picture",
+	"iconsPath": "/favicon/",
+	"design": {
+		"ios": {
+			"pictureAspect": "noChange",
+			"assets": {
+				"ios6AndPriorIcons": false,
+				"ios7AndLaterIcons": false,
+				"precomposedIcons": false,
+				"declareOnlyDefaultIcon": true
+			},
+			"appName": "glagoly"
+		},
+		"desktopBrowser": {
+			"design": "raw"
+		},
+		"windows": {
+			"pictureAspect": "noChange",
+			"backgroundColor": "#801f4f",
+			"onConflict": "override",
+			"assets": {
+				"windows80Ie10Tile": false,
+				"windows10Ie11EdgeTiles": {
+					"small": false,
+					"medium": true,
+					"big": false,
+					"rectangle": false
+				}
+			},
+			"appName": "glagoly"
+		},
+		"androidChrome": {
+			"pictureAspect": "shadow",
+			"themeColor": "#801f4f",
+			"manifest": {
+				"name": "glagoly",
+				"display": "standalone",
+				"orientation": "notSet",
+				"onConflict": "override",
+				"declared": true
+			},
+			"assets": {
+				"legacyIcon": false,
+				"lowResolutionIcons": false
+			}
+		},
+		"safariPinnedTab": {
+			"pictureAspect": "blackAndWhite",
+			"threshold": 52.1875,
+			"themeColor": "#801f4f"
+		}
+	},
+	"settings": {
+		"scalingAlgorithm": "Mitchell",
+		"errorOnImageTooSmall": false,
+		"readmeFile": true,
+		"htmlCodeFile": true,
+		"usePathAsIs": false
+	}
+}
