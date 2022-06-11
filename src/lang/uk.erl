@@ -23,7 +23,12 @@ trans(title_samples) -> title_samples();
 trans(title_sample) -> <<"Де і коли зустрічаємось?"/utf8>>;
 
 trans("Invite others") -> <<"Запросити інших"/utf8>>;
-trans(share_info) -> <<"Будь-хто за посиланням може голосувати та додавати свої варіанти."/utf8>>;
+
+trans("Public poll") -> <<"Вільне опитування"/utf8>>;
+trans(public_access_info) -> <<"Будь-хто за посиланням може голосувати та додавати свої варіанти."/utf8>>;
+trans("Verified poll") -> <<"Верифіковане опитування"/utf8>>;
+trans(verified_access_info) -> <<"Після авторизації через фейсбук, можна голосувати і додавати альтернативи."/utf8>>;
+
 trans("Copy") -> <<"Копіювати"/utf8>>;
 trans("Copied...") -> <<"Скопійовано..."/utf8>>;
 

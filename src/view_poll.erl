@@ -37,6 +37,10 @@ event(view_vote) ->
     [nitro:insert_bottom(alts, alt(Alt, V, polls:can_edit(User, Poll, Alt))) || {V, Alt} <- Alts],
     nitro:clear(bottom),
     nitro:insert_bottom(bottom, add_alt_form()),
+    case polls:can_edit(usr:id(), Poll) of
+        true -> nitro:insert_bottom(bottom, access_panel());
+        _ -> none
+    end,
     nitro:insert_bottom(bottom, vote_form(polls:name(User, poll_id()), nitro:qc(new) /= undefined));
 event(view_results) ->
     Poll = poll(),
@@ -313,6 +317,33 @@ add_alt_form() ->
                     source = [alt_text]
                 }
             }
+        ]
+    }.
+
+radio_button(Name, Value, Checked, Text1, Text2) ->
+    Id = nitro:to_list([Name, Value]),
+    #panel{
+        class = 'form-check',
+        body = [
+            #label{
+                class = 'form-check-label',
+                for = Id,
+                body = [
+                    ?T(Text1), <<"<br><small class=\"text-muted\">">>, ?T(Text2), <<"</small>">>
+                ]
+            },
+            #radio{
+                id = Id, class = 'form-check-input', name = Name, value = Value, checked = Checked
+            }
+        ]
+    }.
+
+access_panel() ->
+    #panel{
+        class = 'mt-4',
+        body = [
+            radio_button(access, public, false, "Public poll", public_access_info),
+            radio_button(access, verified, true, "Verified poll", verified_access_info)
         ]
     }.
 
