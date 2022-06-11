@@ -38,7 +38,7 @@ event(view_vote) ->
     nitro:clear(bottom),
     nitro:insert_bottom(bottom, add_alt_form()),
     case polls:can_edit(usr:id(), Poll) of
-        true -> nitro:insert_bottom(bottom, access_panel());
+        true -> nitro:insert_bottom(bottom, access_panel(polls:access(Poll)));
         _ -> none
     end,
     nitro:insert_bottom(bottom, vote_form(polls:name(User, poll_id()), nitro:qc(new) /= undefined));
@@ -111,7 +111,12 @@ api_event(vote, Data, _) ->
             Title = filter:string(
                 maps:get(<<"title">>, Props), ?TITLE_MAX_LENGTH, polls:title(Poll)
             ),
-            polls:update(Poll, Title);
+            Access =
+                case maps:get(<<"access">>, Props) of
+                    <<"verified">> -> verified;
+                    _ -> public
+                end,
+            polls:update(Poll, Title, Access);
         false ->
             ok
     end,
@@ -320,8 +325,8 @@ add_alt_form() ->
         ]
     }.
 
-radio_button(Name, Value, Checked, Text1, Text2) ->
-    Id = nitro:to_list([Name, Value]),
+radio_button(Value, Checked, Text1, Text2) ->
+    Id = nitro:to_list([access, Value]),
     #panel{
         class = 'form-check',
         body = [
@@ -333,17 +338,17 @@ radio_button(Name, Value, Checked, Text1, Text2) ->
                 ]
             },
             #radio{
-                id = Id, class = 'form-check-input', name = Name, value = Value, checked = Checked
+                id = Id, class = 'form-check-input', name = access, value = Value, checked = Checked
             }
         ]
     }.
 
-access_panel() ->
+access_panel(Access) ->
     #panel{
         class = 'mt-4',
         body = [
-            radio_button(access, public, false, "Public poll", public_access_info),
-            radio_button(access, verified, true, "Verified poll", verified_access_info)
+            radio_button(public, (Access == public), "Public poll", public_access_info),
+            radio_button(verified, (Access == verified), "Verified poll", verified_access_info)
         ]
     }.
 

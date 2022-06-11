@@ -41,8 +41,11 @@ function voteSubmit(event) {
         votes.push([sliders[i].id.replace(/\D/g, ''), sliders[i].value]);
     };
 
+    var accessEl = qs('input[name="access"]:checked');
+
     document.vote({
         title: qi('title') ? qi('title').value : '',
+        access: accessEl ? accessEl.value: '',
         name: qi('name').value,
         votes: votes
     });
