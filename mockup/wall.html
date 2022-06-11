@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://glagoly.com/css/app.css">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Опитування Ⰳ глаголі</title>
+    <meta name="description" content="Просте планування зустрічей. Найшвидший спосіб прийняти колективне рішення. Метод Шульце онлайн.">
+
+    <meta property="og:image" content="https://glagoly.com/img/social.poll.png" />
+    <meta property="fb:app_id" content="543950855954497" />
+  </head>
+  <body>
+    <div class="navbar navbar-dark bg_brand">
+      <div class="container main">
+         <a class="navbar-brand" href="feed.html">
+          <img src="img/logo.svg" width="26" height="24" class="align-text-top ms-2 me-2">глаголі</a>
+        <ul id="nav_links" class="navbar-nav"></ul>
+      </div>
+    </div>
+
+<div class="container main main_body">
+  <div id="top">
+    <h1 class="display-5 mt-3">Як вам нова версія?</h1>
+    <p class="lead text-muted mb-3">Денис</p>
+  </div>
+
+  <div id="alts " class="position-relative">
+    <div class="topper position-absolute">
+      <div class="card m-3  mt-5">
+        <div class="card-body">
+            <h3>Будь ласка, aвторизуйтесь</h3>
+            <p>Увійдіть через фейсбук, аби голосувати чи додавати альтернативи.</p>
+            <p class="text-muted">Антон Потапов  </p>
+            
+        </div>
+      </div>
+    </div>
+    <div class="blur">
+    <div id="alt10panel" class="card mb-3">
+      <div class="card-body">
+        <p class="card-text">Наче все як і раніше<br><span class="small text-muted">Денис</span></p>
+      </div>
+      <div class="card-footer">
+        <div class="row align-items-center">
+          <div class="col-2"><h4 class="text-center mb-0"><span id="alt10badge" class="badge bg-secondary ">∅</span></h4></div>
+          <div class="col-10"><input class="form-range" id="alt10slider" max="7" min="-3" step="1" type="range" value="0" oninput="onSliderChange(this)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="alt10panel" class="card mb-3">
+      <div class="card-body">
+        <p class="card-text">Наче все як і раніше<br><span class="small text-muted">Денис</span></p>
+      </div>
+      <div class="card-footer">
+        <div class="row align-items-center">
+          <div class="col-2"><h4 class="text-center mb-0"><span id="alt10badge" class="badge bg-secondary ">∅</span></h4></div>
+          <div class="col-10"><input class="form-range" id="alt10slider" max="7" min="-3" step="1" type="range" value="0" oninput="onSliderChange(this)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="alt10panel" class="card mb-3">
+      <div class="card-body">
+        <p class="card-text">Наче все як і раніше<br><span class="small text-muted">Денис</span></p>
+      </div>
+      <div class="card-footer">
+        <div class="row align-items-center">
+          <div class="col-2"><h4 class="text-center mb-0"><span id="alt10badge" class="badge bg-secondary ">∅</span></h4></div>
+          <div class="col-10"><input class="form-range" id="alt10slider" max="7" min="-3" step="1" type="range" value="0" oninput="onSliderChange(this)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-grid gap-2 mt-4"><button id="auto-404927" type="button" class="btn btn-outline-secondary">Побачити результати</button></div>
+
+      </div>
+    </div>
+
+    <footer class="bg-light border-top pt-3 pb-2 mt-5">
+      <div class="container main text-muted">
+        <p>
+          <a class="text-reset" href="policy.html">privacy policy</a>
+          <a class="text-reset ms-3" href="https://github.com/glagoly/glagoly/issues">github issues</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="js/lib.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      host = location.hostname;
+      port = location.port;
+      debug = (host == 'localhost');
+      persistent = true;
+      tokenStorage = window.localStorage;
+      protos = [$bert];
+      N2O_start();
+    </script>
+  </body>
+</html>
