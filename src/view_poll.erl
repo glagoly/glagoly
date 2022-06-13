@@ -14,13 +14,24 @@ poll() ->
     {ok, Poll} = kvs:get(poll, poll_id()),
     Poll.
 
+can(access, Poll) ->
+    case polls:access(Poll) of
+        verified -> (usr:state() == pers);
+        _ -> true
+    end.
+
 event(init) ->
     case kvs:get(poll, poll_id()) of
-        {ok, _} ->
+        {ok, Poll} ->
             view:init(navbar),
             case polls:get_ballot(usr:id(), poll_id()) of
-                B when map_size(B) == 0 -> event(view_vote);
-                _ -> event(view_results)
+                B when map_size(B) == 0 ->
+                    case can(access, Poll) of
+                        true -> event(view_vote);
+                        false -> event(view_wall)
+                    end;
+                _ ->
+                    event(view_results)
             end;
         _ ->
             nitro:redirect("404.html")

@@ -20,7 +20,7 @@ trans("deleted alterntive.") -> <<"видалений варіант."/utf8>>;
 trans("Please enter your name") -> <<"Будь-ласка вкажіть ваше ім'я."/utf8>>;
 
 trans(title_samples) -> title_samples();
-trans(title_sample) -> <<"Де і коли зустрічаємось?"/utf8>>;
+trans(title_sample) -> <<"Що робимо?"/utf8>>;
 
 trans("Invite others") -> <<"Запросити інших"/utf8>>;
 

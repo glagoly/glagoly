@@ -60,15 +60,16 @@ title_input(Title) ->
     #panel{
         id = title_panel,
         body = [
-            #input{
+            #textarea{
                 id = title,
-                data_fields = [{maxlength, ?TITLE_MAX_LENGTH}],
+                maxlength = ?TITLE_MAX_LENGTH,
                 class = 'form-control form-control-lg mb-2 mt-3',
-                placeholder = nitro:hte(Title),
-                value = nitro:hte(Title)
+                placeholder = ?T(title_sample),
+                value = nitro:hte(Title),
+                rows = 2
             },
             #p{
-                class = 'lead mb-3',
+                class = 'mb-3',
                 body = [?T("Try:"), " &laquo;", lists:join("&raquo;, &laquo;", Samples), "&raquo;"]
             }
         ]
@@ -106,7 +107,7 @@ create_panel() ->
         class = 'mb-3',
         body = [
             #h2{class = 'display-6', body = ?T("Create your poll")},
-            title_input(?T(title_sample)),
+            title_input([]),
             #button{
                 class = 'btn btn-lg btn-success w-100',
                 body = ?T("Create poll"),
