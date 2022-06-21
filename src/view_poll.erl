@@ -143,7 +143,7 @@ api_event(vote, Data, _) ->
 %%%=============================================================================
 
 title_input(Poll) ->
-    #panel{id = top, body = view:title_input(polls:title(Poll))}.
+    #panel{id = top, class='mb-4', body = view:title_input(polls:title(Poll), false)}.
 
 title(Poll) ->
     #panel{

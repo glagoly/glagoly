@@ -1,6 +1,6 @@
 -module(view).
 
--export([init/1, event/1, api_event/3, create_panel/0, insert_bottom/2, title_input/1]).
+-export([init/1, event/1, api_event/3, create_panel/0, insert_bottom/2, title_input/2]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
@@ -42,7 +42,7 @@ event(logout) ->
     usr:logout(),
     nitro:redirect("./");
 event(create_poll) ->
-    Title = filter:string(nitro:q(title), 128, ?T(title_sample)),
+    Title = filter:string(nitro:q(title), ?TITLE_MAX_LENGTH, ?T(title_sample)),
     Id = polls:create(usr:ensure(), Title),
     nitro:redirect("poll.html?new=1&id=" ++ Id);
 event(_) ->
@@ -52,7 +52,7 @@ event(_) ->
 %%% HTML Components
 %%%=============================================================================
 
-title_input(Title) ->
+title_input(Title, ShowSamples) ->
     Samples = [
         #link{class = dotted, onclick = 'update_title_input(this)', body = S}
      || S <- ?T(title_samples)
@@ -65,12 +65,15 @@ title_input(Title) ->
                 maxlength = ?TITLE_MAX_LENGTH,
                 class = 'form-control form-control-lg mb-2 mt-3',
                 placeholder = ?T(title_sample),
-                value = nitro:hte(Title),
+                body = nitro:hte(Title),
                 rows = 2
             },
             #p{
-                class = 'mb-3',
-                body = [?T("Try:"), " &laquo;", lists:join("&raquo;, &laquo;", Samples), "&raquo;"]
+                class = 'mb-3 link-dark',
+                body = case ShowSamples of
+                    true -> [?T("Try:"), " &laquo;", lists:join("&raquo;, &laquo;", Samples), "&raquo;"];
+                    _ -> []
+                end
             }
         ]
     }.
@@ -107,7 +110,7 @@ create_panel() ->
         class = 'mb-3',
         body = [
             #h2{class = 'display-6', body = ?T("Create your poll")},
-            title_input([]),
+            title_input([], true),
             #button{
                 class = 'btn btn-lg btn-success w-100',
                 body = ?T("Create poll"),

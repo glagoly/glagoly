@@ -22,3 +22,7 @@
   z-index: 1;
   width: 100%;
 }
+
+h1, p {
+    word-wrap: break-word;
+}
