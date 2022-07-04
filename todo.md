@@ -3,6 +3,7 @@
 [x] full favicon
 [x] BUG: missing name in voters in Cg0mABta (removed on login of logged in user)
 [x] No logout button on feed.html
+[х] Space as first letter in nane
 
 DONE:
 

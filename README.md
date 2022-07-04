@@ -12,6 +12,11 @@ Start the app (localhost:8001/app/index.html):
     npm i
     npm run js
 
+### Unit tests
+
+    ./rebar3 eunit
+    ./rebar3 eunit --module="filter_tests"
+
 ## Update on prod
     
     cd /var/www/glagoly/
