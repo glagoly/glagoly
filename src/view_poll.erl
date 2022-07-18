@@ -53,6 +53,9 @@ event(view_vote) ->
         _ -> none
     end,
     nitro:insert_bottom(bottom, vote_form(polls:name(User, poll_id()), nitro:qc(new) /= undefined));
+event(view_wall) ->
+    nitro:clear(alts),
+    nitro:insert_bottom(bottom, wall_panel());
 event(view_results) ->
     Poll = poll(),
     nitro:update(top, title(Poll)),
@@ -143,7 +146,7 @@ api_event(vote, Data, _) ->
 %%%=============================================================================
 
 title_input(Poll) ->
-    #panel{id = top, class='mb-4', body = view:title_input(polls:title(Poll), false)}.
+    #panel{id = top, class = 'mb-4', body = view:title_input(polls:title(Poll), false)}.
 
 title(Poll) ->
     #panel{
@@ -411,7 +414,7 @@ share_panel(Poll) ->
         class = 'mb-3',
         body = [
             #h2{class = 'display-6', body = ?T("Invite others")},
-            #p{body = ?T(share_info)},
+            #p{body = ?T(public_access_info)},
             #textbox{
                 id = share_url,
                 class = 'form-control form-control-lg mb-3 text-center',
@@ -423,5 +426,13 @@ share_panel(Poll) ->
             #button{
                 class = 'btn btn-success w-100', body = ?T("Copy"), onclick = 'copy_share();'
             }
+        ]
+    }.
+
+wall_panel() ->
+    #panel{
+        body = [
+            #p{body = "secret poll"},
+            view:fb_login_button()
         ]
     }.

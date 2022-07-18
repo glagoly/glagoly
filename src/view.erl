@@ -1,6 +1,8 @@
 -module(view).
 
--export([init/1, event/1, api_event/3, create_panel/0, insert_bottom/2, title_input/2]).
+-export([
+    init/1, event/1, api_event/3, fb_login_button/0, create_panel/0, insert_bottom/2, title_input/2
+]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
@@ -70,12 +72,38 @@ title_input(Title, ShowSamples) ->
             },
             #p{
                 class = 'mb-3 link-dark',
-                body = case ShowSamples of
-                    true -> [?T("Try:"), " &laquo;", lists:join("&raquo;, &laquo;", Samples), "&raquo;"];
-                    _ -> []
-                end
+                body =
+                    case ShowSamples of
+                        true ->
+                            [
+                                ?T("Try:"),
+                                " &laquo;",
+                                lists:join("&raquo;, &laquo;", Samples),
+                                "&raquo;"
+                            ];
+                        _ ->
+                            []
+                    end
             }
         ]
+    }.
+
+fb_login_button() ->
+    #panel{
+        class = fb_wrapper,
+        body = #panel{
+            class = 'fb-login-button d-inline-block',
+            body = ?T("Login with facebook"),
+            data_fields = [
+                {"data-size", large},
+                {"data-button-type", login_with},
+                {"data-layout", default},
+                {"data-auto-logout-link", false},
+                {"data-use-continue-as", false},
+                {"data-width", "260px"},
+                {"data-onlogin", checkLoginState}
+            ]
+        }
     }.
 
 login_panel() ->
@@ -85,22 +113,7 @@ login_panel() ->
         body = [
             #h2{class = 'display-6', body = ?T("Remember me")},
             #p{body = ?T(remember_me_info)},
-            #panel{
-                class = fb_wrapper,
-                body = #panel{
-                    class = 'fb-login-button d-inline-block',
-                    body = ?T("Login with facebook"),
-                    data_fields = [
-                        {"data-size", large},
-                        {"data-button-type", login_with},
-                        {"data-layout", default},
-                        {"data-auto-logout-link", false},
-                        {"data-use-continue-as", false},
-                        {"data-width", "260px"},
-                        {"data-onlogin", checkLoginState}
-                    ]
-                }
-            }
+            fb_login_button()
         ]
     }.
 
