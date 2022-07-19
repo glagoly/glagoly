@@ -1,16 +1,17 @@
 -module(view).
 
 -export([
-    init/1, event/1, api_event/3, fb_login_button/0, create_panel/0, insert_bottom/2, title_input/2
+    init_fb/1, init/1, event/1, api_event/3, fb_login_button/0, create_panel/0, insert_bottom/2, title_input/2
 ]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
 -include_lib("records.hrl").
 
-init(fb) ->
-    nitro:wire(#api{name = fb_login, delegate = view}),
-    nitro:wire("fb_init();");
+init_fb(Delegate) ->
+    nitro:wire(#api{name = fb_login, delegate = Delegate}),
+    nitro:wire("fb_init();").
+
 init(navbar) ->
     nitro:clear(nav_links),
     case usr:state() of
@@ -33,7 +34,7 @@ insert_bottom(Id, login_panel) ->
             already;
         _ ->
             nitro:insert_bottom(Id, login_panel()),
-            view:init(fb)
+            init_fb(view)
     end.
 
 api_event(fb_login, Token, _) ->

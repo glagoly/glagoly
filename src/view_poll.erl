@@ -55,7 +55,8 @@ event(view_vote) ->
     nitro:insert_bottom(bottom, vote_form(polls:name(User, poll_id()), nitro:qc(new) /= undefined));
 event(view_wall) ->
     nitro:clear(alts),
-    nitro:insert_bottom(bottom, wall_panel());
+    nitro:insert_bottom(bottom, wall_panel()),
+    view:init_fb(view_poll);
 event(view_results) ->
     Poll = poll(),
     nitro:update(top, title(Poll)),
@@ -115,6 +116,9 @@ filter_votes(Votes) ->
     P1 = [{nitro:to_list(A), filter:in_range(binary_to_integer(V), -3, 7)} || [A, V] <- Votes],
     lists:filter(fun({_, V}) -> (V /= 0) end, P1).
 
+api_event(fb_login, Token, _) ->
+    usr:fb_login(Token),
+    event(view_vote);
 api_event(vote, Data, _) ->
     Props = jsone:decode(list_to_binary(Data)),
     User = usr:ensure(),
