@@ -1,7 +1,14 @@
 -module(view).
 
 -export([
-    init_fb/1, init/1, event/1, api_event/3, fb_login_button/0, create_panel/0, insert_bottom/2, title_input/2
+    init_fb/1,
+    init/1,
+    event/1,
+    api_event/3,
+    fb_login_button/0,
+    create_panel/0,
+    insert_bottom/2,
+    title_input/2
 ]).
 
 -include_lib("nitro/include/nitro.hrl").

@@ -22,41 +22,20 @@ can(access, Poll) ->
 
 event(init) ->
     case kvs:get(poll, poll_id()) of
-        {ok, Poll} ->
+        {ok, _} ->
             view:init(navbar),
             case polls:get_ballot(usr:id(), poll_id()) of
-                B when map_size(B) == 0 ->
-                    case can(access, Poll) of
-                        true -> event(view_vote);
-                        false -> event(view_wall)
-                    end;
-                _ ->
-                    event(view_results)
+                B when map_size(B) == 0 -> event(view_vote);
+                _ -> event(view_results)
             end;
         _ ->
             nitro:redirect("404.html")
     end;
 event(view_vote) ->
-    Poll = poll(),
-    User = usr:id(),
-    case polls:can_edit(usr:id(), Poll) of
-        true -> nitro:update(top, title_input(Poll));
-        _ -> nitro:update(top, title(Poll))
-    end,
-    nitro:clear(alts),
-    Alts = polls:user_alts(User, poll_id(), usr:seed()),
-    [nitro:insert_bottom(alts, alt(Alt, V, polls:can_edit(User, Poll, Alt))) || {V, Alt} <- Alts],
-    nitro:clear(bottom),
-    nitro:insert_bottom(bottom, add_alt_form()),
-    case polls:can_edit(usr:id(), Poll) of
-        true -> nitro:insert_bottom(bottom, access_panel(polls:access(Poll)));
-        _ -> none
-    end,
-    nitro:insert_bottom(bottom, vote_form(polls:name(User, poll_id()), nitro:qc(new) /= undefined));
-event(view_wall) ->
-    nitro:clear(alts),
-    nitro:insert_bottom(bottom, wall_panel()),
-    view:init_fb(view_poll);
+    case can(access, poll()) of
+        true -> view_vote();
+        false -> view_wall()
+    end;
 event(view_results) ->
     Poll = poll(),
     nitro:update(top, title(Poll)),
@@ -93,6 +72,32 @@ event({alt, Op, Id}) ->
 event(_) ->
     ok.
 
+view_vote() ->
+    Poll = poll(),
+    User = usr:id(),
+    case polls:can_edit(usr:id(), Poll) of
+        true -> nitro:update(top, title_input(Poll));
+        _ -> nitro:update(top, title(Poll))
+    end,
+    nitro:clear(alts),
+    Alts = polls:user_alts(User, poll_id(), usr:seed()),
+    [nitro:insert_bottom(alts, alt(Alt, V, polls:can_edit(User, Poll, Alt))) || {V, Alt} <- Alts],
+    nitro:clear(bottom),
+    nitro:insert_bottom(bottom, add_alt_form()),
+    case polls:can_edit(usr:id(), Poll) of
+        true -> nitro:insert_bottom(bottom, access_panel(polls:access(Poll)));
+        _ -> none
+    end,
+    nitro:insert_bottom(bottom, vote_form(polls:name(User, poll_id()), nitro:qc(new) /= undefined)).
+
+view_wall() ->
+    Poll = poll(),
+    nitro:update(top, title(Poll)),
+    nitro:clear(alts),
+    nitro:insert_bottom(alts, add_alt_form()),
+    nitro:insert_bottom(bottom, wall_panel()),
+    view:init_fb(view_poll).
+
 alt_event(edit, Alt) ->
     edit_alt_form(Alt);
 alt_event(cancel_edit, Alt) ->
@@ -123,7 +128,6 @@ api_event(vote, Data, _) ->
     Props = jsone:decode(list_to_binary(Data)),
     User = usr:ensure(),
     Poll = poll(),
-
     case polls:can_edit(User, Poll) of
         true ->
             Title = filter:string(
@@ -434,6 +438,9 @@ share_panel(Poll) ->
     }.
 
 wall_panel() ->
+    #panel{ class=blur, body=[
+        [alt(Alt, 0, false) || {V, Alt} <- Alts],
+    ]}
     #panel{
         body = [
             #p{body = "secret poll"},

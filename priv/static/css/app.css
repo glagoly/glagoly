@@ -63,6 +63,7 @@ h1, p {
 .fb_wrapper {
     min-height: 50px;
 }
+
 .fb-login-button {
     color: var(--bs-white);
     min-height: 40px;
@@ -74,4 +75,12 @@ h1, p {
     min-width: 260px;
     text-align: center;
     vertical-align: middle;
+}
+
+/**
+ * poll.html
+ */
+.blur {
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
 }
