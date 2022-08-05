@@ -438,9 +438,9 @@ share_panel(Poll) ->
     }.
 
 wall_panel() ->
-    #panel{ class=blur, body=[
-        [alt(Alt, 0, false) || {V, Alt} <- Alts],
-    ]}
+    #panel{ class=blur, body=
+        [alt(Alt, 0, false) || {V, Alt} <- []]
+    },
     #panel{
         body = [
             #p{body = "secret poll"},
