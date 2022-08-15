@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/app.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#801f4f">
+    <link rel="shortcut icon" href="/favicon/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="glagoly">
+    <meta name="application-name" content="glagoly">
+    <meta name="msapplication-TileColor" content="#801f4f">
+    <meta name="msapplication-config" content="/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#801f4f">
+
+    <title>Опитування Ⰳ глаголі</title>
+    <meta name="description" content="Просте планування зустрічей. Найшвидший спосіб прийняти колективне рішення. Метод Шульце онлайн.">
+
+    <meta property="og:image" content="https://glagoly.com/img/social.poll.png" />
+    <meta property="fb:app_id" content="543950855954497" />
+  </head>
+  <body>
+    <div class="navbar navbar-dark bg_brand">
+      <div class="container main">
+         <a class="navbar-brand" href="feed.html">
+          <img src="img/logo.svg" width="26" height="24" class="align-text-top ms-2 me-2">глаголі</a>
+        <ul id="nav_links" class="navbar-nav"></ul>
+      </div>
+    </div>
+
+    <div class="container main main_body">
+      <div id=top></div>
+      <div id=alts></div>
+      <div id=bottom></div>
+    </div>
+
+    <footer class="bg-light border-top pt-3 pb-2 mt-5">
+      <div class="container main text-muted">
+        <p>
+          <a class="text-reset" href="policy.html">privacy policy</a>
+          <a class="text-reset ms-3" href="https://github.com/glagoly/glagoly/issues">github issues</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="js/lib.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      host = location.hostname;
+      port = location.port;
+      debug = (host == 'localhost');
+      persistent = true;
+      tokenStorage = window.localStorage;
+      protos = [$bert];
+      N2O_start();
+    </script>
+  </body>
+</html>
