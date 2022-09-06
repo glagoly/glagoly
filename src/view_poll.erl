@@ -438,8 +438,10 @@ share_panel(Poll) ->
     }.
 
 wall_panel() ->
-    #panel{ class=blur, body=
-        [alt(Alt, 0, false) || {V, Alt} <- []]
+    #panel{
+        class = blur,
+        body =
+            [alt(Alt, 0, false) || {V, Alt} <- []]
     },
     #panel{
         body = [

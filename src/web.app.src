@@ -11,6 +11,7 @@
         mnesia,
         n2o,
         nitro,
+        erlydtl,
         syn,
         cowlib,
         ssl,
