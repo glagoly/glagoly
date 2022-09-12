@@ -22,6 +22,11 @@ server {
         expires 1d;
     }
 
+    # not good not terrible
+    location = /poll.html {
+        proxy_pass http://127.0.0.1:8001/dynamic/poll.html$is_args$args;
+    }
+
     # pass websocket
     location /ws/ {
         proxy_pass http://127.0.0.1:8001;
