@@ -437,15 +437,81 @@ share_panel(Poll) ->
         ]
     }.
 
-wall_panel() ->
+fake_alt() ->
     #panel{
-        class = blur,
-        body =
-            [alt(Alt, 0, false) || {V, Alt} <- []]
-    },
-    #panel{
+        class = 'card mb-3',
         body = [
-            #p{body = "secret poll"},
-            view:fb_login_button()
+            #panel{
+                class = 'card-body',
+                body = [
+                    #p{
+                        class = 'card-text',
+                        body = [
+                            "Lorem ipsum dolor sit amet",
+                            #br{},
+                            #span{class = 'small text-muted', body = "Name"}
+                        ]
+                    }
+                ]
+            },
+            #panel{
+                class = 'card-footer',
+                body = #panel{
+                    class = 'row align-items-center',
+                    body = [
+                        #panel{
+                            class = 'col-2',
+                            body = #h4{
+                                class = 'text-center mb-0',
+                                body = #span{
+                                    body = "0",
+                                    class = ['badge', 'bg-secondary']
+                                }
+                            }
+                        },
+                        #panel{
+                            class = 'col-10',
+                            body = #range{
+                                min = -3,
+                                max = 7,
+                                class = 'form-range'
+                            }
+                        }
+                    ]
+                }
+            }
         ]
     }.
+
+wall_panel() ->
+    [
+        #panel{
+            class = blur,
+            body = [fake_alt() || _ <- lists:seq(1, 3)]
+        },
+        #panel{
+            class = 'topper position-absolute',
+            body = #panel{
+                class = 'card m-3 mt-5',
+                body = #panel{
+                    class = 'card-body',
+                    body = [
+                        #h3{body = <<"test">>}
+                    ]
+                }
+            }
+        }
+    ].
+
+% <div class="">
+    %   <div class="">
+    %     <div >
+    %         <h3></h3>
+    %         <p>Увійдіть через фейсбук, аби голосувати чи додавати альтернативи.</p>
+    %         <p class="text-muted">Антон Потапов  </p>
+            
+    %     </div>
+    %   </div>
+    % </div>
+    % ,
+    %                 view:fb_login_button()
