@@ -84,3 +84,8 @@ h1, p {
     filter: blur(5px);
     -webkit-filter: blur(5px);
 }
+
+.topper {
+    z-index: 1;
+    width: 100%;
+}

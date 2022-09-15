@@ -56,6 +56,7 @@ event(view_results) ->
         _ -> view:insert_bottom(bottom, create_panel)
     end;
 event(add_alt) ->
+    true = can(access, poll()),
     case filter:string(nitro:q(alt_text), ?ALT_MAX_LENGTH, []) of
         [] ->
             no;
@@ -68,6 +69,7 @@ event({alt, Op, Id}) ->
     Poll = poll(),
     Alt = polls:get_alt(Poll, Id),
     true = polls:can_edit(usr:id(), Poll, Alt),
+    true = can(access, Poll),
     nitro:update(?ALT_ID(Alt, panel), alt_event(Op, Alt));
 event(_) ->
     ok.
@@ -94,8 +96,7 @@ view_wall() ->
     Poll = poll(),
     nitro:update(top, title(Poll)),
     nitro:clear(alts),
-    nitro:insert_bottom(alts, add_alt_form()),
-    nitro:insert_bottom(bottom, wall_panel()),
+    nitro:insert_bottom(alts, wall_panel(polls:name(Poll))),
     view:init_fb(view_poll).
 
 alt_event(edit, Alt) ->
@@ -123,11 +124,12 @@ filter_votes(Votes) ->
 
 api_event(fb_login, Token, _) ->
     usr:fb_login(Token),
-    event(view_vote);
+    event(init);
 api_event(vote, Data, _) ->
     Props = jsone:decode(list_to_binary(Data)),
     User = usr:ensure(),
     Poll = poll(),
+    true = can(access, Poll),
     case polls:can_edit(User, Poll) of
         true ->
             Title = filter:string(
@@ -483,35 +485,28 @@ fake_alt() ->
         ]
     }.
 
-wall_panel() ->
-    [
-        #panel{
-            class = blur,
-            body = [fake_alt() || _ <- lists:seq(1, 3)]
-        },
-        #panel{
-            class = 'topper position-absolute',
-            body = #panel{
-                class = 'card m-3 mt-5',
+wall_panel(Name) ->
+    #panel{
+        class = 'position-relative',
+        body = [
+            #panel{
+                class = 'topper position-absolute',
                 body = #panel{
-                    class = 'card-body',
-                    body = [
-                        #h3{body = <<"test">>}
-                    ]
+                    class = 'card m-3 mt-5',
+                    body = #panel{
+                        class = 'card-body',
+                        body = [
+                            #h3{body = ?T("Please log in")},
+                            #p{body = ?T(verified_access_wall)},
+                            #p{class = 'text-muted', body = nitro:hte(Name)},
+                            view:fb_login_button()
+                        ]
+                    }
                 }
+            },
+            #panel{
+                class = blur,
+                body = [fake_alt() || _ <- lists:seq(1, 3)]
             }
-        }
-    ].
-
-% <div class="">
-    %   <div class="">
-    %     <div >
-    %         <h3></h3>
-    %         <p>Увійдіть через фейсбук, аби голосувати чи додавати альтернативи.</p>
-    %         <p class="text-muted">Антон Потапов  </p>
-            
-    %     </div>
-    %   </div>
-    % </div>
-    % ,
-    %                 view:fb_login_button()
+        ]
+    }.

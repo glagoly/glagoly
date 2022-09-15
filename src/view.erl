@@ -1,7 +1,7 @@
 -module(view).
 
 -export([
-    init_fb/1,
+    init_fb/0, init_fb/1,
     init/1,
     event/1,
     api_event/3,
@@ -14,6 +14,8 @@
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
 -include_lib("records.hrl").
+
+init_fb() -> init_fb(view).
 
 init_fb(Delegate) ->
     nitro:wire(#api{name = fb_login, delegate = Delegate}),
