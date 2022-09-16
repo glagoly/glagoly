@@ -14,6 +14,9 @@ poll() ->
     {ok, Poll} = kvs:get(poll, poll_id()),
     Poll.
 
+win_vote([{V, _} | _]) when V > 0 -> V;
+win_vote(_) -> 1.
+
 can(access, Poll) ->
     case polls:access(Poll) of
         verified -> (usr:state() == pers);
@@ -41,10 +44,11 @@ event(view_results) ->
     nitro:update(top, title(Poll)),
     nitro:clear(alts),
     Result = polls:result(poll_id()),
+    Win = win_vote(Result),
     Voters = polls:voters(poll_id()),
     [
         nitro:insert_bottom(
-            alts, result(polls:get_alt(Poll, AltId), V, maps:get(AltId, Voters, []))
+            alts, result(polls:get_alt(Poll, AltId), V, V == Win, maps:get(AltId, Voters, []))
         )
      || {V, AltId} <- Result
     ],
@@ -181,10 +185,14 @@ voter({Name, Vote}) when Vote < 0 ->
 voter({Name, Vote}) ->
     #span{body = [nitro:hte(Name), " ", filter:pretty_int(Vote)]}.
 
-result(Alt, Vote, Voters) ->
+result(Alt, Vote, IsWinner, Voters) ->
+
     #panel{
         id = ?ALT_ID(Alt, panel),
-        class = 'card mb-3',
+        class = case IsWinner of
+            true -> 'card mb-3 bg-light';
+            _ -> 'card mb-3'
+        end,
         body = [
             #panel{class = 'card-body', body = alt_p(Alt)},
             #panel{
