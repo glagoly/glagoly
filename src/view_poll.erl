@@ -97,6 +97,8 @@ view_wall() ->
     nitro:update(top, title(Poll)),
     nitro:clear(alts),
     nitro:insert_bottom(alts, wall_panel(polls:name(Poll))),
+    nitro:clear(bottom),
+    nitro:insert_bottom(bottom, results_button()),
     view:init_fb(view_poll).
 
 alt_event(edit, Alt) ->
@@ -392,31 +394,34 @@ vote_form(Name, IsNew) ->
         },
         #panel{class = 'invalid-feedback', body = ?T("Please enter your name")},
         #panel{
-            class = 'd-grid gap-2 mt-4',
             body =
                 case IsNew of
                     true ->
                         #submit{
-                            class = 'btn btn-lg btn-success', body = ?T("Create poll"), click = []
+                            class = 'btn btn-lg btn-success w-100 mt-4',
+                            body = ?T("Create poll"),
+                            click = []
                         };
                     _ ->
                         [
                             #submit{
-                                class = 'btn btn-lg btn-success', body = ?T("Vote"), click = []
+                                class = 'btn btn-lg btn-success w-100 mt-4',
+                                body = ?T("Vote"),
+                                click = []
                             },
-                            #button{
-                                class = 'btn btn-outline-secondary',
-                                body = ?T("View results"),
-                                postback = view_results
-                            }
+                            results_button()
                         ]
                 end
         },
         <<"</form>">>
     ].
 
-change_button() ->
-    #button{class = 'btn btn_brand w-100 mb-4', body = ?T("Change vote"), postback = view_vote}.
+results_button() ->
+    button("View results", ['w-100', 'btn-outline-secondary', 'mt-2'], view_results).
+change_button() -> button("Change vote", [btn_brand, 'w-100', 'mb-4'], view_vote).
+
+button(Body, Class, Postback) ->
+    #button{class = [btn] ++ Class, body = ?T(Body), postback = Postback}.
 
 share_panel(Poll) ->
     #panel{
@@ -487,7 +492,7 @@ fake_alt() ->
 
 wall_panel(Name) ->
     #panel{
-        class = 'position-relative',
+        class = 'position-relative mb-4',
         body = [
             #panel{
                 class = 'topper position-absolute',
