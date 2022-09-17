@@ -20,10 +20,10 @@
     <meta name="msapplication-config" content="/favicon/browserconfig.xml">
     <meta name="theme-color" content="#801f4f">
 
-    <title>Мої опитування Ⰳ глаголі</title>
-    <meta name="description" content="Просте планування зустрічей. Найшвидший спосіб прийняти колективне рішення. Метод Шульце онлайн.">
+    <title>{{ title }} Ⰳ глаголі</title>
+    <meta name="description" content="{{ name }}">
 
-    <meta property="og:image" content="https://glagoly.com/img/social.glagoly.png" />
+    <meta property="og:image" content="https://glagoly.com/img/social.poll.png" />
     <meta property="fb:app_id" content="543950855954497" />
   </head>
   <body>
@@ -36,8 +36,11 @@
     </div>
 
     <div class="container main main_body">
-      <div id="top"></div>
-      <div id=polls></div>
+      <div id=top>
+        <h1 class='display-5 mt-3'>{{ title }}</h1>
+      </div>
+      <div id=alts></div>
+      <div id=bottom></div>
     </div>
 
     <footer class="bg-light border-top pt-3 pb-2 mt-5">

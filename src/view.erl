@@ -1,14 +1,26 @@
 -module(view).
 
--export([init/1, event/1, api_event/3, create_panel/0, insert_bottom/2, title_input/1]).
+-export([
+    init_fb/0, init_fb/1,
+    init/1,
+    event/1,
+    api_event/3,
+    fb_login_button/0,
+    create_panel/0,
+    insert_bottom/2,
+    title_input/2
+]).
 
 -include_lib("nitro/include/nitro.hrl").
 -include_lib("web.hrl").
 -include_lib("records.hrl").
 
-init(fb) ->
-    nitro:wire(#api{name = fb_login, delegate = view}),
-    nitro:wire("fb_init();");
+init_fb() -> init_fb(view).
+
+init_fb(Delegate) ->
+    nitro:wire(#api{name = fb_login, delegate = Delegate}),
+    nitro:wire("fb_init();").
+
 init(navbar) ->
     nitro:clear(nav_links),
     case usr:state() of
@@ -31,7 +43,7 @@ insert_bottom(Id, login_panel) ->
             already;
         _ ->
             nitro:insert_bottom(Id, login_panel()),
-            view:init(fb)
+            init_fb(view)
     end.
 
 api_event(fb_login, Token, _) ->
@@ -42,7 +54,7 @@ event(logout) ->
     usr:logout(),
     nitro:redirect("./");
 event(create_poll) ->
-    Title = filter:string(nitro:q(title), 128, ?T(title_sample)),
+    Title = filter:string(nitro:q(title), ?TITLE_MAX_LENGTH, ?T(title_sample)),
     Id = polls:create(usr:ensure(), Title),
     nitro:redirect("poll.html?new=1&id=" ++ Id);
 event(_) ->
@@ -52,7 +64,7 @@ event(_) ->
 %%% HTML Components
 %%%=============================================================================
 
-title_input(Title) ->
+title_input(Title, ShowSamples) ->
     Samples = [
         #link{class = dotted, onclick = 'update_title_input(this)', body = S}
      || S <- ?T(title_samples)
@@ -60,18 +72,48 @@ title_input(Title) ->
     #panel{
         id = title_panel,
         body = [
-            #input{
+            #textarea{
                 id = title,
-                data_fields = [{maxlength, ?TITLE_MAX_LENGTH}],
+                maxlength = ?TITLE_MAX_LENGTH,
                 class = 'form-control form-control-lg mb-2 mt-3',
-                placeholder = nitro:hte(Title),
-                value = nitro:hte(Title)
+                placeholder = ?T(title_sample),
+                body = nitro:hte(Title),
+                rows = 2
             },
             #p{
-                class = 'lead mb-3',
-                body = [?T("Try:"), " &laquo;", lists:join("&raquo;, &laquo;", Samples), "&raquo;"]
+                class = 'mb-3 link-dark',
+                body =
+                    case ShowSamples of
+                        true ->
+                            [
+                                ?T("Try:"),
+                                " &laquo;",
+                                lists:join("&raquo;, &laquo;", Samples),
+                                "&raquo;"
+                            ];
+                        _ ->
+                            []
+                    end
             }
         ]
+    }.
+
+fb_login_button() ->
+    #panel{
+        class = fb_wrapper,
+        body = #panel{
+            class = 'fb-login-button d-inline-block',
+            body = ?T("Login with facebook"),
+            data_fields = [
+                {"data-size", large},
+                {"data-button-type", login_with},
+                {"data-layout", default},
+                {"data-auto-logout-link", false},
+                {"data-use-continue-as", false},
+                {"data-width", "260px"},
+                {"data-onlogin", checkLoginState}
+            ]
+        }
     }.
 
 login_panel() ->
@@ -81,22 +123,7 @@ login_panel() ->
         body = [
             #h2{class = 'display-6', body = ?T("Remember me")},
             #p{body = ?T(remember_me_info)},
-            #panel{
-                class = fb_wrapper,
-                body = #panel{
-                    class = 'fb-login-button d-inline-block',
-                    body = ?T("Login with facebook"),
-                    data_fields = [
-                        {"data-size", large},
-                        {"data-button-type", login_with},
-                        {"data-layout", default},
-                        {"data-auto-logout-link", false},
-                        {"data-use-continue-as", false},
-                        {"data-width", "260px"},
-                        {"data-onlogin", checkLoginState}
-                    ]
-                }
-            }
+            fb_login_button()
         ]
     }.
 
@@ -106,7 +133,7 @@ create_panel() ->
         class = 'mb-3',
         body = [
             #h2{class = 'display-6', body = ?T("Create your poll")},
-            title_input(?T(title_sample)),
+            title_input([], true),
             #button{
                 class = 'btn btn-lg btn-success w-100',
                 body = ?T("Create poll"),

@@ -29,7 +29,11 @@
 }
 
 .dotted, .dotted:hover {
-  text-decoration-style: dotted
+    text-decoration-style: dotted
+}
+
+.link-dark a {
+    color: #212529 !important;
 }
 
 .navbar {
@@ -38,6 +42,10 @@
 
 footer a {
     text-decoration: none;
+}
+
+h1, p {
+    word-wrap: break-word;
 }
 
 /**
@@ -55,6 +63,7 @@ footer a {
 .fb_wrapper {
     min-height: 50px;
 }
+
 .fb-login-button {
     color: var(--bs-white);
     min-height: 40px;
@@ -66,4 +75,17 @@ footer a {
     min-width: 260px;
     text-align: center;
     vertical-align: middle;
+}
+
+/**
+ * poll.html
+ */
+.blur {
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+}
+
+.topper {
+    z-index: 1;
+    width: 100%;
 }

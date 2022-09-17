@@ -19,11 +19,20 @@ trans("deleted alterntive.") -> <<"видалений варіант."/utf8>>;
 
 trans("Please enter your name") -> <<"Будь-ласка вкажіть ваше ім'я."/utf8>>;
 
+trans("Poll title") -> <<"Заголовок опитування"/utf8>>;
 trans(title_samples) -> title_samples();
-trans(title_sample) -> <<"Де і коли зустрічаємось?"/utf8>>;
+trans(title_sample) -> <<"Що робимо?"/utf8>>;
 
 trans("Invite others") -> <<"Запросити інших"/utf8>>;
-trans(share_info) -> <<"Будь-хто за посиланням може голосувати та додавати свої варіанти."/utf8>>;
+
+trans("Public poll") -> <<"Вільне опитування"/utf8>>;
+trans(public_access_info) -> <<"Будь-хто за посиланням може голосувати та додавати свої варіанти."/utf8>>;
+trans("Verified poll") -> <<"Верифіковане опитування"/utf8>>;
+trans(verified_access_info) -> <<"Після авторизації через фейсбук, можна голосувати і додавати альтернативи за посиланням."/utf8>>;
+
+trans("Please log in") -> <<"Будь ласка, aвторизуйтесь"/utf8>>;
+trans(verified_access_wall) -> <<"Увійдіть через фейсбук, аби голосувати чи додавати альтернативи."/utf8>>;
+
 trans("Copy") -> <<"Копіювати"/utf8>>;
 trans("Copied...") -> <<"Скопійовано..."/utf8>>;
 

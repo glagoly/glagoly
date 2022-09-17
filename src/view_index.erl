@@ -21,7 +21,7 @@ event(init) ->
                 }
             ),
             nitro:update(create_panel, view:create_panel()),
-            view:init(fb)
+            view:init_fb()
     end;
 event(_) ->
     ok.

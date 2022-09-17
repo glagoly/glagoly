@@ -3,6 +3,7 @@
 -include_lib("records.hrl").
 
 -export([
+    access/1,
     append_alt/3,
     can_edit/2, can_edit/3,
     create/2,
@@ -19,7 +20,6 @@
     restore/1,
     text/1,
     title/1,
-    update/2,
     update/3,
     user_alts/3,
     vote/2,
@@ -40,6 +40,11 @@ vote(UserId, #alt{id = Id, poll = PollId}) -> maps:get(Id, get_ballot(UserId, Po
 
 title(#poll{title = Title}) -> Title.
 
+options(#poll{opts = undefined}) -> #{};
+options(#poll{opts = Opts}) -> Opts.
+
+access(Poll) -> maps:get(access, options(Poll), public).
+
 get(#my_poll{id = {_, PollId}}) ->
     {ok, Poll} = kvs:get(poll, PollId),
     Poll.
@@ -47,10 +52,12 @@ get(#my_poll{id = {_, PollId}}) ->
 delete(Alt) when is_record(Alt, alt) -> kvs:put(Alt#alt{status = deleted}).
 restore(Alt) when is_record(Alt, alt) -> kvs:put(Alt#alt{status = ok}).
 
-update(Alt, User, Text) ->
+update(Alt, User, Text) when is_record(Alt, alt) ->
     New = Alt#alt{user = User, text = Text},
     kvs:put(New),
-    New.
+    New;
+update(Poll, Title, Access) when is_record(Poll, poll) ->
+    kvs:put(Poll#poll{title = Title, opts = #{access => Access}}).
 
 can_edit(User, #poll{user = Author}) -> Author == User.
 can_edit(User, Poll, #alt{user = Author}) -> can_edit(User, Poll) or (Author == User).
@@ -73,8 +80,6 @@ create(User, Title) ->
     Id = new_id(),
     kvs:put(#poll{id = Id, user = User, title = Title}),
     Id.
-
-update(Poll, Title) when is_record(Poll, poll) -> kvs:put(Poll#poll{title = Title}).
 
 get_alt(#poll{id = PollId}, Id) ->
     {ok, Alt} = kvs:get(alt, Id),

@@ -2,11 +2,12 @@
 
 -export([string/3, pretty_int/1, in_range/3]).
 
-string(Binary, Length, Default) ->
-    S = string:strip(unicode:characters_to_list(Binary)),
-    case lists:sublist(S, 1, Length) of
+string(S, Length, Default) ->
+    % 194 160 - non breakable space
+    S1 = string:replace(S, <<194, 160>>, <<" ">>, all),
+    case string:trim(S1) of
         [] -> Default;
-        L -> unicode:characters_to_binary(L)
+        S2 -> string:slice(S2, 0, Length)
     end.
 
 in_range(Int, Min, Max) ->

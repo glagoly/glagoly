@@ -13,6 +13,7 @@ event(init) ->
             nitro:clear(top),
             view:insert_bottom(top, login_panel),
             view:insert_bottom(top, create_panel),
+            view:init_fb(),
             case polls:my(User) of
                 [] ->
                     empty;
