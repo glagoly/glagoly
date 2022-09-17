@@ -1,6 +1,6 @@
 -define(ID_LENGTH, 8).
 -define(TITLE_MAX_LENGTH, 128).
--define(ALT_MAX_LENGTH, 256).
+-define(ALT_MAX_LENGTH, 128).
 -define(NAME_MAX_LENGTH, 32).
 
 -define(NOW, erlang:system_time(second)).

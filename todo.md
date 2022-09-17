@@ -1,21 +1,3 @@
-[ ] limit my feed to X top entries
-[ ] highlight winners
-[x] full favicon
-[x] BUG: missing name in voters in Cg0mABta (removed on login of logged in user)
-[x] No logout button on feed.html
-[х] Space as first letter in nane
-
-DONE:
-
-- Title max length is 128 now
-
-NICE to have:
-
-* Мене цікавлять при створенні опитувань тільки голосування, з аторизацією через Фейсбук
-* Мені трохи забагато інформації на головній сторінці - купа кнопок купа посилань
-* Мені треба кожний раз видаляти плейсхолдер руками - хоча я навряд буду користуватися саме таким заголовком
-* Є проблема з довгими назвами - зникає курсор, в мене переважно завжди довгі назви
-* Я хочу щоб за замовчуванням було моє імя з ФБ
-* На головній сторінці я хотів би бачити лише 2 кнопки(як в застосунку НП), мої опитування і створити опитування
-* В превью лінка який я кидаю бажано щоб була видна тема опитування
-* Я хочу щоб в результатах було очевидно який варіант зараз перемагає
+[ ] limit feed, alts, votes to X top entries
+[ ] name autofill or sugesstions (fb name, last used names ?)
+[ ] upwote button
