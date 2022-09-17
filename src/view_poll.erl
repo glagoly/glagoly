@@ -186,13 +186,13 @@ voter({Name, Vote}) ->
     #span{body = [nitro:hte(Name), " ", filter:pretty_int(Vote)]}.
 
 result(Alt, Vote, IsWinner, Voters) ->
-
     #panel{
         id = ?ALT_ID(Alt, panel),
-        class = case IsWinner of
-            true -> 'card mb-3 bg-light';
-            _ -> 'card mb-3'
-        end,
+        class =
+            case IsWinner of
+                true -> 'card mb-3 bg-light';
+                _ -> 'card mb-3'
+            end,
         body = [
             #panel{class = 'card-body', body = alt_p(Alt)},
             #panel{
@@ -437,7 +437,13 @@ share_panel(Poll) ->
         class = 'mb-3',
         body = [
             #h2{class = 'display-6', body = ?T("Invite others")},
-            #p{body = ?T(public_access_info)},
+            #p{
+                body =
+                    case polls:access(Poll) of
+                        verified -> ?T(verified_access_info);
+                        _ -> ?T(public_access_info)
+                    end
+            },
             #textbox{
                 id = share_url,
                 class = 'form-control form-control-lg mb-3 text-center',
