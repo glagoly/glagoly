@@ -53,9 +53,9 @@
     <script src="js/lib.js"></script>
     <script src="js/app.js"></script>
     <script>
-      host = location.hostname;
+      host = 'app.' + location.hostname;
       port = location.port;
-      debug = (host == 'localhost');
+      debug = host.endsWith('localhost');
       persistent = true;
       tokenStorage = window.localStorage;
       protos = [$bert];
