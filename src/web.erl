@@ -24,6 +24,7 @@ points() ->
     cowboy_router:compile([
         {'_', [
             {"/app/[...]", cowboy_static, {dir, "priv/static"}},
+            {"/:lang/index.html", pages, {page, index}},
             {"/dynamic/[...]", dynamic, []},
             {"/ws/[...]", n2o_cowboy, []}
         ]}
