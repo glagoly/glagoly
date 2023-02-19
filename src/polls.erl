@@ -79,6 +79,8 @@ new_id() ->
 create(User, Title) ->
     Id = new_id(),
     kvs:put(#poll{id = Id, user = User, title = Title}),
+    % add vote, so we see it in my polls
+    put_vote(User, Id, <<"">>, []),
     Id.
 
 get_alt(#poll{id = PollId}, Id) ->
@@ -96,18 +98,22 @@ append_alt(PollId, Text, User) ->
     Alt.
 
 result(PollId) ->
+    % not good, but we return result and vote count
     AltIds = [Alt#alt.id || Alt <- alts(PollId)],
     Ballots = [V#vote.ballot || V <- votes(PollId)],
-    case Ballots of
-        [Single] ->
-            Ballot = maps:from_list(Single),
-            Result = [{maps:get(AltId, Ballot, 0), AltId} || AltId <- AltIds],
-            lists:reverse(lists:sort(Result));
-        _ ->
-            Core = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), AltIds),
-            Core2 = lists:foldl(fun vote_core:add_ballot/2, Core, Ballots),
-            vote_core:result(Core2)
-    end.
+    VoteCount = length(Ballots),
+    VoteResult =
+        case Ballots of
+            [Single] ->
+                Ballot = maps:from_list(Single),
+                Result = [{maps:get(AltId, Ballot, 0), AltId} || AltId <- AltIds],
+                lists:reverse(lists:sort(Result));
+            _ ->
+                Core = lists:foldl(fun vote_core:add_alt/2, vote_core:new(), AltIds),
+                Core2 = lists:foldl(fun vote_core:add_ballot/2, Core, Ballots),
+                vote_core:result(Core2)
+        end,
+    {VoteResult, VoteCount}.
 
 voters(Id) ->
     Votes = votes(Id),

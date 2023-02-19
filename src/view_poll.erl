@@ -41,9 +41,9 @@ event(view_vote) ->
     end;
 event(view_results) ->
     Poll = poll(),
-    nitro:update(top, title(Poll)),
+    {Result, VoteCount} = polls:result(poll_id()),
+    nitro:update(top, results_title(Poll, VoteCount)),
     nitro:clear(alts),
-    Result = polls:result(poll_id()),
     Win = win_vote(Result),
     Voters = polls:voters(poll_id()),
     [
@@ -173,6 +173,20 @@ title(Poll) ->
         ]
     }.
 
+results_title(Poll, VoteCount) ->
+    #panel{
+        id = top,
+        body = [
+            #h1{class = 'display-5 mt-3', body = nitro:hte(polls:title(Poll))},
+            #p{
+                class = 'lead text-muted mb-3',
+                body = [
+                    nitro:hte(polls:name(Poll)), <<", ">>, nitro:to_list(VoteCount), <<"&check;">>
+                ]
+            }
+        ]
+    }.
+
 badge_class(I) ->
     if
         I > 0 -> 'bg-success';
@@ -225,9 +239,9 @@ alt_p(Alt) ->
     #p{
         class = 'card-text',
         body = [
-            nitro:hte(polls:text(Alt)),
+            #span{class = 'small text-muted', body = nitro:hte(polls:name(Alt))},
             #br{},
-            #span{class = 'small text-muted', body = nitro:hte(polls:name(Alt))}
+            nitro:hte(polls:text(Alt))
         ]
     }.
 
