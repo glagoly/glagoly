@@ -79,6 +79,8 @@ new_id() ->
 create(User, Title) ->
     Id = new_id(),
     kvs:put(#poll{id = Id, user = User, title = Title}),
+    % add vote, so we see it in my polls
+    put_vote(User, Id, <<"">>, []),
     Id.
 
 get_alt(#poll{id = PollId}, Id) ->
