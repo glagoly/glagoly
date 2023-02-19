@@ -225,9 +225,9 @@ alt_p(Alt) ->
     #p{
         class = 'card-text',
         body = [
-            nitro:hte(polls:text(Alt)),
+            #span{class = 'small text-muted', body = nitro:hte(polls:name(Alt))},
             #br{},
-            #span{class = 'small text-muted', body = nitro:hte(polls:name(Alt))}
+            nitro:hte(polls:text(Alt))
         ]
     }.
 
