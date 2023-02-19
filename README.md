@@ -17,8 +17,13 @@ Start the app (localhost:8001/app/index.html):
     ./rebar3 eunit
     ./rebar3 eunit --module="filter_tests"
 
+### Codestyle
+
+    ./rebar3 fmt -w
+
 ## Update on prod
     
+    sudo su # Important
     cd /var/www/glagoly/
 
 Start:
