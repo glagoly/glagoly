@@ -121,7 +121,7 @@ alt_event(delete, Alt) ->
     restore_alt(Alt);
 alt_event(restore, Alt) ->
     polls:restore(Alt),
-    alt(Alt, polls:vote(usr:id( ), Alt), true).
+    alt(Alt, polls:vote(usr:id(), Alt), true).
 
 filter_votes(Votes) ->
     % to pairs {list(), int()}
@@ -178,8 +178,12 @@ results_title(Poll, VoteCount) ->
         id = top,
         body = [
             #h1{class = 'display-5 mt-3', body = nitro:hte(polls:title(Poll))},
-            #p{class = 'lead text-muted mb-3', body = [
-                nitro:hte(polls:name(Poll)), <<", ">>, nitro:to_list(VoteCount), <<"&check;">>]}
+            #p{
+                class = 'lead text-muted mb-3',
+                body = [
+                    nitro:hte(polls:name(Poll)), <<", ">>, nitro:to_list(VoteCount), <<"&check;">>
+                ]
+            }
         ]
     }.
 
