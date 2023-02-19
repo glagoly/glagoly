@@ -41,9 +41,9 @@ event(view_vote) ->
     end;
 event(view_results) ->
     Poll = poll(),
-    nitro:update(top, title(Poll)),
+    {Result, VoteCount} = polls:result(poll_id()),
+    nitro:update(top, results_title(Poll, VoteCount)),
     nitro:clear(alts),
-    Result = polls:result(poll_id()),
     Win = win_vote(Result),
     Voters = polls:voters(poll_id()),
     [
@@ -121,7 +121,7 @@ alt_event(delete, Alt) ->
     restore_alt(Alt);
 alt_event(restore, Alt) ->
     polls:restore(Alt),
-    alt(Alt, polls:vote(usr:id(), Alt), true).
+    alt(Alt, polls:vote(usr:id( ), Alt), true).
 
 filter_votes(Votes) ->
     % to pairs {list(), int()}
@@ -170,6 +170,16 @@ title(Poll) ->
         body = [
             #h1{class = 'display-5 mt-3', body = nitro:hte(polls:title(Poll))},
             #p{class = 'lead text-muted mb-3', body = nitro:hte(polls:name(Poll))}
+        ]
+    }.
+
+results_title(Poll, VoteCount) ->
+    #panel{
+        id = top,
+        body = [
+            #h1{class = 'display-5 mt-3', body = nitro:hte(polls:title(Poll))},
+            #p{class = 'lead text-muted mb-3', body = [
+                nitro:hte(polls:name(Poll)), <<", ">>, nitro:to_list(VoteCount), <<"&check;">>]}
         ]
     }.
 
