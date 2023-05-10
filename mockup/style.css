@@ -26,3 +26,20 @@
 h1, p {
     word-wrap: break-word;
 }
+
+.vote_buttons button {
+  border-radius: 50%;
+  margin-right: 0.1rem;
+  font-weight: 700;
+  padding: 0.325rem 0.525rem;
+  border-color: #DDDDDD;
+  color: #6c757d;
+}
+
+.vote_buttons button:hover {
+  opacity: 30%;
+}
+
+.vote_buttons button.active:hover {
+  opacity: 100% !important;
+}
