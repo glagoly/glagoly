@@ -296,36 +296,6 @@ alt(Alt, Vote, CanEdit) ->
                     alt_p(Alt),
                     vote_buttons(Vote, Alt)
                 ]
-            },
-            #panel{
-                class = 'card-footer',
-                body = #panel{
-                    class = 'row align-items-center',
-                    body = [
-                        #panel{
-                            class = 'col-2',
-                            body = #h4{
-                                class = 'text-center mb-0',
-                                body = #span{
-                                    id = ?ALT_ID(Alt, badge),
-                                    body = filter:pretty_int(Vote),
-                                    class = ['badge', 'bg-secondary', badge_class(Vote)]
-                                }
-                            }
-                        },
-                        #panel{
-                            class = 'col-10',
-                            body = #range{
-                                id = ?ALT_ID(Alt, slider),
-                                value = Vote,
-                                min = -3,
-                                max = 7,
-                                class = 'form-range',
-                                data_fields = [{oninput, 'onSliderChange(this)'}]
-                            }
-                        }
-                    ]
-                }
             }
         ]
     }.
@@ -521,34 +491,9 @@ fake_alt() ->
                             #br{},
                             #span{class = 'small text-muted', body = "Name"}
                         ]
-                    }
+                    },
+                    vote_buttons(0, 0)
                 ]
-            },
-            #panel{
-                class = 'card-footer',
-                body = #panel{
-                    class = 'row align-items-center',
-                    body = [
-                        #panel{
-                            class = 'col-2',
-                            body = #h4{
-                                class = 'text-center mb-0',
-                                body = #span{
-                                    body = "0",
-                                    class = ['badge', 'bg-secondary']
-                                }
-                            }
-                        },
-                        #panel{
-                            class = 'col-10',
-                            body = #range{
-                                min = -3,
-                                max = 7,
-                                class = 'form-range'
-                            }
-                        }
-                    ]
-                }
             }
         ]
     }.
