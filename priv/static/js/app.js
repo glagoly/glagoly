@@ -1,31 +1,22 @@
 /**
  * Event helpers
  */
-function onSliderChange(slider) {
-    // fix scroll bug
-    // see: https://stackoverflow.com/questions/70914750/prevent-scroll-jump-on-range-input-on-android
-    slider.focus({
-        preventScroll: true
+function onVoteClick(button) {
+    var newValue = button.dataset.value;
+    var input = button.parentNode.querySelector('input');
+    if (input.value == newValue) {
+      newValue = 0;
+    }
+    input.value = newValue;
+    
+    button.parentNode.querySelectorAll("button").forEach((btn) => {
+        if (btn.dataset.value == newValue) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }   
     });
-
-    var text = qi(slider.id.replace('slider', 'badge'));
-    text.classList.remove('bg-success');
-    text.classList.remove('bg-danger');
-
-    if (slider.value > 0) {
-        text.classList.add('bg-success');
-        text.innerHTML = "+" + slider.value;
-    }
-
-    if (slider.value < 0) {
-        text.classList.add('bg-danger');
-        text.innerHTML = "&minus;" + (-slider.value);
-    }
-
-    if (slider.value == 0) {
-        text.innerHTML = "&empty;";
-    }
-}
+};
 
 function voteSubmit(event) {
     event.preventDefault();
@@ -35,11 +26,15 @@ function voteSubmit(event) {
         return false;
     }
 
-    var sliders = qa("input[type=range]");
+
+    var sliders = qa("input[type=hidden]");
     var votes = [];
-    for (var i = 0; i < sliders.length; i++) {
-        votes.push([sliders[i].id.replace(/\D/g, ''), sliders[i].value]);
-    };
+    sliders.forEach((slider) => {
+        console.log(slider.dataset);
+        if (slider.dataset.altId) {
+            votes.push([slider.dataset.altId, slider.value]);
+        }
+    });
 
     var accessEl = qs('input[name="access"]:checked');
 

@@ -33,8 +33,11 @@ Start:
 
 Attach:
     
-    _build/default/rel/prod/bin/prod daemon_attach
+    _build/default/rel/prod/bin/prod remote
     # CTRL-D - detach from console
+
+    # gracefully shut down
+    init:stop().
 
 Update:
 
