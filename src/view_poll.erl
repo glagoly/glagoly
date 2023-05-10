@@ -194,6 +194,40 @@ badge_class(I) ->
         I == 0 -> ''
     end.
 
+if_true(true, Value) -> Value;
+if_true(_, _) -> [].
+
+vote_buttons(Vote, Alt) ->
+    Options = [
+        {-3, 'btn-outline-danger'},
+        {-1, 'btn-outline-danger'},
+        {1, 'btn-outline-success ms-2'},
+        {3, 'btn-outline-success'},
+        {5, 'btn-outline-success'},
+        {7, 'btn-outline-success'}
+    ],
+    Options2 = [{V, [C, if_true(Vote == V, ' active')]} || {V, C} <- Options],
+    #panel{
+        class = vote_buttons,
+        body = [
+            [
+                #button{
+                    class = ['btn', Class],
+                    onclick = "onVoteClick(this)",
+                    data_fields = [{'data-value', Value}],
+                    body = filter:pretty_int(Value)
+                }
+             || {Value, Class} <- Options2
+            ],
+            #input{
+                type = hidden,
+                autocomplete = off,
+                value = Vote,
+                data_fields = [{'data-alt-id', polls:id(Alt)}]
+            }
+        ]
+    }.
+
 voter({Name, Vote}) when Vote < 0 ->
     #span{class = 'text-muted', body = [nitro:hte(Name), " ", filter:pretty_int(Vote)]};
 voter({Name, Vote}) ->
@@ -259,7 +293,8 @@ alt(Alt, Vote, CanEdit) ->
                         body = ?T("edit"),
                         postback = {alt, edit, polls:id(Alt)}
                     },
-                    alt_p(Alt)
+                    alt_p(Alt),
+                    vote_buttons(Vote, Alt)
                 ]
             },
             #panel{
