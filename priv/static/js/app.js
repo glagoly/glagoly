@@ -117,21 +117,13 @@ function checkLoginState() {
 }
 
 /**
- * Google Analytics
+ * counter.dev
  */
-
 if (document.location.hostname !== 'localhost') {
-    (function(e, t, n, i, s, a, c) {
-        e[n] = e[n] || function() {
-            (e[n].q = e[n].q || []).push(arguments)
-        };
-        a = t.createElement(i);
-        c = t.getElementsByTagName(i)[0];
-        a.async = true;
-        a.src = s;
-        c.parentNode.insertBefore(a, c)
-    })(window, document, "galite", "script", "https://cdn.jsdelivr.net/npm/ga-lite@2/dist/ga-lite.min.js");
-
-    galite('create', 'UA-111273395-1', 'auto');
-    galite('send', 'pageview');
+    const script = document.createElement('script');
+    script.async = true;
+    script.dataset.id = "a3bfb50d-6a82-4c40-aab9-9a2527614c81";
+    script.dataset.utcoffset = "3";
+    script.src = "https://cdn.counter.dev/script.js";
+    document.body.appendChild(script);
 }
