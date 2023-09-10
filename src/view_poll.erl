@@ -492,7 +492,7 @@ fake_alt() ->
                             #span{class = 'small text-muted', body = "Name"}
                         ]
                     },
-                    vote_buttons(0, 0)
+                    vote_buttons(0, #alt{id = 0})
                 ]
             }
         ]
